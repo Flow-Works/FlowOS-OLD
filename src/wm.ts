@@ -1,4 +1,5 @@
 import flow from "./flow.ts";
+import { v4 as uuid } from 'uuid';
 
 interface FlowWindowConfig {
   title: string;
@@ -89,6 +90,8 @@ export class FlowWindow {
   isMaximized = false;
 
   wm: WM;
+
+  id = uuid();
 
   config: FlowWindowConfig;
 
