@@ -179,15 +179,11 @@ launcher {
   font-family: monospace;
 }
 
-.ace-monokai .ace_marker-layer .ace_active-line {
+.ace_marker-layer .ace_active-line, .ace_layer.ace_gutter-layer.ace_folding-enabled, .ace_gutter {
   background: var(--mantle)!important;
 }
 
-.ace_layer.ace_gutter-layer.ace_folding-enabled {
-  background: var(--mantle)!important;
-}
-
-.ace_content {
+.ace_content, .ace_scroller {
   background: var(--base)!important;
 }
 
@@ -195,6 +191,6 @@ launcher {
   background: var(--crust)!important;
 }
 
-.ace-monokai .ace_marker-layer .ace_selection {
+.ace_marker-layer .ace_selection {
   background: var(--surface-0)!important;
 }
