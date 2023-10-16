@@ -1,6 +1,6 @@
 import icon from '../assets/icons/files.png';
 import { App } from "../types.ts";
-import fs from 'fs';
+
 import flow from '../flow.ts';
 
 export default class FilesApp implements App {
@@ -12,6 +12,8 @@ export default class FilesApp implements App {
   constructor() {}
 
   async open() {
+    const { default: fs } = await import('fs');
+
     const win = window.wm.createWindow({
       title: this.name,
       icon: icon,
@@ -59,7 +61,6 @@ export default class FilesApp implements App {
             element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;');
             
             const genIcon = () => {
-              console.log(files[file].split('.').at(-1))
               switch (files[file].split('.').at(-1)) {
                 case 'js':
                 case 'mjs':

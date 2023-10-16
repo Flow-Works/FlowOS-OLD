@@ -1,5 +1,3 @@
-import flow from '../flow.ts';
-import { App } from '../types.ts';
 import { FlowWindow } from '../wm.ts';
 
 export const meta = {

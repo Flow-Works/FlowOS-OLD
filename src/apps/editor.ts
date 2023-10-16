@@ -1,6 +1,17 @@
 import icon from '../assets/icons/editor.png';
 import { App } from "../types.ts";
-import fs from 'fs';
+
+import { fullEditor } from "prism-code-editor/setups";
+import Prism from "prism-code-editor/prism-core";
+
+import "prismjs/components/prism-markup.js";
+import "prismjs/components/prism-javascript.js";
+import "prismjs/components/prism-typescript.js";
+import "prismjs/components/prism-css.js";
+import "prismjs/components/prism-scss.js";
+import "prismjs/components/prism-less.js";
+import "prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-tsx.js";
 
 interface EditorConfig {
   path: string;
@@ -15,6 +26,8 @@ export default class EditorApp implements App {
   constructor() {}
 
   async open(data?: EditorConfig) {
+    const { default: fs } = await import('fs');
+
     const win = window.wm.createWindow({
       title: this.name,
       icon: icon,
@@ -25,26 +38,15 @@ export default class EditorApp implements App {
     if (data) {
       win.setTitle('Editor - ' + data.path);
 
-      var { default: ace } = await import('brace');
-      var editor = ace.edit(win.content);
-
-      if (data.path.split('.').at(-1).match(/(m|c|)(js)/)) {
-        require('brace/mode/javascript')
-        editor.getSession().setMode('ace/mode/javascript');
-      } else if (data.path.split('.').at(-1).match(/json/)) {
-        require('brace/mode/json')
-        editor.getSession().setMode('ace/mode/json');
-      } else if (data.path.split('.').at(-1).match(/(htm)(l|)/)) {
-        require('brace/mode/html')
-        editor.getSession().setMode('ace/mode/html');
-      } else if (data.path.split('.').at(-1).match(/css/)) {
-        require('brace/mode/css')
-        editor.getSession().setMode('ace/mode/css');
-      }
-      require('brace/theme/monokai');
-      editor.setTheme('ace/theme/monokai');
-      
-      editor.setValue((await fs.promises.readFile(data.path)).toString());
+      const editor = fullEditor(
+        Prism,
+        win.content,
+        {
+          language: "html",
+          theme: "github-dark",
+        },
+        () => console.log("ready"),
+      )
     }
     
     return win;
