@@ -68,7 +68,7 @@ module.exports = {
       excludeAliases: ['console']
     }),
     new webpack.optimize.MinChunkSizePlugin({
-      minChunkSize: 50000, // Minimum number of characters
+      minChunkSize: 50000,
     }),
     new webpack.optimize.SplitChunksPlugin({
       minSize: 45000,

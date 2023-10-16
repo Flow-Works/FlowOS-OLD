@@ -4,14 +4,11 @@ import { App } from "../types.ts";
 import { fullEditor } from "prism-code-editor/setups";
 import Prism from "prism-code-editor/prism-core";
 
+import "prismjs/components/prism-clike.js";
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-javascript.js";
 import "prismjs/components/prism-typescript.js";
 import "prismjs/components/prism-css.js";
-import "prismjs/components/prism-scss.js";
-import "prismjs/components/prism-less.js";
-import "prismjs/components/prism-jsx.js";
-import "prismjs/components/prism-tsx.js";
 
 interface EditorConfig {
   path: string;
@@ -42,11 +39,13 @@ export default class EditorApp implements App {
         Prism,
         win.content,
         {
-          language: "html",
+          language: data.path.split('.').at(-1),
           theme: "github-dark",
         },
-        () => console.log("ready"),
-      )
+      );
+
+      console.log(editor)
+      editor.scrollContainer.setAttribute('style', 'height: 100%;')
     }
     
     return win;
