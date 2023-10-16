@@ -56,8 +56,61 @@ export default class FilesApp implements App {
           const separator = dir === '/' ? '' : '/';
           fs.stat(dir + separator + files[file], (e, fileStat) => {
             const element = document.createElement('div');
-            element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);');
-            element.innerText += `${files[file]}`;
+            element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;');
+            
+            const genIcon = () => {
+              console.log(files[file].split('.').at(-1))
+              switch (files[file].split('.').at(-1)) {
+                case 'js':
+                case 'mjs':
+                case 'cjs': {
+                  return `<i class='bx bxs-file-js' ></i>`
+                }
+
+                case 'html':
+                case 'htm': {
+                  return `<i class='bx bxs-file-html' ></i>`
+                }
+
+                case 'css': {
+                  return `<i class='bx bxs-file-css' ></i>`
+                }
+
+                case 'json': {
+                  return `<i class='bx bxs-file-json' ></i>`
+                }
+
+                case 'md': {
+                  return `<i class='bx bxs-file-md' ></i>`
+                }
+
+                case 'txt':
+                case 'text': {
+                  return `<i class='bx bxs-file-txt' ></i>`
+                }
+
+                case 'png': 
+                case 'apng': {
+                  return `<i class='bx bxs-file-png' ></i>`
+                }
+
+                case 'jpg': 
+                case 'jpeg': {
+                  return `<i class='bx bxs-file-jpg' ></i>`
+                }
+
+                case 'gif': {
+                  return `<i class='bx bxs-file-gif' ></i>`
+                }
+
+                default: {
+                  return `<i class='bx bxs-file-blank' ></i>`
+                }
+              }
+            }
+            const icon = fileStat.isDirectory() ? `<i class='bx bx-folder'></i>` : genIcon()
+
+            element.innerHTML += `${icon} ${files[file]}`;
             element.onclick = () => {
               if (fileStat.isDirectory() === true) {
                 setDir(dir + separator + files[file]);
