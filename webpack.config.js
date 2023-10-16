@@ -1,13 +1,13 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { FilerWebpackPlugin } = require('filer/webpack');
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { FilerWebpackPlugin } = require('filer/webpack')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const webpack = require('webpack')
 
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   entry: {
-    flow: './src/index.ts',
+    flow: './src/index.ts'
   },
   devtool: 'inline-source-map',
   mode: 'production',
@@ -16,24 +16,24 @@ module.exports = {
       {
         test: /\.less$/i,
         use: [
-          "style-loader",
-          "css-loader",
-          "less-loader",
-        ],
+          'style-loader',
+          'css-loader',
+          'less-loader'
+        ]
       },
       {
         test: /\.css$/i,
         use: [
-          "style-loader",
-          "css-loader",
-        ],
+          'style-loader',
+          'css-loader'
+        ]
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
         loader: 'file-loader',
         options: {
-          outputPath: 'images',
-        },
+          outputPath: 'images'
+        }
       },
       {
         test: /\.ts$/,
@@ -42,33 +42,33 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        use: ["source-map-loader"],
-        enforce: "pre"
-      },
+        use: ['source-map-loader'],
+        enforce: 'pre'
+      }
 
-    ],
+    ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    clean: true
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, 'dist'),
+      directory: path.join(__dirname, 'dist')
     },
     compress: true,
-    port: 9000,
+    port: 9000
   },
   plugins: [new HtmlWebpackPlugin(), new FilerWebpackPlugin(),
     new NodePolyfillPlugin({
       excludeAliases: ['console']
     }),
     new webpack.optimize.MinChunkSizePlugin({
-      minChunkSize: 50000,
+      minChunkSize: 50000
     }),
     new webpack.optimize.SplitChunksPlugin({
       minSize: 45000,
@@ -87,15 +87,15 @@ module.exports = {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: "initial",
-          reuseExistingChunk: true,
+          name: 'vendor',
+          chunks: 'initial',
+          reuseExistingChunk: true
         },
         default: {
           minChunks: 2,
-          reuseExistingChunk: true,
-        },
-      },
-    },
-  },
-};
+          reuseExistingChunk: true
+        }
+      }
+    }
+  }
+}

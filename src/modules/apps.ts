@@ -1,4 +1,4 @@
-import { FlowWindow } from '../wm.ts';
+import { AppOpenedEvent, AppClosedEvent } from '../types'
 
 export const meta = {
   name: 'Apps',
@@ -6,30 +6,28 @@ export const meta = {
   id: 'apps'
 }
 
-interface Status {
-  win: FlowWindow,
-  appElement: HTMLElement
-}
+export const run = (element: HTMLDivElement): void => {
+  element.style.display = 'flex'
+  element.style.alignItems = 'center'
+  element.style.gap = '10px'
+  element.style.paddingLeft = '15px'
+  element.style.paddingRight = '15px'
 
-export const run = (element: HTMLDivElement) => {
-  element.style.display = 'flex';
-  element.style.alignItems = 'center';
-  element.style.gap = '10px';
-  element.style.paddingLeft = '15px';
-  element.style.paddingRight = '15px';
-
-  window.addEventListener('app_opened', async (e: CustomEvent) => {
-    const app = document.createElement('app');
-    app.innerHTML = `<img data-id="${(await e.detail.win).id}" src="${e.detail.app.icon}"/>`;
-    app.onclick = async () => {
-      const win = await e.detail.win;
-      await win.focus();
-      await win.toggleMin();
+  window.addEventListener('app_opened', (e: AppOpenedEvent): void => {
+    const appIcon = document.createElement('app')
+    const app = e.detail.app
+    const win = e.detail.win
+    appIcon.innerHTML = `<img data-id="${win.id}" src="${app.icon}"/>`
+    appIcon.onclick = async () => {
+      const win = await e.detail.win
+      win.focus()
+      win.toggleMin()
     }
-    element.appendChild(app);
+    element.appendChild(appIcon)
   })
 
-  window.addEventListener('app_closed', async (e: CustomEvent) => {
-    element.querySelector(`img[data-id="${(await e.detail.win).id}"]`).parentElement.remove();
+  window.addEventListener('app_closed', (e: AppClosedEvent): void => {
+    const win = e.detail.win
+    element.querySelector(`img[data-id="${win.id}"]`)?.parentElement?.remove()
   })
 }

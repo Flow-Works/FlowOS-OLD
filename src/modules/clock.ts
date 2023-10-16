@@ -4,8 +4,8 @@ export const meta = {
   id: 'clock'
 }
 
-export const run = (element: HTMLDivElement) => {
-  element.style.display = 'flex';
-  element.style.alignItems = 'center';
-  element.innerText = '9:41 AM\n10/14/2023';
+export const run = (element: HTMLDivElement): void => {
+  element.style.display = 'flex'
+  element.style.alignItems = 'center'
+  element.innerText = '9:41 AM\n10/14/2023'
 }
