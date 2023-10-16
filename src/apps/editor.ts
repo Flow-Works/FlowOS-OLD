@@ -45,7 +45,39 @@ export default class EditorApp implements App {
       );
 
       console.log(editor)
-      editor.scrollContainer.setAttribute('style', 'height: 100%;')
+      editor.scrollContainer.setAttribute('style', 'height: 100%;');
+      const style = document.createElement('style');
+      style.innerHTML = `
+      .prism-editor {
+        caret-color: var(--text);
+        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        --editor__bg: var(--base);
+        --widget__border: var(--mantle);
+        --widget__bg: var(--crust);
+        --widget__color: var(--text);
+        --widget__color-active: var(--text);
+        --widget__color-options: #8a99a8;
+        --widget__bg-input: var(--mantle);
+        --widget__bg-hover: #5a5d5e4f;
+        --widget__bg-active: var(--base);
+        --widget__focus-ring: var(--text);
+        --search__bg-find: var(--surface-1)80;
+        --widget__bg-error: #5a1d1d;
+        --widget__error-ring: #be1100;
+        --editor__bg-highlight: #636e7b1a;
+        --editor__bg-selection-match: var(--surface-1)40;
+        --editor__line-number: #636e7b;
+        --editor__line-number-active: #adbac7;
+        --editor__bg-scrollbar: 210, 10%, 35%;
+        --editor__bg-fold: #768390;
+        --bg-guide-indent: var(--surface-0);
+        color-scheme: dark;
+      }
+      .prism-search * {
+        font-family: 'Satoshi', sans-serif;
+      }
+      `
+      editor.scrollContainer.appendChild(style)
     }
     
     return win;
