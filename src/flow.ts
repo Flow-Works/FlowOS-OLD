@@ -1,16 +1,9 @@
-import { App } from './types.ts'
+import { Flow } from './types.ts'
 
 import SettingsApp from './apps/settings.ts'
 import FilesApp from './apps/files.ts'
 import MusicApp from './apps/music.ts'
 import EditorApp from './apps/editor.ts'
-
-interface Flow {
-  apps: {
-    [key: string]: App
-  }
-  openApp: Function
-}
 
 const flow: Flow = {
   apps: {

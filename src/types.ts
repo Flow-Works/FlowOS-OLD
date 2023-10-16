@@ -32,3 +32,21 @@ export interface AppClosedEvent extends CustomEvent {
     win: FlowWindow
   }
 }
+
+export interface FlowWindowConfig {
+  title: string
+  icon: string
+
+  width?: number
+  height?: number
+
+  minWidth?: number
+  minHeight?: number
+}
+
+export interface Flow {
+  apps: {
+    [key: string]: App
+  }
+  openApp: Function
+}

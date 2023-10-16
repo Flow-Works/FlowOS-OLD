@@ -1,16 +1,6 @@
 import flow from './flow.ts'
 import { v4 as uuid } from 'uuid'
-
-interface FlowWindowConfig {
-  title: string
-  icon: string
-
-  width?: number
-  height?: number
-
-  minWidth?: number
-  minHeight?: number
-}
+import { FlowWindowConfig } from './types.ts'
 
 function dragElement (element: HTMLElement, container: HTMLElement): void {
   let posX = 0; let posY = 0
@@ -176,13 +166,13 @@ export class FlowWindow {
 }
 
 class WM {
-  launcherOpen = false
-  area: HTMLElement
+  private isLauncherOpen = false
+  windowArea: HTMLElement
   launcher: HTMLElement
   windows: FlowWindow[] = []
 
   constructor () {
-    this.area = document.createElement('window-area')
+    this.windowArea = document.createElement('window-area')
     this.launcher = document.createElement('launcher')
 
     this.init()
@@ -205,12 +195,12 @@ class WM {
   createWindow (config: FlowWindowConfig): FlowWindow {
     const win = new FlowWindow(this, config)
     this.windows.push(win)
-    this.area.appendChild(win.element)
+    this.windowArea.appendChild(win.element)
     return win
   }
 
   toggleLauncher (): boolean {
-    if (this.launcherOpen) {
+    if (this.isLauncherOpen) {
       this.launcher.style.opacity = '0'
       this.launcher.style.backdropFilter = 'blur(0px)'
       this.launcher.style.pointerEvents = 'none'
@@ -220,8 +210,8 @@ class WM {
       this.launcher.style.pointerEvents = 'all'
     }
 
-    this.launcherOpen = !this.launcherOpen
-    return this.launcherOpen
+    this.isLauncherOpen = !this.isLauncherOpen
+    return this.isLauncherOpen
   }
 
   private init (): void {
@@ -254,7 +244,7 @@ class WM {
       this.launcher.querySelector('apps')?.appendChild(app)
     }
 
-    document.body.appendChild(this.area)
+    document.body.appendChild(this.windowArea)
     document.body.appendChild(this.launcher)
   }
 }
