@@ -1,4 +1,4 @@
-<center>
+<div align="center">
 
   # FlowOS Next
   The *future* of FlowOS.
@@ -10,4 +10,4 @@
   ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS-2.0)
 
 
-</center>
+</div>
