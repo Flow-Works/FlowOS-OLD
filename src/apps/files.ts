@@ -4,7 +4,6 @@ import { App } from '../types.ts'
 import flow from '../flow.ts'
 import { FlowWindow } from '../wm.ts'
 
-import Filer from 'filer'
 import { Stats } from 'fs'
 
 export default class FilesApp implements App {
@@ -14,7 +13,7 @@ export default class FilesApp implements App {
   version = '1.0.0'
 
   async open (): Promise<FlowWindow> {
-    const fs = new Filer.FileSystem()
+    const fs = new (window as any).Filer.FileSystem()
 
     const win = (window as any).wm.createWindow({
       title: this.name,
