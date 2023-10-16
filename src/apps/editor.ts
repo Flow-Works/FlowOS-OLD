@@ -22,7 +22,7 @@ export default class EditorApp implements App {
   version = '1.0.0'
 
   async open (data?: EditorConfig): Promise<FlowWindow> {
-    const { default: fs } = await import('fs')
+    const fs = new (window as any).Filer.FileSystem()
 
     const win = (window as any).wm.createWindow({
       title: this.name,

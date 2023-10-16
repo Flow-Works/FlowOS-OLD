@@ -4,6 +4,8 @@ import { App } from '../types.ts'
 import flow from '../flow.ts'
 import { FlowWindow } from '../wm.ts'
 
+import { Stats } from 'fs'
+
 export default class FilesApp implements App {
   name = 'Files'
   pkg = 'flow.files'
@@ -11,7 +13,7 @@ export default class FilesApp implements App {
   version = '1.0.0'
 
   async open (): Promise<FlowWindow> {
-    const { default: fs } = await import('fs')
+    const fs = new (window as any).Filer.FileSystem()
 
     const win = (window as any).wm.createWindow({
       title: this.name,
@@ -34,7 +36,7 @@ export default class FilesApp implements App {
     win.content.style.flexDirection = 'column'
 
     async function setDir (dir: string): Promise<void> {
-      await fs.readdir(dir, (e, files) => {
+      await fs.readdir(dir, (e: NodeJS.ErrnoException, files: string[]) => {
         const back = dir === '/' ? '<i class=\'bx bx-arrow-to-left\'></i>' : '<i class=\'back bx bx-left-arrow-alt\'></i>'
 
         win.content.innerHTML = `
@@ -54,7 +56,7 @@ export default class FilesApp implements App {
 
         for (const file of files) {
           const separator = dir === '/' ? '' : '/'
-          fs.stat(dir + separator + file, (e, fileStat) => {
+          fs.stat(dir + separator + file, (e: NodeJS.ErrnoException, fileStat: Stats) => {
             const element = document.createElement('div')
             element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;')
 
