@@ -1,0 +1,10 @@
+name: ts-standard
+jobs:
+  Semi-Standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - name: Install dependencies
+        run: npm i
+      - name: Run ts-standard test
+        run: npm run test
