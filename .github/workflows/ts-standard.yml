@@ -1,4 +1,9 @@
 name: ts-standard
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 jobs:
   Semi-Standard:
     runs-on: ubuntu-latest
