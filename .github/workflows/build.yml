@@ -1,0 +1,15 @@
+name: build
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  ts-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - name: Install dependencies
+        run: npm i
+      - name: Run ts-standard test
+        run: npm run build
