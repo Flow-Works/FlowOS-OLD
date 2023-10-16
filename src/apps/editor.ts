@@ -11,6 +11,8 @@ import 'prismjs/components/prism-typescript.js'
 import 'prismjs/components/prism-css.js'
 import { FlowWindow } from '../wm.ts'
 
+import Filer from 'filer'
+
 interface EditorConfig {
   path: string
 }
@@ -22,7 +24,7 @@ export default class EditorApp implements App {
   version = '1.0.0'
 
   async open (data?: EditorConfig): Promise<FlowWindow> {
-    const fs = new (window as any).Filer.FileSystem()
+    const fs = new Filer.FileSystem()
 
     const win = (window as any).wm.createWindow({
       title: this.name,
