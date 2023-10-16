@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { FilerWebpackPlugin } = require('filer/webpack');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const webpack = require('webpack');
 
 const path = require('path');
 
@@ -53,6 +54,7 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   devServer: {
     static: {
@@ -64,6 +66,36 @@ module.exports = {
   plugins: [new HtmlWebpackPlugin(), new FilerWebpackPlugin(),
     new NodePolyfillPlugin({
       excludeAliases: ['console']
+    }),
+    new webpack.optimize.MinChunkSizePlugin({
+      minChunkSize: 50000, // Minimum number of characters
+    }),
+    new webpack.optimize.SplitChunksPlugin({
+      minSize: 45000,
+      maxSize: 110000
     })
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "initial",
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
 };
