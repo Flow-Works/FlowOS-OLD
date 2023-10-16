@@ -35,17 +35,16 @@ export default class EditorApp implements App {
     if (data) {
       win.setTitle('Editor - ' + data.path);
 
+      const value = (await fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
         Prism,
         win.content,
         {
           language: data.path.split('.').at(-1),
           theme: "github-dark",
+          value
         },
       );
-
-      console.log(editor)
-      editor.scrollContainer.setAttribute('style', 'height: 100%;');
       const style = document.createElement('style');
       style.innerHTML = `
       .prism-editor {
@@ -72,6 +71,7 @@ export default class EditorApp implements App {
         --editor__bg-fold: #768390;
         --bg-guide-indent: var(--surface-0);
         color-scheme: dark;
+        height: 100%;
       }
       .prism-search * {
         font-family: 'Satoshi', sans-serif;
