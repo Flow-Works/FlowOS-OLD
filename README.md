@@ -1,39 +1,46 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS/main/public/assets/logo.svg" width="100px">
-  <p style="font-size: 28px; font-weight: bold">Flow OS</p>
-  <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=for-the-badge" />
+  <p style="font-size: 28px; font-weight: bold">FlowOS Next</p>
 
-  <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=for-the-badge" />
+  [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-  <img src="https://img.shields.io/github/forks/flow-works/flowos-2.0?style=for-the-badge&color=orange" />
+  <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=flat" />
+  <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=flat" />
+  <img src="https://img.shields.io/github/forks/flow-works/flowos-2.0?style=flat&color=orange" />
+  <img src="https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS-2.0?style=flat&color=violet" />
 
-  <img src="https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS-2.0?style=for-the-badge&color=violet" />
-  <br><br>
-  <i>The next generation of Flow OS</i>
+  [![build](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml/badge.svg)](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml)
+
   <br>
-<a href="https://docs.flow-works.me"><strong>Read the docs »</strong></a>
-  <hr>
+  <i>The future of Flow OS</i>
+  <br>
+  <a href="https://docs.flow-works.me"><strong>Read the docs »</strong></a>
+  <br>
   
 </div>
 
 ## What is Flow OS?
+
 Flow OS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's extremly customizable with an API to make your own apps, themes, and modules.
 
 ## Getting Started
+
 To run Flow OS on your local machine, you need Node.js 16 or above. 
-* Clone the repository
+
+1. Clone the repository
+```bash
+git clone https://github.com/Flow-Works/FlowOS-2.0
 ```
-git clone https://github.com/flow-works/flowos
-```
-* Install packages
-```
+2. Install packages
+```bash
 npm install
 ```
-* Build and run!
-```
-npm run build
+3. Run!
+```bash
 npm run serve
 ```
+## Contributing
+
 
 ## Made with
 Flow OS is made with the following software:
@@ -43,4 +50,4 @@ Flow OS is made with the following software:
 * [Ultraviolet](https://github.com/titaniumnetwork-dev/ultraviolet)
 
 ## License
-Flow OS is licensed under the MIT license. See the `LICENSE` file for more information.
+FlowOS is licensed under the MIT license. See the `LICENSE` file for more information.
