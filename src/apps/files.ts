@@ -22,16 +22,6 @@ export default class FilesApp implements App {
       height: 400
     })
 
-    try {
-      await fs.mkdir('/home', () => {})
-      await fs.mkdir('/home/meow', () => {})
-    } catch (e) {}
-    try {
-      await fs.writeFile('/home/owo1.txt', 'sussy', () => {})
-      await fs.writeFile('/home/owo2.html', '<body></body>', () => {})
-      await fs.writeFile('/home/owo.js', 'alert(`hi`)', () => {})
-    } catch (e) {}
-
     win.content.style.display = 'flex'
     win.content.style.flexDirection = 'column'
 
@@ -40,7 +30,11 @@ export default class FilesApp implements App {
         const back = dir === '/' ? '<i class=\'bx bx-arrow-to-left\'></i>' : '<i class=\'back bx bx-left-arrow-alt\'></i>'
 
         win.content.innerHTML = `
-          <div style="padding: 5px;display: flex;align-items: center;">${back}${dir}</div>
+          <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
+            ${back}${dir}
+            <div style="flex:1;"></div>
+            <i class='bx bxs-folder-plus' style="font-size: 20px;"></i><i class='bx bxs-file-plus' style="font-size: 20px;"></i>
+          </div>
           <div class="files" style="background: var(--base);flex: 1;border-radius: 10px;display: flex;flex-direction: column;"></div>
         `
 
