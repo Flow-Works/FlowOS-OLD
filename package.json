@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "vite serve"
+    "serve": "vite dev"
   },
   "keywords": [],
   "author": "",
