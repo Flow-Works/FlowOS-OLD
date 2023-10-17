@@ -1,6 +1,6 @@
 import * as clock from './modules/clock.ts'
 import * as switcher from './modules/switcher.ts'
-import * as appView from './modules/appView.ts'
+import * as appView from './modules/appLauncher.ts'
 import * as apps from './modules/apps.ts'
 import * as weather from './modules/weather.ts'
 import * as battery from './modules/battery.ts'
