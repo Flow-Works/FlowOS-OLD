@@ -19,9 +19,12 @@ window.fs = new (window as any).Filer.FileSystem()
 
 const params = new URLSearchParams(window.location.search)
 
-async function enableDebug() {
-  const { default: eruda } = await import("eruda")
+async function enableDebug (): Promise<void> {
+  const { default: eruda } = await import('eruda')
   eruda.init()
+  return await Promise.resolve()
 }
 
-if (params.get("debug")) enableDebug()
+if (params.get('debug') !== null && params.get('debug') !== undefined) {
+  enableDebug().catch(e => console.error(e))
+}
