@@ -12,6 +12,6 @@ export const run = (element: HTMLDivElement): void => {
   element.innerHTML = '<i class=\'bx bx-rocket\'></i>'
 
   element.onclick = () => {
-    (window as any).wm.toggleLauncher()
+    window.wm.toggleLauncher()
   }
 }

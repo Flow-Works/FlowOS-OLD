@@ -9,7 +9,7 @@ export default class SettingsApp implements App {
   version = '1.0.0'
 
   async open (): Promise<FlowWindow> {
-    const win = (window as any).wm.createWindow({
+    const win = window.wm.createWindow({
       title: this.name,
       icon,
       width: 700,

@@ -26,9 +26,7 @@ export default class EditorApp implements App {
   version = '1.0.0'
 
   async open (data?: EditorConfig): Promise<FlowWindow> {
-    const fs = new (window as any).Filer.FileSystem()
-
-    const win = (window as any).wm.createWindow({
+    const win = window.wm.createWindow({
       title: this.name,
       icon,
       width: 500,
@@ -38,19 +36,114 @@ export default class EditorApp implements App {
     if (data != null) {
       win.setTitle('Editor - ' + data.path)
 
-      const value = (await fs.promises.readFile(data.path)).toString()
+      win.content.style.display = 'flex'
+      win.content.style.flexDirection = 'column'
+      win.content.innerHTML = `
+        <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
+          <div id="file-open">File</div>
+          <div id="edit-open">Edit</div>
+
+          <div class="dropdown" id="file">
+            <a id="save">
+              <i class='bx bxs-save' style="font-size: 1.1rem;"></i>
+              Save
+            </a>
+          </div>
+          <div class="dropdown" id="edit">
+            <a id="find">
+              <i class='bx bxs-save' style="font-size: 1.1rem;"></i>
+              Find
+            </a>
+          </div>
+        </div>
+        <div class="editor" style="flex:1;"></div>
+        <style>
+        .dropdown {
+          position: absolute;
+          z-index: 100;
+          width: 150px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          padding: 5px;
+          margin-top: 80px;
+          background: var(--surface-0);
+          transition: all 0.1s cubic-bezier(0.16, 1, 0.5, 1);
+            
+          transform: translateY(0.5rem);
+          visibility: hidden;
+          opacity: 0;
+        }
+        
+        .show {
+          transform: translateY(0rem);
+          visibility: visible;
+          opacity: 1;
+        }
+
+        .dropdown a {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 5px 10px;
+          text-decoration: none;
+          color: var(--text);
+        }
+        
+        .dropdown a:hover {
+          background-color: var(--base);
+          color: white;
+        }
+        </style>
+      `
+
+      const fileBtn = win.content.querySelector('#file-open')
+      const editBtn = win.content.querySelector('#edit-open')
+
+      const toggleDropdown = function (id: string): void {
+        const el = win.content.querySelector(`#${id}`)
+        el?.classList.toggle('show')
+      }
+
+      fileBtn?.addEventListener('click', function (e) {
+        e.stopPropagation()
+        toggleDropdown('file')
+      })
+
+      editBtn?.addEventListener('click', function (e) {
+        e.stopPropagation()
+        toggleDropdown('edit')
+      })
+
+      win.content.addEventListener('click', function () {
+        const file = win.content.querySelector('#file')
+        const edit = win.content.querySelector('#edit')
+        if (file !== null) {
+          if (file.classList.contains('show')) {
+            toggleDropdown('file')
+          }
+        }
+        if (edit !== null) {
+          if (edit.classList.contains('show')) {
+            toggleDropdown('edit')
+          }
+        }
+      })
+
+      const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
         Prism,
-        win.content,
+        win.content.querySelector('.editor'),
         {
           language: data.path.split('.').at(-1),
           theme: 'github-dark',
           value
         }
       )
+
       const style = document.createElement('style')
       style.innerHTML = `
       .prism-editor {
+        border-radius: 10px 10px 0 0;
         caret-color: var(--text);
         font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
         --editor__bg: var(--base);
@@ -80,7 +173,13 @@ export default class EditorApp implements App {
         font-family: 'Satoshi', sans-serif;
       }
       `
-      editor.scrollContainer.appendChild(style)
+      editor.scrollContainer.appendChild(style);
+      (win.content.querySelector('#find') as HTMLElement).onclick = () => {
+        editor.extensions.searchWidget.open()
+      }
+      (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
+        await window.fs.promises.writeFile(data.path, editor.value)
+      }
     }
 
     return win
