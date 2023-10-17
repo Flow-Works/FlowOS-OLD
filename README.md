@@ -13,20 +13,20 @@
   [![build](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml/badge.svg)](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml)
 
   <br>
-  <i>The future of Flow OS</i>
+  <i>The future of FlowOS</i>
   <br>
   <a href="https://docs.flow-works.me"><strong>Read the docs »</strong></a>
   <br>
   
 </div>
 
-## What is Flow OS?
+## What is FlowOS?
 
-Flow OS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's extremly customizable with an API to make your own apps, themes, and modules.
+FlowOS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's extremly customizable with an API to make your own apps, themes, and modules.
 
 ## Getting Started
 
-To run Flow OS on your local machine, you need Node.js 16 or above. 
+To run FlowOS on your local machine, you need Node.js 16 or above. 
 
 1. Clone the repository
 ```bash
@@ -44,7 +44,7 @@ npm run serve
 
 
 ## Made with
-Flow OS is made with the following software:
+FlowOS is made with the following software:
 * [Filer](https://github.com/filerjs/filer)
 * [Prism Code Editor](https://github.com/FIameCaster/prism-code-editor)
 * [Vite](https://vitejs.dev)
