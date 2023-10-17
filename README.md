@@ -23,7 +23,7 @@ Flow OS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's ext
 To run Flow OS on your local machine, you need Node.js 16 or above. 
 * Clone the repository
 ```
-git clone https://github.com/flow-works/flowos
+git clone https://github.com/Flow-Works/FlowOS-2.0
 ```
 * Install packages
 ```
