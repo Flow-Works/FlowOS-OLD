@@ -7,7 +7,7 @@
     "test": "ts-standard",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite serve"
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
