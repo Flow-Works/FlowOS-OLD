@@ -39,22 +39,22 @@ export default class FilesApp implements App {
         if (back !== '<i class=\'bx bx-arrow-to-left\'></i>') {
           (win.content.querySelector('.back') as HTMLElement).onclick = async () => {
             if (dir.split('/')[1] === dir.replace('/', '')) {
-              await setDir('/' + dir.split('/')[0])
+              await setDir(`/${dir.split('/')[0]}`)
             } else {
-              await setDir('/' + dir.split('/')[1])
+              await setDir(`/${dir.split('/')[1]}`)
             }
           }
         }
 
         (win.content.querySelector('.file') as HTMLElement).onclick = async () => {
           const title: string = prompt('Enter file name') ?? 'new-file.txt'
-          await window.fs.promises.open(dir + '/' + title, 'w')
+          await window.fs.promises.open(`${dir}/${title}`, 'w')
           await setDir(dir)
         }
 
         (win.content.querySelector('.folder') as HTMLElement).onclick = async () => {
           const title: string = prompt('Enter folder name') ?? 'new-folder'
-          await window.fs.promises.mkdir(dir + '/' + title)
+          await window.fs.promises.mkdir(`${dir}/${title}`)
           await setDir(dir)
         }
 
