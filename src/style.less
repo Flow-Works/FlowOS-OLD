@@ -44,10 +44,10 @@ body, html {
 }
 
 toolbar {
-  width: 100%;
+  width: calc(100% - 40px);
   display: flex;
   gap: 10px;
-  margin-bottom: 10px;
+  margin: 0 0 0 0;
   justify-content: center;
 
   & > div {
@@ -75,7 +75,7 @@ toolbar {
 window-area {
   position: relative;
   width: calc(100% - 40px);
-  margin-left: 20px;
+  margin-top: 20px;
   margin-bottom: 20px;
   height: 100%;
   overflow: hidden;
