@@ -46,7 +46,7 @@ npm run serve
 ## Made with
 Flow OS is made with the following software:
 * [Filer](https://github.com/filerjs/filer)
-* [PrismJS](https://github.com/PrismJS/prism)
+* [Prism Code Editor](https://github.com/FIameCaster/prism-code-editor)
 * [Vite](https://vitejs.dev)
 * [Ultraviolet](https://github.com/titaniumnetwork-dev/ultraviolet)
 
