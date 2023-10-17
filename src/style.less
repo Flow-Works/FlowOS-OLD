@@ -137,10 +137,12 @@ launcher {
   top: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 99999999999999999999999;
-  width: 100vw;
+  width: calc(100vw + 20px);
   height: calc(100vh + 20px);
   gap: 20px;
   transition: 0.2s opacity, 0.2s backdrop-filter;
+  margin: 0;
+  left: 0;
 
   apps {
     max-height: 70vh;
