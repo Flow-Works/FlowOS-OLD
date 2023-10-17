@@ -17,9 +17,9 @@ export default class SettingsApp implements App {
     })
 
     win.content.style.padding = '10px'
+    // TODO: add css styling
     win.content.innerHTML = `
-      <h1>Settings</h1>
-      <p>owo2</p>
+    win.content.innerHTML = '<iframe src="/src/apps/html/settings.html></iframe>'
     `
 
     return win

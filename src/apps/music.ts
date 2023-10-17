@@ -14,7 +14,8 @@ export default class MusicApp implements App {
       icon
     })
 
-    win.content.innerHTML = 'hi'
+    // TODO: add css styling (in /apps/html)
+    win.content.innerHTML = '<iframe src="/src/apps/html/music.html></iframe>'
 
     return win
   }
