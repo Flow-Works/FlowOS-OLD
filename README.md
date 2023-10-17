@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS/main/public/assets/logo.svg" width="100px">
+  <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS-2.0/master/src/assets/flow.png" width="100px">
  
   # FlowOS Next
 
