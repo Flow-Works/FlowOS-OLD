@@ -59,6 +59,19 @@ Please note we have a code of conduct, please follow it in all your interactions
 | Move/rename repository      | :truck: `:truck:`                                         |
 | Issue/Pull Request template | :newspaper_roll: `:newspaper_roll:`                       |
 | Merge pull request          | :knot: `:knot:`                                           |
+| Assets                      | :bento: `:bento:`                                         |
+
+### Format
+
+Your commit messages should use the following as a guide:
+```
+[emoji] description
+```
+
+This is an example of this being used for "**Assets**":
+```
+[🍱] Added terminal.png
+```
 
 ## Code of Conduct
 
