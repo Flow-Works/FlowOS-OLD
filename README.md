@@ -5,12 +5,11 @@
 
   [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-  <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=flat" />
-  <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=flat" />
-  <img src="https://img.shields.io/github/forks/flow-works/flowos-2.0?style=flat&color=orange" />
-  <img src="https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS-2.0?style=flat&color=violet" />
-
-  [![build](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml/badge.svg)](https://github.com/Flow-Works/FlowOS-2.0/actions/workflows/build.yml)
+  <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=for-the-badge" />
+  <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=for-the-badge" />
+  <img src="https://img.shields.io/github/forks/flow-works/flowos-2.0?style=for-the-badge&color=orange" />
+  <img src="https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS-2.0?style=for-the-badge&color=violet" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flow-works/flowos-2.0/build.yml?style=for-the-badge" />
 
   <br>
   <i>The future of FlowOS</i>
