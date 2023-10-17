@@ -27,15 +27,16 @@ class StatusBar {
   add (item: StatusItem): void {
     if (this.items.some(x => x.meta.id === item.meta.id)) {
       console.error(`Unable to register tool; ${item.meta.id} is already registered.`)
-    } else {
-      const element = document.createElement('div')
-      element.setAttribute('data-toolbar-id', item.meta.id)
-
-      this.items.push(item)
-      this.element.appendChild(element)
-
-      item.run(element)
+      return
     }
+
+    const element = document.createElement('div')
+    element.setAttribute('data-toolbar-id', item.meta.id)
+
+    this.items.push(item)
+    this.element.appendChild(element)
+
+    item.run(element)
   }
 }
 
