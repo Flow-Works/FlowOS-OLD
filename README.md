@@ -1,6 +1,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS/main/public/assets/logo.svg" width="100px">
-  <p style="font-size: 28px; font-weight: bold">FlowOS Next</p>
+ 
+  # FlowOS Next
 
   [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
