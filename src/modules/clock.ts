@@ -6,14 +6,17 @@ export const meta = {
 
 export const run = (element: HTMLDivElement): void => {
   element.style.display = 'flex'
-  element.style.alignItems = 'center'
+  element.style.flexDirection = 'column'
+  element.style.padding = '5px 10px'
+  element.style.fontSize = '12.5px'
+  element.style.justifyContent = 'center'
 
-  const refreshDate = (): any => {
+  const refreshDate = (): string => {
     const split = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).split(',')
     return `<i>${split[0]}</i>,${split[1]} `
   }
 
-  const refreshClock = (): any => {
+  const refreshClock = (): string => {
     return date.toLocaleTimeString('en-US', { hour12: false, hour: 'numeric', minute: 'numeric' })
   }
 
@@ -24,15 +27,8 @@ export const run = (element: HTMLDivElement): void => {
 
   setInterval(() => {
     date = new Date()
-    const date_: string = refreshDate()
-    element.innerHTML = `${date_} <br><span id="time">,  </span>`
-  }, 1000)
-  setInterval(() => {
-    date = new Date()
-    const clock: string = refreshClock()
-    const time = document.getElementById('time')
-    if (time !== null) {
-      time.innerText = ` | ${clock}`
-    }
+    const clock = refreshClock()
+    const date_ = refreshDate()
+    element.innerHTML = `${clock}<div>${date_}</div>`
   }, 1000)
 }
