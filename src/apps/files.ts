@@ -13,34 +13,26 @@ export default class FilesApp implements App {
   version = '1.0.0'
 
   async open (): Promise<FlowWindow> {
-    const fs = new (window as any).Filer.FileSystem()
-
-    const win = (window as any).wm.createWindow({
+    const win = window.wm.createWindow({
       title: this.name,
       icon,
       width: 500,
       height: 400
     })
 
-    try {
-      await fs.mkdir('/home', () => {})
-      await fs.mkdir('/home/meow', () => {})
-    } catch (e) {}
-    try {
-      await fs.writeFile('/home/owo1.txt', 'sussy', () => {})
-      await fs.writeFile('/home/owo2.html', '<body></body>', () => {})
-      await fs.writeFile('/home/owo.js', 'alert(`hi`)', () => {})
-    } catch (e) {}
-
     win.content.style.display = 'flex'
     win.content.style.flexDirection = 'column'
 
     async function setDir (dir: string): Promise<void> {
-      await fs.readdir(dir, (e: NodeJS.ErrnoException, files: string[]) => {
+      await window.fs.readdir(dir, (e: NodeJS.ErrnoException, files: string[]) => {
         const back = dir === '/' ? '<i class=\'bx bx-arrow-to-left\'></i>' : '<i class=\'back bx bx-left-arrow-alt\'></i>'
 
         win.content.innerHTML = `
-          <div style="padding: 5px;display: flex;align-items: center;">${back}${dir}</div>
+          <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
+            ${back}${dir}
+            <div style="flex:1;"></div>
+            <i class='folder bx bxs-folder-plus' style="font-size: 17.5px;"></i><i class='file bx bxs-file-plus' style="font-size: 17.5px;"></i>
+          </div>
           <div class="files" style="background: var(--base);flex: 1;border-radius: 10px;display: flex;flex-direction: column;"></div>
         `
 
@@ -54,9 +46,21 @@ export default class FilesApp implements App {
           }
         }
 
+        (win.content.querySelector('.file') as HTMLElement).onclick = async () => {
+          const title: string = prompt('Enter file name') ?? 'new-file.txt'
+          await window.fs.promises.open(dir + '/' + title, 'w')
+          await setDir(dir)
+        }
+
+        (win.content.querySelector('.folder') as HTMLElement).onclick = async () => {
+          const title: string = prompt('Enter folder name') ?? 'new-folder'
+          await window.fs.promises.mkdir(dir + '/' + title)
+          await setDir(dir)
+        }
+
         for (const file of files) {
           const separator = dir === '/' ? '' : '/'
-          fs.stat(dir + separator + file, (e: NodeJS.ErrnoException, fileStat: Stats) => {
+          window.fs.stat(dir + separator + file, (e: NodeJS.ErrnoException, fileStat: Stats) => {
             const element = document.createElement('div')
             element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;')
 
@@ -120,7 +124,7 @@ export default class FilesApp implements App {
               }
             }
 
-            win.content.querySelector('.files').appendChild(element)
+            win.content.querySelector('.files')?.appendChild(element)
           })
         }
       })
