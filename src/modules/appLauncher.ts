@@ -9,7 +9,7 @@ export const run = (element: HTMLDivElement): void => {
   element.style.alignItems = 'center'
   element.style.justifyContent = 'center'
   element.style.aspectRatio = '1 / 1'
-  element.innerHTML = '<i class=\'bx bx-rocket\'></i>'
+  element.innerHTML = '<i class=\'bx bx-category\'></i>'
 
   element.onclick = () => {
     window.wm.toggleLauncher()

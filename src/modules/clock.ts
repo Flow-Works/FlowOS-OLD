@@ -5,6 +5,8 @@ export const meta = {
 }
 
 export const run = (element: HTMLDivElement): void => {
+  let date: Date = new Date()
+
   element.style.display = 'flex'
   element.style.flexDirection = 'column'
   element.style.padding = '5px 10px'
@@ -19,8 +21,6 @@ export const run = (element: HTMLDivElement): void => {
   const refreshClock = (): string => {
     return date.toLocaleTimeString('en-US', { hour12: false, hour: 'numeric', minute: 'numeric' })
   }
-
-  let date: Date = new Date()
 
   refreshDate()
   refreshClock()
