@@ -1,5 +1,5 @@
 import icon from '../assets/icons/info.png'
-import { App } from '../types.ts'
+import { App, PackageJSON } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
 export default class SettingsApp implements App {
@@ -10,6 +10,7 @@ export default class SettingsApp implements App {
   canResize = true
 
   async open (): Promise<FlowWindow> {
+    const packageJSON: PackageJSON = await import('../../package.json')
     const win = window.wm.createWindow({
       title: this.name,
       icon,
@@ -19,40 +20,21 @@ export default class SettingsApp implements App {
     })
 
     win.content.style.padding = '10px'
+    win.content.style.textAlign = 'center'
+    win.content.style.display = 'flex'
+    win.content.style.flexDirection = 'column'
+    win.content.style.justifyContent = 'center'
+    win.content.style.alignItems = 'center'
     win.content.innerHTML = `
-        <h1>FlowOS</h1>
-        <p>v2.0</p>
-
-        <p> Created by ThinLiquid, 1nspird_, Proudparot2, Systemless_  </p>
-
-        <a class="discord" href="https://discord.gg/flowos"> Discord </a>
-
-        <a class="github" href="https://github.com/Flow-Works/FlowOS-2.0"> Github </a>
-
-        <style>
-
-          #contributers {
-            font-size:12px;
-          }
-
-          h1 {
-            text-align: center;
-            font-size: 48px;
-          }
-          p {
-            text-align: center;
-          }
-          .github {
-            float:right;
-            position: relative;
-            top: 125px;
-          }
-          .discord {
-            float:left;
-            position: relative;
-            top: 125px;
-          }
-        </style>
+        <div>
+          <h1 style="margin:0;">FlowOS</h1>
+          <p style="margin:0;">v${packageJSON.version}</p>
+          <br/>
+          <p>Created by ThinLiquid, 1nspird_, proudparot2, systemless_</p>
+          <a class="discord" href="https://discord.gg/flowos">Discord</a>
+         - 
+        <a class="github" href="https://github.com/Flow-Works/FlowOS-2.0">Github</a>
+        </div>
     `
 
     return win
