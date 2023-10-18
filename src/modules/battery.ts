@@ -9,5 +9,17 @@ export const run = (element: HTMLDivElement): void => {
   element.style.alignItems = 'center'
   element.style.paddingLeft = '15px'
   element.style.paddingRight = '15px'
-  element.innerHTML = '🔋 100%'
+
+  if ('getBattery' in navigator) {
+    // types don't exist for battery api
+    // @ts-expect-error
+    navigator.getBattery().then((battery) => {
+      element.innerHTML = `🔋 ${(battery.level * 100).toFixed(0)}%`
+      battery.addEventListener('', () => {
+        element.innerHTML = `🔋 ${(battery.level * 100).toFixed(0)}%`
+      })
+    })
+  } else {
+    console.log('Battery API is not supported on this device')
+  }
 }
