@@ -16,6 +16,7 @@ export default class MusicApp implements App {
       height: 300
     })
 
+    win.content.style.background = 'var(--base)'
     win.content.innerHTML = 'hi'
 
     return win

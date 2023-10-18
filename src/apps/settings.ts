@@ -16,6 +16,7 @@ export default class SettingsApp implements App {
       height: 300
     })
 
+    win.content.style.background = 'var(--base)'
     win.content.style.padding = '10px'
     win.content.innerHTML = `
       <h1>Settings</h1>

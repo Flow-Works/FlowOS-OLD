@@ -25,6 +25,7 @@ export default class SettingsApp implements App {
     win.content.style.flexDirection = 'column'
     win.content.style.justifyContent = 'center'
     win.content.style.alignItems = 'center'
+    win.content.style.background = 'var(--base)'
     win.content.innerHTML = `
         <div>
           <h1 style="margin:0;">FlowOS</h1>

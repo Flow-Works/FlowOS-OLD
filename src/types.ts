@@ -53,3 +53,7 @@ export interface FlowWindowConfig {
 export interface Apps {
   [key: string]: App
 }
+
+export interface LoadedApp extends App {
+  builtin: boolean
+}
