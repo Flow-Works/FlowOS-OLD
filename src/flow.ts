@@ -4,13 +4,15 @@ import SettingsApp from './apps/settings.ts'
 import FilesApp from './apps/files.ts'
 import MusicApp from './apps/music.ts'
 import EditorApp from './apps/editor.ts'
+import InfoApp from './apps/info.ts'
 
 const flow: Flow = {
   apps: {
     'flow.settings': new SettingsApp(),
     'flow.music': new MusicApp(),
     'flow.files': new FilesApp(),
-    'flow.editor': new EditorApp()
+    'flow.editor': new EditorApp(),
+    'flow.info': new InfoApp()
   },
   async openApp (pkg: string, data: any) {
     const win = this.apps[pkg].open(data)

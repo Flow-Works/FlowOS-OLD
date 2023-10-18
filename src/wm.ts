@@ -93,13 +93,20 @@ export class FlowWindow {
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
-    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`;
+    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="close" class='bx bx-x'></i>`
+    if (config.canResize) {
+      this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`
+    }
+
     (this.header.querySelector('#close') as HTMLElement).onclick = () => {
       this.close()
     }
 
-    (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin();
-    (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
+    (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin()
+
+    if (config.canResize) {
+      (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
+    }
 
     this.content = document.createElement('window-content')
 

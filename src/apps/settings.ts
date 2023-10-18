@@ -13,7 +13,8 @@ export default class SettingsApp implements App {
       title: this.name,
       icon,
       width: 700,
-      height: 300
+      height: 300,
+      canResize: true
     })
 
     win.content.style.padding = '10px'
