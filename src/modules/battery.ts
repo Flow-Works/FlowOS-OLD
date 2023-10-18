@@ -9,5 +9,5 @@ export const run = (element: HTMLDivElement): void => {
   element.style.alignItems = 'center'
   element.style.paddingLeft = '15px'
   element.style.paddingRight = '15px'
-  element.innerHTML = '100%'
+  element.innerHTML = '🔋 100%'
 }

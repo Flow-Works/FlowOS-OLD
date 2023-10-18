@@ -35,7 +35,7 @@ export default class EditorApp implements App {
     })
 
     if (data != null) {
-      win.setTitle('Editor - ' + data.path)
+      win.setTitle(`Editor - ${data.path}`)
 
       win.content.style.display = 'flex'
       win.content.style.flexDirection = 'column'
@@ -100,33 +100,29 @@ export default class EditorApp implements App {
       const fileBtn = win.content.querySelector('#file-open')
       const editBtn = win.content.querySelector('#edit-open')
 
-      const toggleDropdown = function (id: string): void {
+      const toggleDropdown = (id: string): void => {
         const el = win.content.querySelector(`#${id}`)
         el?.classList.toggle('show')
       }
 
-      fileBtn?.addEventListener('click', function (e) {
+      fileBtn?.addEventListener('click', (e) => {
         e.stopPropagation()
         toggleDropdown('file')
       })
 
-      editBtn?.addEventListener('click', function (e) {
+      editBtn?.addEventListener('click', (e) => {
         e.stopPropagation()
         toggleDropdown('edit')
       })
 
-      win.content.addEventListener('click', function () {
-        const file = win.content.querySelector('#file')
-        const edit = win.content.querySelector('#edit')
-        if (file !== null) {
-          if (file.classList.contains('show')) {
-            toggleDropdown('file')
-          }
+      win.content.addEventListener('click', () => {
+        const file = (win.content.querySelector('#file') as HTMLElement)
+        const edit = (win.content.querySelector('#edit') as HTMLElement)
+        if (file.classList.contains('show')) {
+          toggleDropdown('file')
         }
-        if (edit !== null) {
-          if (edit.classList.contains('show')) {
-            toggleDropdown('edit')
-          }
+        if (edit.classList.contains('show')) {
+          toggleDropdown('edit')
         }
       })
 

@@ -192,11 +192,7 @@ class WM {
 
     const max = Math.max(...indexes)
 
-    if (max === -Infinity) {
-      return 0
-    } else {
-      return max
-    }
+    return max === -Infinity ? 0 : max
   }
 
   createWindow (config: FlowWindowConfig): FlowWindow {
