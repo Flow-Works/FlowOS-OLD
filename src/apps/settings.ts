@@ -19,8 +19,8 @@ export default class SettingsApp implements App {
     win.content.style.background = 'var(--base)'
     win.content.style.padding = '10px'
     win.content.innerHTML = `
-      <h1>Settings</h1>
-      <p>owo2</p>
+    <h1> Settings </h1>
+    <p>owo2</p>
     `
 
     return win
