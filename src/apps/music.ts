@@ -13,8 +13,7 @@ export default class MusicApp implements App {
       title: this.name,
       icon,
       width: 700,
-      height: 300,
-      canResize: true
+      height: 300
     })
 
     win.content.innerHTML = 'hi'

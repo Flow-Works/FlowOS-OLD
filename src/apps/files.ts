@@ -16,8 +16,7 @@ export default class FilesApp implements App {
       title: this.name,
       icon,
       width: 500,
-      height: 400,
-      canResize: true
+      height: 400
     })
 
     win.content.style.display = 'flex'
