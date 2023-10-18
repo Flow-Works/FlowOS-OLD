@@ -11,10 +11,6 @@
   --crust: #11111b;
 }
 
-.bx-category {
-  color: #181926;
-}
-
 body,
 html {
   background-color: var(--crust);
@@ -55,10 +51,9 @@ toolbar {
   justify-content: center;
 
   div[data-toolbar-id="appview"] {
-    background: rgb(150, 181, 246);
-    background: linear-gradient(45deg, rgba(150, 181, 246, 1) 0%, rgba(150, 181, 246, 1) 12%, rgba(77, 129, 236, 1) 100%);
-    color: black;
+    background: linear-gradient(45deg, var(--crust), var(--surface-0));
   }
+
   & > div {
     background: var(--base);
     padding: 5px;
