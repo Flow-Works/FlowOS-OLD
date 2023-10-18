@@ -40,6 +40,8 @@ export interface FlowWindowConfig {
   width?: number
   height?: number
 
+  canResize: boolean
+
   minWidth?: number
   minHeight?: number
 }
