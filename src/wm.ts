@@ -173,9 +173,6 @@ class WM {
 
   constructor () {
     this.windowArea = document.createElement('window-area')
-    this.launcher = document.createElement('launcher')
-
-    this.init()
   }
 
   getHighestZIndex (): number {
@@ -210,7 +207,11 @@ class WM {
     return this.isLauncherOpen
   }
 
-  private init (): void {
+  async init (): Promise<void> {
+    window.preloader.setPending('window manager')
+    window.preloader.setStatus('creating app launcher...')
+    this.launcher = document.createElement('launcher')
+
     this.launcher.innerHTML = `
       <input placeholder="Search"/>
       <apps></apps>
@@ -230,7 +231,10 @@ class WM {
     this.launcher.style.filter = 'blur(0px)'
     this.launcher.style.pointerEvents = 'none'
 
+    window.preloader.setStatus('adding apps to app launcher...')
+
     for (const pkg in flow.apps) {
+      window.preloader.setStatus(`adding apps to app launcher\n${flow.apps[pkg].name}`)
       const app = document.createElement('app')
       app.onclick = () => {
         flow.openApp(pkg)
@@ -242,6 +246,8 @@ class WM {
 
     document.body.appendChild(this.windowArea)
     document.body.appendChild(this.launcher)
+
+    await window.preloader.setDone('window manager')
   }
 }
 
