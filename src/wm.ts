@@ -1,4 +1,3 @@
-import flow from './flow.ts'
 import { v4 as uuid } from 'uuid'
 import { FlowWindowConfig } from './types.ts'
 
@@ -233,26 +232,6 @@ class WM {
       if (e.target !== e.currentTarget) return
       this.toggleLauncher()
     }
-
-    this.launcher.style.opacity = '0'
-    this.launcher.style.filter = 'blur(0px)'
-    this.launcher.style.pointerEvents = 'none'
-
-    window.preloader.setStatus('adding apps to app launcher...')
-
-    for (const pkg in flow.apps) {
-      window.preloader.setStatus(`adding apps to app launcher\n${flow.apps[pkg].name}`)
-      const app = document.createElement('app')
-      app.onclick = () => {
-        flow.openApp(pkg)
-        this.toggleLauncher()
-      }
-      app.innerHTML = `<img src="${flow.apps[pkg].icon}"><div>${flow.apps[pkg].name}</div>`
-      this.launcher.querySelector('apps')?.appendChild(app)
-    }
-
-    document.body.appendChild(this.windowArea)
-    document.body.appendChild(this.launcher)
 
     await window.preloader.setDone('window manager')
   }

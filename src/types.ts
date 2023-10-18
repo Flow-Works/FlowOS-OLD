@@ -50,9 +50,6 @@ export interface FlowWindowConfig {
   minHeight?: number
 }
 
-export interface Flow {
-  apps: {
-    [key: string]: App
-  }
-  openApp: Function
+export interface Apps {
+  [key: string]: App
 }
