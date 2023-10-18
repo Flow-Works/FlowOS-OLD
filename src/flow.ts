@@ -1,24 +1,67 @@
-import { Flow } from './types.ts'
+import { App, LoadedApp } from './types.ts'
 
-import SettingsApp from './apps/settings.ts'
-import FilesApp from './apps/files.ts'
-import MusicApp from './apps/music.ts'
-import EditorApp from './apps/editor.ts'
-import InfoApp from './apps/info.ts'
+class Flow {
+  apps: LoadedApp[] = []
+  appList = [
+    'settings',
+    'music',
+    'files',
+    'editor',
+    'info',
+    'manager'
+  ]
 
-const flow: Flow = {
-  apps: {
-    'flow.settings': new SettingsApp(),
-    'flow.music': new MusicApp(),
-    'flow.files': new FilesApp(),
-    'flow.editor': new EditorApp(),
-    'flow.info': new InfoApp()
-  },
-  async openApp (pkg: string, data: any) {
-    const win = this.apps[pkg].open(data)
-    const event = new CustomEvent('app_opened', { detail: { app: this.apps[pkg], win: await win } })
+  async init (): Promise<void> {
+    window.preloader.setPending('apps')
+    window.preloader.setStatus('importing default apps...')
+
+    for (const appPath of this.appList) {
+      const { default: ImportedApp } = await import(`./apps/${appPath}.ts`)
+      const app = new ImportedApp()
+      app.builtin = true
+
+      window.preloader.setStatus(`importing default apps\n${appPath}`)
+      this.add(app)
+    }
+
+    window.wm.launcher.style.opacity = '0'
+    window.wm.launcher.style.filter = 'blur(0px)'
+    window.wm.launcher.style.pointerEvents = 'none'
+
+    window.preloader.setStatus('adding apps to app launcher...')
+
+    this.apps.forEach((app) => {
+      window.preloader.setStatus(`adding apps to app launcher\n${app.name}`)
+      const appElement = document.createElement('app')
+      appElement.onclick = async () => {
+        await window.flow.openApp(app.pkg)
+        window.wm.toggleLauncher()
+      }
+      appElement.innerHTML = `<img src="${app.icon}"><div>${app.name}</div>`
+      window.wm.launcher.querySelector('apps')?.appendChild(appElement)
+    })
+
+    document.body.appendChild(window.wm.windowArea)
+    document.body.appendChild(window.wm.launcher)
+
+    await window.preloader.setDone('apps')
+  }
+
+  add (app: App): void {
+    if (this.apps.some(x => x.pkg === app.pkg)) {
+      console.error(`Unable to register app; ${app.pkg} is already registered.`)
+      return
+    }
+
+    this.apps.push(app)
+  }
+
+  async openApp (pkg: string, data?: any): Promise<void> {
+    const app = this.apps.find(x => x.pkg === pkg)
+    const win = app?.open(data)
+    const event = new CustomEvent('app_opened', { detail: { app, win: await win } })
     window.dispatchEvent(event)
   }
 }
 
-export default flow
+export default Flow

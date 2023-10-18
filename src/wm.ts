@@ -1,4 +1,3 @@
-import flow from './flow.ts'
 import { v4 as uuid } from 'uuid'
 import { FlowWindowConfig } from './types.ts'
 
@@ -89,12 +88,14 @@ export class FlowWindow {
       this.focus()
     }
 
+    if (config.canResize === undefined) config.canResize = true
+
     this.element.style.width = `${config.width ?? 300}px`
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
     this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="close" class='bx bx-x'></i>`
-    if (config.canResize) {
+    if (!config.canResize) {
       this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`
     }
 
@@ -104,7 +105,7 @@ export class FlowWindow {
 
     (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin()
 
-    if (config.canResize) {
+    if (!config.canResize) {
       (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
     }
 
@@ -233,26 +234,6 @@ class WM {
       if (e.target !== e.currentTarget) return
       this.toggleLauncher()
     }
-
-    this.launcher.style.opacity = '0'
-    this.launcher.style.filter = 'blur(0px)'
-    this.launcher.style.pointerEvents = 'none'
-
-    window.preloader.setStatus('adding apps to app launcher...')
-
-    for (const pkg in flow.apps) {
-      window.preloader.setStatus(`adding apps to app launcher\n${flow.apps[pkg].name}`)
-      const app = document.createElement('app')
-      app.onclick = () => {
-        flow.openApp(pkg)
-        this.toggleLauncher()
-      }
-      app.innerHTML = `<img src="${flow.apps[pkg].icon}"><div>${flow.apps[pkg].name}</div>`
-      this.launcher.querySelector('apps')?.appendChild(app)
-    }
-
-    document.body.appendChild(this.windowArea)
-    document.body.appendChild(this.launcher)
 
     await window.preloader.setDone('window manager')
   }

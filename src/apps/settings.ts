@@ -13,10 +13,10 @@ export default class SettingsApp implements App {
       title: this.name,
       icon,
       width: 700,
-      height: 300,
-      canResize: true
+      height: 300
     })
 
+    win.content.style.background = 'var(--base)'
     win.content.style.padding = '10px'
     win.content.innerHTML = `
       <h1>Settings</h1>

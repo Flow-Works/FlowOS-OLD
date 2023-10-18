@@ -44,15 +44,16 @@ export interface FlowWindowConfig {
   width?: number
   height?: number
 
-  canResize: boolean
+  canResize?: boolean
 
   minWidth?: number
   minHeight?: number
 }
 
-export interface Flow {
-  apps: {
-    [key: string]: App
-  }
-  openApp: Function
+export interface Apps {
+  [key: string]: App
+}
+
+export interface LoadedApp extends App {
+  builtin: boolean
 }

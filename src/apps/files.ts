@@ -1,7 +1,6 @@
 import icon from '../assets/icons/files.png'
 import { App } from '../types.ts'
 
-import flow from '../flow.ts'
 import { FlowWindow } from '../wm.ts'
 
 import { Stats } from 'fs'
@@ -17,8 +16,7 @@ export default class FilesApp implements App {
       title: this.name,
       icon,
       width: 500,
-      height: 400,
-      canResize: true
+      height: 400
     })
 
     win.content.style.display = 'flex'
@@ -121,7 +119,7 @@ export default class FilesApp implements App {
               if (fileStat.isDirectory()) {
                 await setDir(dir + separator + file)
               } else {
-                flow.openApp('flow.editor', { path: dir + separator + file })
+                await window.flow.openApp('flow.editor', { path: dir + separator + file })
               }
             }
 
