@@ -29,14 +29,16 @@ if (params.get('debug') !== null && params.get('debug') !== undefined) {
 
 window.preloader = new Preloader()
 window.statusBar = new StatusBar()
-window.wm = new WM()
+window.wm = new WM();
 
-window.preloader.setPending('filesystem')
-window.fs = new (window as any).Filer.FileSystem()
-await window.preloader.setDone('filesystem')
+(async function () {
+  window.preloader.setPending('filesystem')
+  window.fs = new (window as any).Filer.FileSystem()
+  await window.preloader.setDone('filesystem')
 
-await window.statusBar.init()
-await window.wm.init()
+  await window.statusBar.init()
+  await window.wm.init()
 
-window.preloader.setStatus('')
-window.preloader.finish()
+  window.preloader.setStatus('')
+  window.preloader.finish()
+})().catch(e => console.error)
