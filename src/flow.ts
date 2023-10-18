@@ -1,13 +1,14 @@
-import { App } from './types.ts'
+import { App, LoadedApp } from './types.ts'
 
 class Flow {
-  apps: App[] = []
+  apps: LoadedApp[] = []
   appList = [
     'settings',
     'music',
     'files',
     'editor',
-    'info'
+    'info',
+    'manager'
   ]
 
   async init (): Promise<void> {
@@ -17,6 +18,7 @@ class Flow {
     for (const appPath of this.appList) {
       const { default: ImportedApp } = await import(`./apps/${appPath}.ts`)
       const app = new ImportedApp()
+      app.builtin = true
 
       window.preloader.setStatus(`importing default apps\n${appPath}`)
       this.add(app)
