@@ -30,7 +30,8 @@ export default class EditorApp implements App {
       title: this.name,
       icon,
       width: 500,
-      height: 400
+      height: 400,
+      canResize: true
     })
 
     if (data != null) {

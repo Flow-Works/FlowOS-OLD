@@ -11,7 +11,10 @@ export default class MusicApp implements App {
   async open (): Promise<FlowWindow> {
     const win = window.wm.createWindow({
       title: this.name,
-      icon
+      icon,
+      width: 700,
+      height: 300,
+      canResize: true
     })
 
     win.content.innerHTML = 'hi'
