@@ -7,7 +7,7 @@ class Preloader {
     this.element = document.createElement('preloader')
 
     this.element.innerHTML = `
-      <img src="${flowIcon as string}" width="150px">
+      <img src="${flowIcon}" width="150px">
       <div class="done"></div>
       <div class="status"></div>
     `

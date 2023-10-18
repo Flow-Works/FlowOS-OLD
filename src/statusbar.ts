@@ -10,13 +10,13 @@ class StatusBar {
     document.body.appendChild(this.element)
   }
 
-  add (item: Plugin): void {
+  async add (item: Plugin): Promise<void> {
     const element = document.createElement('div')
     element.setAttribute('data-toolbar-id', item.meta.pkg)
 
     this.element.appendChild(element)
 
-    item.run(element)
+    await item.run(element)
   }
 
   async init (): Promise<void> {
@@ -24,7 +24,7 @@ class StatusBar {
 
     for (const plugin of window.flow.plugins) {
       window.preloader.setStatus(`adding plugins to statusbar\n${plugin.meta.pkg}`)
-      this.add(plugin)
+      await this.add(plugin)
     }
 
     await window.preloader.setDone('plugins')
