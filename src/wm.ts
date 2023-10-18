@@ -93,13 +93,20 @@ export class FlowWindow {
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
-    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`;
+    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="close" class='bx bx-x'></i>`
+    if (config.canResize) {
+      this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`
+    }
+
     (this.header.querySelector('#close') as HTMLElement).onclick = () => {
       this.close()
     }
 
-    (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin();
-    (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
+    (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin()
+
+    if (config.canResize) {
+      (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
+    }
 
     this.content = document.createElement('window-content')
 
@@ -173,9 +180,6 @@ class WM {
 
   constructor () {
     this.windowArea = document.createElement('window-area')
-    this.launcher = document.createElement('launcher')
-
-    this.init()
   }
 
   getHighestZIndex (): number {
@@ -210,7 +214,11 @@ class WM {
     return this.isLauncherOpen
   }
 
-  private init (): void {
+  async init (): Promise<void> {
+    window.preloader.setPending('window manager')
+    window.preloader.setStatus('creating app launcher...')
+    this.launcher = document.createElement('launcher')
+
     this.launcher.innerHTML = `
       <input placeholder="Search"/>
       <apps></apps>
@@ -230,7 +238,10 @@ class WM {
     this.launcher.style.filter = 'blur(0px)'
     this.launcher.style.pointerEvents = 'none'
 
+    window.preloader.setStatus('adding apps to app launcher...')
+
     for (const pkg in flow.apps) {
+      window.preloader.setStatus(`adding apps to app launcher\n${flow.apps[pkg].name}`)
       const app = document.createElement('app')
       app.onclick = () => {
         flow.openApp(pkg)
@@ -242,6 +253,8 @@ class WM {
 
     document.body.appendChild(this.windowArea)
     document.body.appendChild(this.launcher)
+
+    await window.preloader.setDone('window manager')
   }
 }
 

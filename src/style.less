@@ -11,10 +11,6 @@
   --crust: #11111b;
 }
 
-.bx-category {
-  color: #181926;
-}
-
 body,
 html {
   background-color: var(--crust);
@@ -55,10 +51,9 @@ toolbar {
   justify-content: center;
 
   div[data-toolbar-id="appview"] {
-    background: rgb(150, 181, 246);
-    background: linear-gradient(45deg, rgba(150, 181, 246, 1) 0%, rgba(150, 181, 246, 1) 12%, rgba(77, 129, 236, 1) 100%);
-    color: black;
+    background: linear-gradient(45deg, var(--crust), var(--surface-0));
   }
+
   & > div {
     background: var(--base);
     padding: 5px;
@@ -183,5 +178,30 @@ launcher {
       outline: none;
       border: 2px solid var(--text);
     }
+  }
+}
+
+preloader {
+  position: absolute;
+  z-index: 999999999999999999;
+  top: 0;
+  left: 0;
+  background: var(--crust);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s;
+
+  .status, .done {
+    text-align: center;
+  }
+
+  .done div {
+    display: flex;
+    align-items: center;
+    gap: 2px;
   }
 }

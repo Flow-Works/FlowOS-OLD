@@ -9,6 +9,10 @@ export interface StatusItem {
   run: Function
 }
 
+export interface PackageJSON {
+  version: string
+}
+
 export interface App {
   name: string
   pkg: string
@@ -39,6 +43,8 @@ export interface FlowWindowConfig {
 
   width?: number
   height?: number
+
+  canResize: boolean
 
   minWidth?: number
   minHeight?: number
