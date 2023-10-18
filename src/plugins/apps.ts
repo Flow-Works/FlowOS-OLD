@@ -3,7 +3,8 @@ import { AppOpenedEvent, AppClosedEvent } from '../types'
 export const meta = {
   name: 'Apps',
   description: 'Displays the current apps open.',
-  id: 'apps'
+  pkg: 'flow.apps',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {
@@ -19,7 +20,7 @@ export const run = (element: HTMLDivElement): void => {
     appIcon.style.background = 'var(--surface-0)'
     appIcon.style.padding = '5px 7.5px'
     appIcon.style.borderRadius = '5px'
-    appIcon.innerHTML = `<img data-id="${win.id}" src="${app.icon}"/> ${app.name}`
+    appIcon.innerHTML = `<img data-id="${win.id}" src="${app.meta.icon}"/> ${app.meta.name}`
     appIcon.onclick = async () => {
       const win = await e.detail.win
       win.focus()

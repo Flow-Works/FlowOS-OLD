@@ -3,16 +3,15 @@ import { App } from '../types.ts'
 
 import { fullEditor } from 'prism-code-editor/setups'
 import Prism from 'prism-code-editor/prism-core'
-
-import 'prismjs/components/prism-clike.js'
 import 'prismjs/components/prism-markup.js'
+import 'prismjs/components/prism-clike.js'
 import 'prismjs/components/prism-javascript.js'
 import 'prismjs/components/prism-typescript.js'
-import 'prismjs/components/prism-css.js'
-import 'prismjs/components/prism-json.js'
-import 'prismjs/components/prism-c.js'
-import 'prismjs/components/prism-csharp.js'
-import 'prismjs/components/prism-cpp.js'
+import 'prismjs/components/prism-jsx.js'
+import 'prismjs/components/prism-tsx.js'
+import 'prism-code-editor/languages'
+import 'prism-code-editor/prism-markdown'
+
 import { FlowWindow } from '../wm.ts'
 
 interface EditorConfig {
@@ -20,15 +19,18 @@ interface EditorConfig {
 }
 
 export default class EditorApp implements App {
-  name = 'Editor'
-  pkg = 'flow.editor'
-  icon = icon
-  version = '1.0.0'
+  meta = {
+    name: 'Editor',
+    description: 'A simple editor app.',
+    pkg: 'flow.editor',
+    version: '1.0.0',
+    icon
+  }
 
   async open (data?: EditorConfig): Promise<FlowWindow> {
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 500,
       height: 400
     })
@@ -125,12 +127,76 @@ export default class EditorApp implements App {
         }
       })
 
+      let language
+
+      switch (data.path.split('.').at(-1)?.toLowerCase()) {
+        case 'c':
+        case 'cs':
+        case 'cpp':
+        case 'java': {
+          language = 'clike'
+          break
+        }
+
+        case 'ts': {
+          language = 'typescript'
+          break
+        }
+
+        case 'js':
+        case 'mjs':
+        case 'cjs': {
+          language = 'javascript'
+          break
+        }
+
+        case 'jsx': {
+          language = 'jsx'
+          break
+        }
+
+        case 'tsx': {
+          language = 'tsx'
+          break
+        }
+
+        case 'html': {
+          language = 'html'
+          break
+        }
+
+        case 'md': {
+          language = 'md'
+          break
+        }
+
+        case 'css': {
+          language = 'css'
+          break
+        }
+
+        case 'xml': {
+          language = 'xml'
+          break
+        }
+
+        case 'py': {
+          language = 'python'
+          break
+        }
+
+        default: {
+          language = 'text'
+          break
+        }
+      }
+
       const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
         Prism,
         win.content.querySelector('.editor'),
         {
-          language: data.path.split('.').at(-1),
+          language,
           theme: 'github-dark',
           value
         }

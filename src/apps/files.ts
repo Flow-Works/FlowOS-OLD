@@ -6,15 +6,18 @@ import { FlowWindow } from '../wm.ts'
 import { Stats } from 'fs'
 
 export default class FilesApp implements App {
-  name = 'Files'
-  pkg = 'flow.files'
-  icon = icon
-  version = '1.0.0'
+  meta = {
+    name: 'Files',
+    description: 'A simple files app.',
+    pkg: 'flow.files',
+    version: '1.0.0',
+    icon
+  }
 
   async open (): Promise<FlowWindow> {
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 500,
       height: 400
     })

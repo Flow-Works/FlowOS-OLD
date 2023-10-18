@@ -1,17 +1,7 @@
 
-import { StatusItem } from './types'
+import { Plugin } from './types'
 
 class StatusBar {
-  pluginList: string[] = [
-    'appLauncher',
-    'apps',
-    'weather',
-    'clock',
-    'switcher',
-    'battery'
-  ]
-
-  plugins: StatusItem[] = []
   element: HTMLElement
 
   constructor () {
@@ -20,30 +10,21 @@ class StatusBar {
     document.body.appendChild(this.element)
   }
 
-  add (item: StatusItem): void {
-    if (this.plugins.some(x => x.meta.id === item.meta.id)) {
-      console.error(`Unable to register tool; ${item.meta.id} is already registered.`)
-      return
-    }
-
+  async add (item: Plugin): Promise<void> {
     const element = document.createElement('div')
-    element.setAttribute('data-toolbar-id', item.meta.id)
+    element.setAttribute('data-toolbar-id', item.meta.pkg)
 
-    this.plugins.push(item)
     this.element.appendChild(element)
 
-    item.run(element)
+    await item.run(element)
   }
 
   async init (): Promise<void> {
-    window.preloader.setPending('plugins')
-    window.preloader.setStatus('importing default plugins...')
+    window.preloader.setStatus('adding plugins to statusbar...')
 
-    for (const pluginPath of this.pluginList) {
-      const plugin = await import(`./modules/${pluginPath}.ts`)
-
-      window.preloader.setStatus(`importing default plugins\n${pluginPath}`)
-      this.add(plugin)
+    for (const plugin of window.flow.plugins) {
+      window.preloader.setStatus(`adding plugins to statusbar\n${plugin.meta.pkg}`)
+      await this.add(plugin)
     }
 
     await window.preloader.setDone('plugins')

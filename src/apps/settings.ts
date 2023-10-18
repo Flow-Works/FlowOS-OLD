@@ -3,15 +3,18 @@ import { App } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
 export default class SettingsApp implements App {
-  name = 'Settings'
-  pkg = 'flow.settings'
-  icon = icon
-  version = '1.0.0'
+  meta = {
+    name: 'Settings',
+    description: 'Modify/customize FlowOS.',
+    pkg: 'flow.settings',
+    version: '1.0.0',
+    icon
+  }
 
   async open (): Promise<FlowWindow> {
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 700,
       height: 300
     })

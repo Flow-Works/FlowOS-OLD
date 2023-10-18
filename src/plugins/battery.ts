@@ -1,7 +1,8 @@
 export const meta = {
   name: 'Battery',
   description: 'Tells you your device\'s battery.',
-  id: 'battery'
+  pkg: 'flow.battery',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {

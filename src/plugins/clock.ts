@@ -1,7 +1,8 @@
 export const meta = {
   name: 'Clock',
   description: 'Displays the date & time.',
-  id: 'clock'
+  pkg: 'flow.clock',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {

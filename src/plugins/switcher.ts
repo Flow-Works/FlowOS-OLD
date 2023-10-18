@@ -1,7 +1,8 @@
 export const meta = {
   name: 'Desktop Switcher',
   description: 'Allows you to switch between desktops.',
-  id: 'switcher'
+  pkg: 'flow.switcher',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {
