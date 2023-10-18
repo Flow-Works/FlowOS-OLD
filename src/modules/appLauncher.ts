@@ -1,7 +1,7 @@
 export const meta = {
-  name: 'App View',
-  description: 'Opens the app view.',
-  id: 'appview'
+  name: 'App Launcher',
+  description: 'Opens the app launcher.',
+  id: 'applauncher'
 }
 
 export const run = (element: HTMLDivElement): void => {
