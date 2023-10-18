@@ -32,6 +32,7 @@ export interface FlowWindowConfig {
 
 export interface App {
   meta: {
+    id: any
     name: string
     description: string
     pkg: string
