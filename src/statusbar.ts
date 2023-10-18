@@ -3,12 +3,12 @@ import { StatusItem } from './types'
 
 class StatusBar {
   pluginList: string[] = [
-    './modules/appLauncher.ts',
-    './modules/apps.ts',
-    './modules/weather.ts',
-    './modules/clock.ts',
-    './modules/switcher.ts',
-    './modules/battery.ts'
+    'appLauncher',
+    'apps',
+    'weather',
+    'clock',
+    'switcher',
+    'battery'
   ]
 
   plugins: StatusItem[] = []
@@ -40,7 +40,7 @@ class StatusBar {
     window.preloader.setStatus('importing default plugins...')
 
     for (const pluginPath of this.pluginList) {
-      const plugin = await import(pluginPath)
+      const plugin = await import(`./modules/${pluginPath}.ts`)
 
       window.preloader.setStatus(`importing default plugins\n${pluginPath}`)
       this.add(plugin)
