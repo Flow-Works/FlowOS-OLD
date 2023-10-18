@@ -185,3 +185,28 @@ launcher {
     }
   }
 }
+
+preloader {
+  position: absolute;
+  z-index: 999999999999999999;
+  top: 0;
+  left: 0;
+  background: var(--crust);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s;
+
+  .status, .done {
+    text-align: center;
+  }
+
+  .done div {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
