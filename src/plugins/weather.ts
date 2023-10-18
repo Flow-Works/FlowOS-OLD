@@ -1,7 +1,8 @@
 export const meta = {
   name: 'Weather',
   description: 'Tells you the weather.',
-  id: 'weather'
+  pkg: 'flow.weather',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {

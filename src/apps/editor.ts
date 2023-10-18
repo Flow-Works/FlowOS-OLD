@@ -19,15 +19,18 @@ interface EditorConfig {
 }
 
 export default class EditorApp implements App {
-  name = 'Editor'
-  pkg = 'flow.editor'
-  icon = icon
-  version = '1.0.0'
+  meta = {
+    name: 'Editor',
+    description: 'A simple editor app.',
+    pkg: 'flow.editor',
+    version: '1.0.0',
+    icon
+  }
 
   async open (data?: EditorConfig): Promise<FlowWindow> {
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 500,
       height: 400
     })
@@ -156,7 +159,6 @@ export default class EditorApp implements App {
           language = 'tsx'
           break
         }
-
 
         case 'html': {
           language = 'html'

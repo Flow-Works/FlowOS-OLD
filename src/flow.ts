@@ -1,4 +1,4 @@
-import { App, LoadedApp } from './types.ts'
+import { LoadedApp, LoadedPlugin } from './types.ts'
 
 class Flow {
   apps: LoadedApp[] = []
@@ -11,17 +11,30 @@ class Flow {
     'manager'
   ]
 
-  async init (): Promise<void> {
+  plugins: LoadedPlugin[] = []
+  pluginList: string[] = [
+    'appLauncher',
+    'apps',
+    'weather',
+    'clock',
+    'switcher',
+    'battery'
+  ]
+
+  private async initApps (): Promise<void> {
     window.preloader.setPending('apps')
     window.preloader.setStatus('importing default apps...')
 
     for (const appPath of this.appList) {
-      const { default: ImportedApp } = await import(`./apps/${appPath}.ts`)
+      window.preloader.setStatus(`importing default apps\n${appPath}`)
+      const { default: ImportedApp } = await import(`./apps/${appPath}.ts`).catch((e: Error) => {
+        console.error(e)
+        window.preloader.setStatus(`unable to import ${appPath}\n${e.name}: ${e.message}`)
+      })
       const app = new ImportedApp()
       app.builtin = true
 
-      window.preloader.setStatus(`importing default apps\n${appPath}`)
-      this.add(app)
+      this.addApp(app)
     }
 
     window.wm.launcher.style.opacity = '0'
@@ -31,13 +44,13 @@ class Flow {
     window.preloader.setStatus('adding apps to app launcher...')
 
     this.apps.forEach((app) => {
-      window.preloader.setStatus(`adding apps to app launcher\n${app.name}`)
+      window.preloader.setStatus(`adding apps to app launcher\n${app.meta.name}`)
       const appElement = document.createElement('app')
       appElement.onclick = async () => {
-        await window.flow.openApp(app.pkg)
+        await window.flow.openApp(app.meta.pkg)
         window.wm.toggleLauncher()
       }
-      appElement.innerHTML = `<img src="${app.icon}"><div>${app.name}</div>`
+      appElement.innerHTML = `<img src="${app.meta.icon}"><div>${app.meta.name}</div>`
       window.wm.launcher.querySelector('apps')?.appendChild(appElement)
     })
 
@@ -47,17 +60,48 @@ class Flow {
     await window.preloader.setDone('apps')
   }
 
-  add (app: App): void {
-    if (this.apps.some(x => x.pkg === app.pkg)) {
-      console.error(`Unable to register app; ${app.pkg} is already registered.`)
+  private async initPlugins (): Promise<void> {
+    window.preloader.setPending('plugins')
+    window.preloader.setStatus('importing default plugins...')
+
+    for (const pluginPath of this.pluginList) {
+      window.preloader.setStatus(`importing default plugins\n${pluginPath}`)
+      const plugin = await import(`./plugins/${pluginPath}.ts`).catch((e: Error) => {
+        console.error(e)
+        window.preloader.setStatus(`unable to import ${pluginPath}\n${e.name}: ${e.message}`)
+      })
+      const loadedPlugin = {
+        ...plugin,
+        builtin: true
+      }
+      this.addPlugin(loadedPlugin)
+    }
+  }
+
+  async init (): Promise<void> {
+    await this.initApps()
+    await this.initPlugins()
+  }
+
+  addApp (app: LoadedApp): void {
+    if (this.apps.some(x => x.meta.pkg === app.meta.pkg)) {
+      console.error(`Unable to register app; ${app.meta.pkg} is already registered.`)
       return
     }
 
     this.apps.push(app)
   }
 
+  addPlugin (plugin: LoadedPlugin): void {
+    if (window.flow.plugins.some(x => x.meta.pkg === plugin.meta.pkg)) {
+      console.error(`Unable to register tool; ${plugin.meta.pkg} is already registered.`)
+      return
+    }
+    this.plugins.push(plugin)
+  }
+
   async openApp (pkg: string, data?: any): Promise<void> {
-    const app = this.apps.find(x => x.pkg === pkg)
+    const app = this.apps.find(x => x.meta.pkg === pkg)
     const win = app?.open(data)
     const event = new CustomEvent('app_opened', { detail: { app, win: await win } })
     window.dispatchEvent(event)

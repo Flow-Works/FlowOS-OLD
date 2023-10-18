@@ -143,23 +143,35 @@ launcher {
     max-height: 70vh;
     padding: 20px;
     margin: 40px;
-    display: flex;
     justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
     gap: 40px;
-    flex-wrap: wrap;
 
     app {
+      align-items: center;
       justify-content: center;
       display: flex;
       flex-direction: column;
       gap: 10px;
       height: max-content;
       text-align: center;
+      overflow: hidden;
 
       img {
-        width: 75px;
+        width: 100%;
         border-radius: 40%;
         aspect-ratio: 1 / 1;
+      }
+
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: fit-content;
+        height: 100%;
+        white-space: nowrap;
+
       }
     }
   }

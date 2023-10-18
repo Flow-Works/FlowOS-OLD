@@ -39,10 +39,9 @@ window.wm = new WM();
   window.fs = new (window as any).Filer.FileSystem()
   await window.preloader.setDone('filesystem')
 
-  await window.statusBar.init()
   await window.wm.init()
-
   await window.flow.init()
+  await window.statusBar.init()
 
   window.preloader.setStatus('')
   window.preloader.finish()

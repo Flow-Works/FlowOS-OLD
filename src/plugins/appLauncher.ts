@@ -1,7 +1,8 @@
 export const meta = {
   name: 'App Launcher',
   description: 'Opens the app launcher.',
-  id: 'applauncher'
+  pkg: 'flow.applauncher',
+  version: '1.0.0'
 }
 
 export const run = (element: HTMLDivElement): void => {

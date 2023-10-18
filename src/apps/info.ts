@@ -3,17 +3,19 @@ import { App, PackageJSON } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
 export default class SettingsApp implements App {
-  name = 'Info'
-  pkg = 'flow.info'
-  icon = icon
-  version = '1.0.0'
-  canResize = true
+  meta = {
+    name: 'Info',
+    description: 'FlowOS Information.',
+    pkg: 'flow.info',
+    version: '1.0.0',
+    icon
+  }
 
   async open (): Promise<FlowWindow> {
     const packageJSON: PackageJSON = await import('../../package.json')
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 300,
       height: 400,
       canResize: false

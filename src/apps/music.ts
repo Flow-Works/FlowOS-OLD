@@ -3,15 +3,18 @@ import { App } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
 export default class MusicApp implements App {
-  name = 'Music'
-  pkg = 'flow.music'
-  icon = icon
-  version = '1.0.0'
+  meta = {
+    name: 'Music',
+    description: 'A simple music app.',
+    pkg: 'flow.music',
+    version: '1.0.0',
+    icon
+  }
 
   async open (): Promise<FlowWindow> {
     const win = window.wm.createWindow({
-      title: this.name,
-      icon,
+      title: this.meta.name,
+      icon: this.meta.icon,
       width: 700,
       height: 300
     })
