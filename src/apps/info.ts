@@ -1,4 +1,4 @@
-import icon from '../assets/icons/settings.png'
+import icon from '../assets/icons/info.png'
 import { App } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
@@ -45,12 +45,12 @@ export default class SettingsApp implements App {
           .github {
             float:right;
             position: relative;
-            top: 80px;
+            top: 125px;
           }
           .discord {
             float:left;
             position: relative;
-            top: 80px;
+            top: 125px;
           }
         </style>
     `
