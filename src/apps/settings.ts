@@ -1,4 +1,3 @@
-import { json } from 'stream/consumers'
 import icon from '../assets/icons/settings.png'
 import { App } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
@@ -16,14 +15,14 @@ export default class SettingsApp implements App {
     const fs = new (window as any).Filer.FileSystem()
 
     try {
-      fs.exists(this.configFolderLoc, function (exists) {
+      fs.exists(this.configFolderLoc, function (exists: any) {
         if (exists === false) {
           fs.mkdir(this.configFolderLoc, () => {})
         }
       })
-    } catch (e) {alert(e.message) }
+    } catch (e) { alert(e.message) }
     try {
-      fs.exists(this.configFileLoc, function (exists) {
+      fs.exists(this.configFileLoc, function (exists: any) {
         if (exists === false) {
           fs.writeFile(this.configFileLoc, '{"clock-Type":"0", "tab-title": "Flow OS", "favicon-icon": "to-be-replaced", "proxy-type": "uv", "search-engine": "google" }', () => {})
         }
@@ -122,12 +121,12 @@ export default class SettingsApp implements App {
       settingsChange()
     }
 
-    win.content.getElementsByClassName('btn')[2].addEventListener('change', (event) => {
+    win.content.getElementsByClassName('btn')[2].addEventListener('change', () => {
       data['tab-title'] = win.content.getElementsByClassName('btn')[2].value
       settingsChange()
     })
 
-    win.content.getElementsByClassName('btn')[6].addEventListener('change', (event) => {
+    win.content.getElementsByClassName('btn')[6].addEventListener('change', () => {
       if (isURL(win.content.getElementsByClassName('btn')[6].value) && win.content.getElementsByClassName('btn')[6].value !== '') {
         data['flow-server'] = win.content.getElementsByClassName('btn')[6].value
         win.content.getElementsByClassName('error-text')[1].textContent = ''
@@ -141,7 +140,7 @@ export default class SettingsApp implements App {
       settingsChange()
     })
 
-    win.content.getElementsByClassName('btn')[3].addEventListener('change', (event) => {
+    win.content.getElementsByClassName('btn')[3].addEventListener('change', () => {
       if (isURL(win.content.getElementsByClassName('btn')[3].value) && win.content.getElementsByClassName('btn')[4].value !== '') {
         data['favicon-url'] = win.content.getElementsByClassName('btn')[3].value
         win.content.getElementsByClassName('error-text')[0].textContent = ''
@@ -156,13 +155,13 @@ export default class SettingsApp implements App {
     })
 
     win.content.getElementsByClassName('btn')[4].value = data['proxy-type']
-    win.content.getElementsByClassName('btn')[4].addEventListener('change', (event) => {
+    win.content.getElementsByClassName('btn')[4].addEventListener('change', (event: any) => {
       data['proxy-type'] = event.target.value
       settingsChange()
     })
 
     win.content.getElementsByClassName('btn')[5].value = data['search-engine']
-    win.content.getElementsByClassName('btn')[5].addEventListener('change', (event) => {
+    win.content.getElementsByClassName('btn')[5].addEventListener('change', (event: any) => {
       data['search-engine'] = event.target.value
       settingsChange()
     })
