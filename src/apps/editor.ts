@@ -143,11 +143,12 @@ export default class EditorApp implements App {
         }
       })
 
-      const language = fileLanguageMap[data.path.split('.').at(-1)?.toLowerCase()!] || 'text'
+      const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
+      const language = fileLanguageMap[fileExtension] ?? 'text'
 
       const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
-        win.content.querySelector<HTMLElement>('.editor')!,
+        win.content.querySelector('.editor') as HTMLElement,
         {
           language,
           theme: 'github-dark',
@@ -156,7 +157,7 @@ export default class EditorApp implements App {
       )
 
       const style = document.createElement('style')
-      style.innerHTML = `
+      style.textContent = `
       .prism-code-editor {
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
@@ -178,8 +179,6 @@ export default class EditorApp implements App {
         --editor__bg-selection-match: var(--surface-1)40;
         --editor__line-number: #636e7b;
         --editor__line-number-active: #adbac7;
-        --editor__bg-scrollbar: 210, 10%, 35%;
-        --editor__bg-fold: #768390;
         --bg-guide-indent: var(--surface-0);
         overflow: visible;
       }
@@ -189,7 +188,7 @@ export default class EditorApp implements App {
       `
       editor.scrollContainer.appendChild(style);
       (win.content.querySelector('#find') as HTMLElement).onclick = () => {
-        editor.extensions.searchWidget!.open()
+        editor.extensions.searchWidget?.open()
       }
       (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
         await window.fs.promises.writeFile(data.path, editor.value)
