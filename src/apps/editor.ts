@@ -54,7 +54,7 @@ export default class EditorApp implements App {
             </a>
           </div>
         </div>
-        <div class="editor" style="flex:1;"></div>
+        <div class="editor" style="flex:1;display:grid;overflow:scroll;"></div>
         <style>
         .dropdown {
           position: absolute;
@@ -202,7 +202,7 @@ export default class EditorApp implements App {
       .prism-code-editor {
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
-        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        font-weight: 400;
         --editor__bg: var(--base);
         --widget__border: var(--mantle);
         --widget__bg: var(--crust);
@@ -223,8 +223,7 @@ export default class EditorApp implements App {
         --editor__bg-scrollbar: 210, 10%, 35%;
         --editor__bg-fold: #768390;
         --bg-guide-indent: var(--surface-0);
-        color-scheme: dark;
-        height: 100%;
+        overflow: visible;
       }
       .prism-search * {
         font-family: 'Satoshi', sans-serif;
