@@ -2,15 +2,11 @@ import icon from '../assets/icons/editor.png'
 import { App } from '../types.ts'
 
 import { fullEditor } from 'prism-code-editor/setups'
-import Prism from 'prism-code-editor/prism-core'
-import 'prismjs/components/prism-markup.js'
-import 'prismjs/components/prism-clike.js'
-import 'prismjs/components/prism-javascript.js'
-import 'prismjs/components/prism-typescript.js'
-import 'prismjs/components/prism-jsx.js'
-import 'prismjs/components/prism-tsx.js'
-import 'prism-code-editor/languages'
-import 'prism-code-editor/prism-markdown'
+// this will also import markup, clike, javascript, typescript and jsx
+import 'prism-code-editor/grammars/tsx'
+import 'prism-code-editor/grammars/css-extras'
+import 'prism-code-editor/grammars/markdown'
+import 'prism-code-editor/grammars/python'
 
 import { FlowWindow } from '../wm.ts'
 
@@ -193,8 +189,7 @@ export default class EditorApp implements App {
 
       const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
-        Prism,
-        win.content.querySelector('.editor'),
+        win.content.querySelector<HTMLElement>('.editor')!,
         {
           language,
           theme: 'github-dark',
@@ -204,7 +199,7 @@ export default class EditorApp implements App {
 
       const style = document.createElement('style')
       style.innerHTML = `
-      .prism-editor {
+      .prism-code-editor {
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
         font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
@@ -237,7 +232,7 @@ export default class EditorApp implements App {
       `
       editor.scrollContainer.appendChild(style);
       (win.content.querySelector('#find') as HTMLElement).onclick = () => {
-        editor.extensions.searchWidget.open()
+        editor.extensions.searchWidget!.open()
       }
       (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
         await window.fs.promises.writeFile(data.path, editor.value)
