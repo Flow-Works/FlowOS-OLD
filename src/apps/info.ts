@@ -1,4 +1,5 @@
 import icon from '../assets/icons/info.png'
+import badge from '../assets/badge.png'
 import { App, PackageJSON } from '../types.ts'
 import { FlowWindow } from '../wm.ts'
 
@@ -34,6 +35,7 @@ export default class SettingsApp implements App {
           <p style="margin:0;">v${packageJSON.version}</p>
           <br/>
           <p>Created by ThinLiquid, 1nspird_, proudparot2, systemless_</p>
+          <img src="${badge}" height="50"><br/>
           <a class="discord" href="https://discord.gg/flowos">Discord</a>
          - 
         <a class="github" href="https://github.com/Flow-Works/FlowOS-2.0">Github</a>

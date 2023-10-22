@@ -3,7 +3,8 @@
  
   # FlowOS Next
 
-  [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+  <img src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height="50">
+  <img src="./src/assets/badge.png" height="50">
 
   <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=for-the-badge" />
   <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=for-the-badge" />
