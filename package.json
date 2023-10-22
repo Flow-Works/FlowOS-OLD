@@ -28,7 +28,6 @@
     "eruda": "^3.0.1",
     "filer": "^1.4.1",
     "prism-code-editor": "^2.0.1",
-    "prismjs": "^1.29.0",
     "uuid": "^9.0.1"
   }
 }
