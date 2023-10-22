@@ -14,6 +14,26 @@ interface EditorConfig {
   path: string
 }
 
+const fileLanguageMap: {
+  [key: string]: string
+} = {
+  c: 'clike',
+  cpp: 'clike',
+  java: 'clike',
+  cs: 'clike',
+  ts: 'typescript',
+  js: 'javascript',
+  mjs: 'javascript',
+  cjs: 'javascript',
+  jsx: 'jsx',
+  tsx: 'tsx',
+  html: 'html',
+  md: 'markdown',
+  css: 'css',
+  xml: 'xml',
+  py: 'python'
+}
+
 export default class EditorApp implements App {
   meta = {
     name: 'Editor',
@@ -123,69 +143,7 @@ export default class EditorApp implements App {
         }
       })
 
-      let language
-
-      switch (data.path.split('.').at(-1)?.toLowerCase()) {
-        case 'c':
-        case 'cs':
-        case 'cpp':
-        case 'java': {
-          language = 'clike'
-          break
-        }
-
-        case 'ts': {
-          language = 'typescript'
-          break
-        }
-
-        case 'js':
-        case 'mjs':
-        case 'cjs': {
-          language = 'javascript'
-          break
-        }
-
-        case 'jsx': {
-          language = 'jsx'
-          break
-        }
-
-        case 'tsx': {
-          language = 'tsx'
-          break
-        }
-
-        case 'html': {
-          language = 'html'
-          break
-        }
-
-        case 'md': {
-          language = 'md'
-          break
-        }
-
-        case 'css': {
-          language = 'css'
-          break
-        }
-
-        case 'xml': {
-          language = 'xml'
-          break
-        }
-
-        case 'py': {
-          language = 'python'
-          break
-        }
-
-        default: {
-          language = 'text'
-          break
-        }
-      }
+      const language = fileLanguageMap[data.path.split('.').at(-1)?.toLowerCase()!] || 'text'
 
       const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
