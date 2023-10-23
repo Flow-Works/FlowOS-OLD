@@ -4,7 +4,7 @@
   # FlowOS Next
 
   <img src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height="50">
-  <img src="./src/assets/badge.png" height="50"><br/>
+  <a href="https://discord.gg/axUqK8CN2n"><img src="./src/assets/badge.png" height="50"></a><br/>
 
   <img src="https://img.shields.io/github/stars/flow-works/flowos-2.0?style=for-the-badge" />
   <img src="https://img.shields.io/github/issues-pr/flow-works/flowos-2.0?style=for-the-badge" />
