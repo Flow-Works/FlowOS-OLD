@@ -193,6 +193,11 @@ export default class EditorApp implements App {
       (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
         await window.fs.promises.writeFile(data.path, editor.value)
       }
+    } else {
+      await window.flow.openApp('flow.files')
+      setTimeout(() => {
+        win.close()
+      }, 10)
     }
 
     return win
