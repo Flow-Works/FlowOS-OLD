@@ -223,7 +223,33 @@ class WM {
     this.launcher.innerHTML = `
       <input placeholder="Search"/>
       <apps></apps>
-    `
+    `;
+
+    (this.launcher.querySelector('input') as HTMLInputElement).onkeyup = () => {
+      (this.launcher.querySelector('apps') as HTMLElement).innerHTML = ''
+      if ((this.launcher.querySelector('input') as HTMLInputElement).value !== '') {
+        window.flow.apps.filter(x => x.meta.name.toLowerCase().includes((this.launcher.querySelector('input') as HTMLInputElement).value.toLowerCase())).forEach((app) => {
+          const appElement = document.createElement('app')
+          appElement.onclick = async () => {
+            await window.flow.openApp(app.meta.pkg)
+            this.toggleLauncher()
+          }
+          appElement.innerHTML = `<img src="${app.meta.icon}"><div>${app.meta.name}</div>`
+          this.launcher.querySelector('apps')?.appendChild(appElement)
+        })
+      } else {
+        window.flow.apps.forEach((app) => {
+          window.preloader.setStatus(`adding apps to app launcher\n${app.meta.name}`)
+          const appElement = document.createElement('app')
+          appElement.onclick = async () => {
+            await window.flow.openApp(app.meta.pkg)
+            window.wm.toggleLauncher()
+          }
+          appElement.innerHTML = `<img src="${app.meta.icon}"><div>${app.meta.name}</div>`
+          window.wm.launcher.querySelector('apps')?.appendChild(appElement)
+        })
+      }
+    }
 
     this.launcher.onclick = (e) => {
       if (e.target !== e.currentTarget) return
