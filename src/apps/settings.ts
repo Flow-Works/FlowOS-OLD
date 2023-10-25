@@ -6,7 +6,7 @@ export default class SettingsApp implements App {
   meta = {
     name: 'Settings',
     pkg: 'flow.settings',
-    icon: icon,
+    icon,
     version: '1.0.0'
   }
 

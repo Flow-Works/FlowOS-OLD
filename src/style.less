@@ -144,18 +144,20 @@ launcher {
     padding: 20px;
     margin: 40px;
     justify-content: center;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 40px;
 
     app {
+      flex: 1 0 21%;
+      flex-grow: 0;
       align-items: center;
       justify-content: center;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      height: max-content;
+      min-width: 125px;
+      max-width: 125px;
       text-align: center;
       overflow: hidden;
 
