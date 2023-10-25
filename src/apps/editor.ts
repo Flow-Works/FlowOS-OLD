@@ -2,20 +2,36 @@ import icon from '../assets/icons/editor.png'
 import { App } from '../types.ts'
 
 import { fullEditor } from 'prism-code-editor/setups'
-import Prism from 'prism-code-editor/prism-core'
-import 'prismjs/components/prism-markup.js'
-import 'prismjs/components/prism-clike.js'
-import 'prismjs/components/prism-javascript.js'
-import 'prismjs/components/prism-typescript.js'
-import 'prismjs/components/prism-jsx.js'
-import 'prismjs/components/prism-tsx.js'
-import 'prism-code-editor/languages'
-import 'prism-code-editor/prism-markdown'
+// this will also import markup, clike, javascript, typescript and jsx
+import 'prism-code-editor/grammars/tsx'
+import 'prism-code-editor/grammars/css-extras'
+import 'prism-code-editor/grammars/markdown'
+import 'prism-code-editor/grammars/python'
 
 import { FlowWindow } from '../wm.ts'
 
 interface EditorConfig {
   path: string
+}
+
+const fileLanguageMap: {
+  [key: string]: string
+} = {
+  c: 'clike',
+  cpp: 'clike',
+  java: 'clike',
+  cs: 'clike',
+  ts: 'typescript',
+  js: 'javascript',
+  mjs: 'javascript',
+  cjs: 'javascript',
+  jsx: 'jsx',
+  tsx: 'tsx',
+  html: 'html',
+  md: 'markdown',
+  css: 'css',
+  xml: 'xml',
+  py: 'python'
 }
 
 export default class EditorApp implements App {
@@ -58,7 +74,7 @@ export default class EditorApp implements App {
             </a>
           </div>
         </div>
-        <div class="editor" style="flex:1;"></div>
+        <div class="editor" style="flex:1;display:grid;overflow:scroll;"></div>
         <style>
         .dropdown {
           position: absolute;
@@ -127,74 +143,12 @@ export default class EditorApp implements App {
         }
       })
 
-      let language
-
-      switch (data.path.split('.').at(-1)?.toLowerCase()) {
-        case 'c':
-        case 'cs':
-        case 'cpp':
-        case 'java': {
-          language = 'clike'
-          break
-        }
-
-        case 'ts': {
-          language = 'typescript'
-          break
-        }
-
-        case 'js':
-        case 'mjs':
-        case 'cjs': {
-          language = 'javascript'
-          break
-        }
-
-        case 'jsx': {
-          language = 'jsx'
-          break
-        }
-
-        case 'tsx': {
-          language = 'tsx'
-          break
-        }
-
-        case 'html': {
-          language = 'html'
-          break
-        }
-
-        case 'md': {
-          language = 'md'
-          break
-        }
-
-        case 'css': {
-          language = 'css'
-          break
-        }
-
-        case 'xml': {
-          language = 'xml'
-          break
-        }
-
-        case 'py': {
-          language = 'python'
-          break
-        }
-
-        default: {
-          language = 'text'
-          break
-        }
-      }
+      const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
+      const language = fileLanguageMap[fileExtension] ?? 'text'
 
       const value = (await window.fs.promises.readFile(data.path)).toString()
       const editor = fullEditor(
-        Prism,
-        win.content.querySelector('.editor'),
+        win.content.querySelector('.editor') as HTMLElement,
         {
           language,
           theme: 'github-dark',
@@ -203,11 +157,11 @@ export default class EditorApp implements App {
       )
 
       const style = document.createElement('style')
-      style.innerHTML = `
-      .prism-editor {
+      style.textContent = `
+      .prism-code-editor {
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
-        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        font-weight: 400;
         --editor__bg: var(--base);
         --widget__border: var(--mantle);
         --widget__bg: var(--crust);
@@ -225,11 +179,8 @@ export default class EditorApp implements App {
         --editor__bg-selection-match: var(--surface-1)40;
         --editor__line-number: #636e7b;
         --editor__line-number-active: #adbac7;
-        --editor__bg-scrollbar: 210, 10%, 35%;
-        --editor__bg-fold: #768390;
         --bg-guide-indent: var(--surface-0);
-        color-scheme: dark;
-        height: 100%;
+        overflow: visible;
       }
       .prism-search * {
         font-family: 'Satoshi', sans-serif;
@@ -237,11 +188,16 @@ export default class EditorApp implements App {
       `
       editor.scrollContainer.appendChild(style);
       (win.content.querySelector('#find') as HTMLElement).onclick = () => {
-        editor.extensions.searchWidget.open()
+        editor.extensions.searchWidget?.open()
       }
       (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
         await window.fs.promises.writeFile(data.path, editor.value)
       }
+    } else {
+      await window.flow.openApp('flow.files')
+      setTimeout(() => {
+        win.close()
+      }, 10)
     }
 
     return win
