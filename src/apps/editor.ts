@@ -194,7 +194,7 @@ export default class EditorApp implements App {
         await window.fs.promises.writeFile(data.path, editor.value)
       }
     } else {
-      window.flow.openApp('flow.files');
+      await window.flow.openApp('flow.files')
       setTimeout(() => {
         win.close()
       }, 10)
