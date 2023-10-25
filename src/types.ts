@@ -11,6 +11,18 @@ export interface AppOpenedEvent extends CustomEvent {
   }
 }
 
+export interface FlowPlugin {
+  name: string
+  pkg: string
+  version?: string
+  authors?: string[]
+
+  init: (data: any) => void | Promise<void>
+  openWindow?: (data: any) => FlowWindow | Promise<FlowWindow>
+  addStatusbarItem: (data: any) => void | Promise<void>
+  loadTheme: (data: any) => void | Promise<void>
+}
+
 export interface AppClosedEvent extends CustomEvent {
   detail: {
     win: FlowWindow
@@ -32,7 +44,6 @@ export interface FlowWindowConfig {
 
 export interface App {
   meta: {
-    id: any
     name: string
     description: string
     pkg: string

@@ -12,7 +12,7 @@ export const run = (element: HTMLDivElement): void => {
   element.style.alignItems = 'center'
   element.style.gap = '5px'
   element.style.flex = '1'
-
+  // @ts-expect-error
   window.addEventListener('app_opened', (e: AppOpenedEvent): void => {
     const appIcon = document.createElement('app')
     const app = e.detail.app
@@ -28,7 +28,7 @@ export const run = (element: HTMLDivElement): void => {
     }
     element.appendChild(appIcon)
   })
-
+  // @ts-expect-error
   window.addEventListener('app_closed', (e: AppClosedEvent): void => {
     const win = e.detail.win
     element.querySelector(`img[data-id="${win.id}"]`)?.parentElement?.remove()
