@@ -14,6 +14,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.8.7",
     "@types/uuid": "^9.0.5",
     "@types/web": "^0.0.117",
     "ts-standard": "^12.0.2",
@@ -26,8 +27,7 @@
     "@ptkdev/logger": "^1.8.0",
     "eruda": "^3.0.1",
     "filer": "^1.4.1",
-    "prism-code-editor": "^1.2.2",
-    "prismjs": "^1.29.0",
+    "prism-code-editor": "^2.0.1",
     "uuid": "^9.0.1"
   }
 }
