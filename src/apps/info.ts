@@ -1,9 +1,10 @@
 import icon from '../assets/icons/info.png'
 import badge from '../assets/badge.png'
 import { App, PackageJSON } from '../types.ts'
+
 import { FlowWindow } from '../wm.ts'
 
-export default class SettingsApp implements App {
+export default class InfoApp implements App {
   meta = {
     name: 'Info',
     description: 'FlowOS Information.',

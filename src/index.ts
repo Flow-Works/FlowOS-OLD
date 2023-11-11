@@ -45,4 +45,8 @@ window.wm = new WM();
 
   window.preloader.setStatus('')
   window.preloader.finish()
+
+  await navigator.serviceWorker.register('/uv-sw.js', {
+    scope: '/service/'
+  })
 })().catch(e => console.error)
