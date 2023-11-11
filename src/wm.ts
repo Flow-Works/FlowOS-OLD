@@ -57,6 +57,7 @@ export class FlowWindow {
   element: HTMLElement
 
   private readonly header: HTMLElement
+  private readonly realContent: HTMLElement
   content: HTMLElement
 
   maximized: boolean
@@ -109,10 +110,33 @@ export class FlowWindow {
       (this.header.querySelector('#max') as HTMLElement).onclick = () => this.toggleMax()
     }
 
-    this.content = document.createElement('window-content')
+    this.realContent = document.createElement('window-content')
+    const shadow = this.realContent.attachShadow({ mode: 'open' })
+    shadow.innerHTML = `
+      <style>
+        @import url(https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css);.bx {font-size: 25px;}
+        * {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      
+          font-family: "Satoshi", sans-serif;
+          font-weight: 600;
+      
+          color: var(--text);
+        }
+      </style>
+    `
+    const shadowBody = document.createElement('body')
+    shadowBody.style.margin = '0px'
+    shadowBody.style.height = '100%'
+
+    shadow.appendChild(shadowBody)
+    this.content = shadowBody
+
+    console.log(this.content)
 
     this.element.appendChild(this.header)
-    this.element.appendChild(this.content)
+    this.element.appendChild(this.realContent)
 
     dragElement(this.element, (document.querySelector('window-area') as HTMLElement))
   }
