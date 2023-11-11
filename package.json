@@ -29,5 +29,10 @@
     "filer": "^1.4.1",
     "prism-code-editor": "^2.0.1",
     "uuid": "^9.0.1"
+  },
+  "ts-standard": {
+    "ignore": [
+      "public"
+    ]
   }
 }

@@ -2,13 +2,14 @@ import { LoadedApp, LoadedPlugin } from './types.ts'
 
 class Flow {
   apps: LoadedApp[] = []
-  appList = [
+  appList: string[] = [
     'settings',
     'music',
     'files',
     'editor',
     'info',
-    'manager'
+    'manager',
+    'browser'
   ]
 
   plugins: LoadedPlugin[] = []
