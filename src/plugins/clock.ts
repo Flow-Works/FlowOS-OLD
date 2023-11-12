@@ -20,7 +20,7 @@ export const run = (element: HTMLDivElement): void => {
   }
 
   const refreshClock = (): string => {
-    return date.toLocaleTimeString('en-US', { hour12: false, hour: 'numeric', minute: 'numeric' })
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })
   }
 
   refreshDate()
