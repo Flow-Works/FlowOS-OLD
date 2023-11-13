@@ -33,6 +33,7 @@ export default class BrowserApp implements App {
         <i class='forward bx bx-right-arrow-alt'></i>
         <i class='refresh bx bx-refresh'></i>
         <input class="inp" style="border-radius: 15px;flex: 1;background: var(--base);border:none;padding: 0px 16px;height: 30px;">
+        <i class='toggle bx bx-wifi'></i>
       </div>
       <div id="content-container"></div>
       <style>
@@ -66,18 +67,36 @@ export default class BrowserApp implements App {
 
     class Tab {
       active = false
+      proxy = true
 
       header = document.createElement('div')
       iframe: HTMLIFrameElement = document.createElement('iframe')
 
       constructor (url: string) {
-        this.iframe.src = url
+        this.iframe.src = `/service/${xor.encode(url)}`
         this.iframe.style.display = 'none'
 
         this.header.innerHTML = `
           <span class="title">Tab</span>
           <span class="close">&times;</sp>
         `
+      }
+
+      toggle (): void {
+        this.proxy = !this.proxy
+        if (!this.proxy) {
+          if (this === tabManager.activeTab) {
+            win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
+            win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
+          }
+          this.iframe.src = win.content.querySelector('input')?.value as string
+        } else {
+          if (this === tabManager.activeTab) {
+            win.content.querySelector('.toggle')?.classList.remove('bx-wifi-off')
+            win.content.querySelector('.toggle')?.classList.add('bx-wifi')
+          }
+          this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value as string)}`
+        }
       }
     }
 
@@ -99,6 +118,7 @@ export default class BrowserApp implements App {
 
         tab.iframe.onload = () => {
           (tab.header.querySelector('.title') as HTMLElement).textContent = tab.iframe.contentDocument?.title as string
+          if (tab.iframe.contentDocument?.title as string === '') (tab.header.querySelector('.title') as HTMLElement).textContent = 'Tab'
           if (tab === this.activeTab) (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1])
         }
       }
@@ -110,7 +130,7 @@ export default class BrowserApp implements App {
         if (tab.active) {
           const lastTab = win.content.querySelector('#tabs-container')?.lastElementChild
           if (lastTab !== undefined) (lastTab?.querySelector('.title') as HTMLElement).click()
-          else this.addTab(new Tab(`/service/${xor.encode('https://google.com')}`))
+          else this.addTab(new Tab('https://google.com'))
         }
       }
 
@@ -123,7 +143,15 @@ export default class BrowserApp implements App {
           }
         })
 
-        try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
+        if (!tab.proxy) {
+          try { (win.content.querySelector('.inp') as HTMLInputElement).value = (tab.iframe.contentWindow as Window).location.href } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
+          win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
+          win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
+        } else {
+          try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
+          win.content.querySelector('.toggle')?.classList.remove('bx-wifi-off')
+          win.content.querySelector('.toggle')?.classList.add('bx-wifi')
+        }
 
         tab.active = true
         tab.iframe.style.display = 'block'
@@ -138,7 +166,11 @@ export default class BrowserApp implements App {
 
     win.content.querySelector('.inp')?.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}`
+        if (tabManager.activeTab.proxy) {
+          tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}`
+        } else {
+          tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value
+        }
       }
     })
 
@@ -185,7 +217,7 @@ export default class BrowserApp implements App {
     };
 
     (win.content.querySelector('button') as HTMLElement).onclick = () => {
-      tabManager.addTab(new Tab(`/service/${xor.encode('https://google.com')}`))
+      tabManager.addTab(new Tab('https://google.com'))
     }
 
     (win.content.querySelector('.refresh') as HTMLElement).onclick = () => {
@@ -200,7 +232,11 @@ export default class BrowserApp implements App {
       tabManager.activeTab.iframe.contentWindow?.history.forward()
     }
 
-    tabManager.addTab(new Tab(`/service/${xor.encode('https://google.com')}`))
+    (win.content.querySelector('.toggle') as HTMLElement).onclick = () => {
+      tabManager.activeTab.toggle()
+    }
+
+    tabManager.addTab(new Tab('https://google.com'))
 
     return win
   }
