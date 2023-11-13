@@ -82,9 +82,9 @@ export default class BrowserApp implements App {
         `
       }
 
-      toggle() {
+      toggle (): void {
         this.proxy = !this.proxy
-        if (this.proxy === false) {
+        if (!this.proxy) {
           if (this === tabManager.activeTab) {
             win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
             win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
@@ -143,9 +143,7 @@ export default class BrowserApp implements App {
           }
         })
 
-        
-
-        if (tab.proxy === false) {
+        if (!tab.proxy) {
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = (tab.iframe.contentWindow as Window).location.href } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
           win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
           win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
@@ -168,10 +166,10 @@ export default class BrowserApp implements App {
 
     win.content.querySelector('.inp')?.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        if (tabManager.activeTab.proxy === true) {
+        if (tabManager.activeTab.proxy) {
           tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}`
         } else {
-          tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value as string
+          tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value
         }
       }
     })
@@ -238,7 +236,7 @@ export default class BrowserApp implements App {
       tabManager.activeTab.toggle()
     }
 
-    tabManager.addTab(new Tab(`https://google.com`))
+    tabManager.addTab(new Tab('https://google.com'))
 
     return win
   }
