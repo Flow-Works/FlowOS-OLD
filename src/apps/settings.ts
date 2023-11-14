@@ -5,6 +5,7 @@ import { FlowWindow } from '../wm.ts'
 export default class SettingsApp implements App {
   meta = {
     name: 'Settings',
+    description: 'An easy-to-use configuration app.',
     pkg: 'flow.settings',
     icon,
     version: '1.0.0'
