@@ -242,11 +242,11 @@ export default class BrowserApp implements App {
       if (full) {
         win.content.querySelector('.fullscreen')?.classList.remove('bx-fullscreen')
         win.content.querySelector('.fullscreen')?.classList.add('bx-exit-fullscreen')
-        await win.content.requestFullscreen()
+        await document.exitFullscreen()
       } else {
         win.content.querySelector('.fullscreen')?.classList.remove('bx-exit-fullscreen')
         win.content.querySelector('.fullscreen')?.classList.add('bx-fullscreen')
-        await document.exitFullscreen()
+        await win.content.requestFullscreen()
       }
       full = !full
     }
