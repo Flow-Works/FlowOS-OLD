@@ -33,7 +33,8 @@ export default class BrowserApp implements App {
         <i class='forward bx bx-right-arrow-alt'></i>
         <i class='refresh bx bx-refresh'></i>
         <input class="inp" style="border-radius: 15px;flex: 1;background: var(--base);border:none;padding: 0px 16px;height: 30px;">
-        <i class='toggle bx bx-wifi'></i>
+        <i class='toggle bx bx-toggle-right'></i>
+        <i class='fullscreen bx bx-fullscreen'></i>
       </div>
       <div id="content-container"></div>
       <style>
@@ -86,14 +87,14 @@ export default class BrowserApp implements App {
         this.proxy = !this.proxy
         if (!this.proxy) {
           if (this === tabManager.activeTab) {
-            win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
-            win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
+            win.content.querySelector('.toggle')?.classList.remove('bx-toggle-right')
+            win.content.querySelector('.toggle')?.classList.add('bx-toggle-left')
           }
           this.iframe.src = win.content.querySelector('input')?.value as string
         } else {
           if (this === tabManager.activeTab) {
-            win.content.querySelector('.toggle')?.classList.remove('bx-wifi-off')
-            win.content.querySelector('.toggle')?.classList.add('bx-wifi')
+            win.content.querySelector('.toggle')?.classList.remove('bx-toggle-left')
+            win.content.querySelector('.toggle')?.classList.add('bx-toggle-right')
           }
           this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value as string)}`
         }
@@ -145,12 +146,12 @@ export default class BrowserApp implements App {
 
         if (!tab.proxy) {
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = (tab.iframe.contentWindow as Window).location.href } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
-          win.content.querySelector('.toggle')?.classList.remove('bx-wifi')
-          win.content.querySelector('.toggle')?.classList.add('bx-wifi-off')
+          win.content.querySelector('.toggle')?.classList.remove('bx-toggle-right')
+          win.content.querySelector('.toggle')?.classList.add('bx-toggle-left')
         } else {
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
-          win.content.querySelector('.toggle')?.classList.remove('bx-wifi-off')
-          win.content.querySelector('.toggle')?.classList.add('bx-wifi')
+          win.content.querySelector('.toggle')?.classList.remove('bx-toggle-left')
+          win.content.querySelector('.toggle')?.classList.add('bx-toggle-right')
         }
 
         tab.active = true
@@ -234,6 +235,10 @@ export default class BrowserApp implements App {
 
     (win.content.querySelector('.toggle') as HTMLElement).onclick = () => {
       tabManager.activeTab.toggle()
+    }
+
+    (win.content.querySelector('.fullscreen') as HTMLElement).onclick = async () => {
+      await tabManager.activeTab.iframe.requestFullscreen()
     }
 
     tabManager.addTab(new Tab('https://google.com'))
