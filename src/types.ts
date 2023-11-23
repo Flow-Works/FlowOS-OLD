@@ -1,5 +1,8 @@
 import { FlowWindow } from './wm'
 
+export type AppOpenFunction = (data: any) => Promise<FlowWindow>
+export type PluginRunFunction = (element: HTMLDivElement) => void | Promise<void>
+
 /* EVENTS */
 
 export interface AppClosedEvent extends CustomEvent {
@@ -46,12 +49,12 @@ export interface Plugins {
 
 export interface App {
   meta: AppMeta
-  open: (data: any) => Promise<FlowWindow>
+  open: AppOpenFunction
 }
 
 export interface Plugin {
   meta: PluginMeta
-  run: (element: HTMLDivElement) => void | Promise<void>
+  run: PluginRunFunction
 }
 
 /* MISC */
