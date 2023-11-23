@@ -1,7 +1,7 @@
-import icon from '../assets/icons/null.png'
-import { App } from '../types.ts'
+import icon from '../../assets/icons/null.png'
+import { App } from '../../types'
 
-import { FlowWindow } from '../wm.ts'
+import FlowWindow from '../../structures/FlowWindow'
 
 export default class BrowserApp implements App {
   meta = {

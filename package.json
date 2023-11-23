@@ -1,7 +1,7 @@
 {
-  "name": "flow-os",
+  "name": "flowos",
   "version": "1.0.0",
-  "description": "",
+  "description": "The future of FlowOS.",
   "main": "src/index.ts",
   "scripts": {
     "test": "ts-standard",
