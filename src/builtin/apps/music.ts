@@ -1,6 +1,6 @@
-import icon from '../assets/icons/music.png'
-import { App } from '../types.ts'
-import { FlowWindow } from '../wm.ts'
+import icon from '../../assets/icons/music.png'
+import { App } from '../../types'
+import FlowWindow from '../../structures/FlowWindow'
 
 export default class MusicApp implements App {
   meta = {

@@ -1,5 +1,5 @@
-import icon from '../assets/icons/editor.png'
-import { App } from '../types.ts'
+import icon from '../../assets/icons/editor.png'
+import { App } from '../../types'
 
 import { fullEditor } from 'prism-code-editor/setups'
 // this will also import markup, clike, javascript, typescript and jsx
@@ -8,7 +8,7 @@ import 'prism-code-editor/grammars/css-extras'
 import 'prism-code-editor/grammars/markdown'
 import 'prism-code-editor/grammars/python'
 
-import { FlowWindow } from '../wm.ts'
+import FlowWindow from '../../structures/FlowWindow'
 
 interface EditorConfig {
   path: string

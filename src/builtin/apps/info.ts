@@ -1,8 +1,8 @@
-import icon from '../assets/icons/info.png'
-import badge from '../assets/badge.png'
-import { App, PackageJSON } from '../types.ts'
+import icon from '../../assets/icons/info.png'
+import badge from '../../assets/badge.png'
+import { App, PackageJSON } from '../../types'
 
-import { FlowWindow } from '../wm.ts'
+import FlowWindow from '../../structures/FlowWindow'
 
 export default class InfoApp implements App {
   meta = {
@@ -14,7 +14,7 @@ export default class InfoApp implements App {
   }
 
   async open (): Promise<FlowWindow> {
-    const packageJSON: PackageJSON = await import('../../package.json')
+    const packageJSON: PackageJSON = await import('../../../package.json')
     const win = window.wm.createWindow({
       title: this.meta.name,
       icon: this.meta.icon,

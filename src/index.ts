@@ -1,9 +1,9 @@
-import './style.less'
+import './assets/style.less'
 
-import Preloader from './preloader'
-import StatusBar from './statusbar'
-import WM from './wm'
-import Flow from './flow'
+import Preloader from './instances/Preloader'
+import StatusBar from './instances/StatusBar'
+import WindowManager from './instances/WindowManager'
+import Flow from './instances/Flow'
 
 import * as fs from 'fs'
 
@@ -13,7 +13,7 @@ declare global {
     flow: Flow
     fs: typeof fs
     statusBar: StatusBar
-    wm: WM
+    wm: WindowManager
   }
 }
 
@@ -32,7 +32,7 @@ if (params.get('debug') !== null && params.get('debug') !== undefined) {
 window.preloader = new Preloader()
 window.flow = new Flow()
 window.statusBar = new StatusBar()
-window.wm = new WM();
+window.wm = new WindowManager();
 
 (async function () {
   window.preloader.setPending('filesystem')

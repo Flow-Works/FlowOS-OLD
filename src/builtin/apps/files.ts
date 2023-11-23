@@ -1,7 +1,7 @@
-import icon from '../assets/icons/files.png'
-import { App } from '../types.ts'
+import icon from '../../assets/icons/files.png'
+import { App } from '../../types'
 
-import { FlowWindow } from '../wm.ts'
+import FlowWindow from '../../structures/FlowWindow'
 
 import { Stats } from 'fs'
 

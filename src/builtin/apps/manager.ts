@@ -1,7 +1,7 @@
-import icon from '../assets/icons/manager.png'
-import { App, LoadedApp, LoadedPlugin } from '../types.ts'
-import { FlowWindow } from '../wm.ts'
-import nullIcon from '../assets/icons/null.png'
+import icon from '../../assets/icons/manager.png'
+import { App, LoadedApp, LoadedPlugin } from '../../types'
+import FlowWindow from '../../structures/FlowWindow'
+import nullIcon from '../../assets/icons/null.png'
 
 export default class ManagerApp implements App {
   meta = {

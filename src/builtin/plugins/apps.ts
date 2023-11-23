@@ -1,4 +1,4 @@
-import { AppOpenedEvent, AppClosedEvent } from '../types'
+import { AppOpenedEvent, AppClosedEvent } from '../../types'
 
 export const meta = {
   name: 'Apps',
