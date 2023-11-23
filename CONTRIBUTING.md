@@ -60,7 +60,6 @@ Please note we have a code of conduct, please follow it in all your interactions
 | Issue/Pull Request template | :newspaper_roll: `:newspaper_roll:`                       |
 | Merge pull request          | :knot: `:knot:`                                           |
 | Assets                      | :bento: `:bento:`                                         |
-| Spelling mistake            | :pencil: `:pencil:`                                       |
 
 ### Format
 
