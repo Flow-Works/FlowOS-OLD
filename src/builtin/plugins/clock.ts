@@ -1,3 +1,5 @@
+import { getTime } from '../../utils'
+
 export const meta = {
   name: 'Clock',
   description: 'Displays the date & time.',
@@ -5,7 +7,7 @@ export const meta = {
   version: '1.0.0'
 }
 
-export const run = (element: HTMLDivElement): void => {
+export const run = async (element: HTMLDivElement): Promise<void> => {
   let date: Date = new Date()
 
   element.style.display = 'flex'
@@ -19,17 +21,16 @@ export const run = (element: HTMLDivElement): void => {
     return `<i>${split[0]}</i>,${split[1]} `
   }
 
-  const refreshClock = (): string => {
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })
-  }
-
-  refreshDate()
-  refreshClock()
+  let clock = await getTime()
+  let date_ = refreshDate()
+  element.innerHTML = `${clock}<div>${date_}</div>`
 
   setInterval(() => {
-    date = new Date()
-    const clock = refreshClock()
-    const date_ = refreshDate()
-    element.innerHTML = `${clock}<div>${date_}</div>`
+    (async () => {
+      date = new Date()
+      clock = await getTime()
+      date_ = refreshDate()
+      element.innerHTML = `${clock}<div>${date_}</div>`
+    })().catch(e => console.error(e))
   }, 1000)
 }

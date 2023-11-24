@@ -1,7 +1,7 @@
 import FlowWindow from './structures/FlowWindow'
 
 export type AppOpenFunction = (data: any) => Promise<FlowWindow>
-export type PluginRunFunction = (element: HTMLDivElement) => void | Promise<void>
+export type PluginRunFunction = (element: HTMLDivElement, config: any) => void | Promise<void>
 
 export interface AppClosedEvent extends CustomEvent {
   detail: {
@@ -71,4 +71,11 @@ export interface LoadedPlugin extends Plugin {
 
 export interface PackageJSON {
   version: string
+}
+
+export interface FlowConfig {
+  SERVER_URL: string
+  HOSTNAME: string
+  USERNAME: string
+  '24HOUR_CLOCK': boolean
 }

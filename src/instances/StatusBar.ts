@@ -24,7 +24,7 @@ class StatusBar {
 
     this.element.appendChild(element)
 
-    await item.run(element)
+    await item.run(element, await window.config())
   }
 
   /**

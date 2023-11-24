@@ -28,10 +28,9 @@ self.xor = {
     )
   }
 }
-
 self.__uv$config = {
   prefix: '/service/',
-  bare: 'https://server.flow-works.me/bare/',
+  bare: 'https://server.flow-works.me' + '/bare/',
   encodeUrl: self.xor.encode,
   decodeUrl: self.xor.decode,
   handler: '/uv/uv.handler.js',
