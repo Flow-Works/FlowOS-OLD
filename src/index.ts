@@ -51,9 +51,9 @@ window.wm = new WindowManager();
     if (!exists) window.fs.promises.mkdir('/.config').then(null).catch(e => console.error)
 
     window.fs.exists('/.config/flow.json', (exists) => {
-      // if (!exists) {
-      window.fs.promises.writeFile('/.config/flow.json', JSON.stringify(defaultConfig)).then(null).catch(e => console.error)
-      // }
+      if (!exists) {
+        window.fs.promises.writeFile('/.config/flow.json', JSON.stringify(defaultConfig)).then(null).catch(e => console.error)
+      }
     })
   })
   /**
