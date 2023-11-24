@@ -53,9 +53,11 @@ window.wm = new WindowManager();
     window.fs.exists('/.config/flow.json', (exists) => {
       if (!exists) {
         window.fs.promises.writeFile('/.config/flow.json', JSON.stringify(defaultConfig)).then(null).catch(e => console.error)
+        window.location.reload()
       }
     })
   })
+
   /**
    * Gets the current FlowOS config.
    *
@@ -72,8 +74,6 @@ window.wm = new WindowManager();
       })
     })
   }
-
-  console.log(await window.config())
 
   navigator.serviceWorker.register('/uv-sw.js?config=' + encodeURIComponent((await window.config()).SERVER_URL), {
     scope: '/service/'
