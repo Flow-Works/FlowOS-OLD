@@ -4,6 +4,7 @@
   "description": "The future of FlowOS.",
   "main": "src/index.ts",
   "scripts": {
+    "docs": "typedoc src/**",
     "test": "ts-standard",
     "dev": "vite",
     "build": "vite build",
@@ -18,6 +19,9 @@
     "@types/uuid": "^9.0.5",
     "@types/web": "^0.0.117",
     "ts-standard": "^12.0.2",
+    "typedoc": "^0.25.3",
+    "typedoc-material-theme": "^1.0.0",
+    "typedoc-plugin-missing-exports": "^2.1.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.11",
     "vite-plugin-dynamic-import": "^1.5.0",
