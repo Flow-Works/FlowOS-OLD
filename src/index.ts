@@ -75,9 +75,13 @@ window.wm = new WindowManager();
     })
   }
 
-  navigator.serviceWorker.register('/uv-sw.js?config=' + encodeURIComponent((await window.config()).SERVER_URL), {
+  const registrations = await navigator.serviceWorker.getRegistrations()
+  for (const registration of registrations) {
+    await registration.unregister()
+  }
+  await navigator.serviceWorker.register('/uv-sw.js?url=' + encodeURIComponent(btoa((await window.config()).SERVER_URL)), {
     scope: '/service/'
-  }).catch(e => console.error(e))
+  })
 
   await window.preloader.setDone('filesystem')
 

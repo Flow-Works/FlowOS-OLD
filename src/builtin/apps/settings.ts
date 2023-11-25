@@ -82,15 +82,7 @@ export default class SettingsApp implements App {
       win.content.querySelector('.save')?.addEventListener('click', () => {
         (config as any)[key] = input.value
 
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-          for (const registration of registrations) {
-            registration.unregister().then(() => {
-              navigator.serviceWorker.register('/uv-sw.js?config=' + encodeURIComponent(config.SERVER_URL), {
-                scope: '/service/'
-              }).catch(e => console.error(e))
-            }).catch(e => console.error(e))
-          }
-        }).catch(e => console.error(e))
+        window.location.reload()
       })
     }
 
