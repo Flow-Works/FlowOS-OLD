@@ -2,9 +2,9 @@ importScripts('/uv/uv.bundle.js');
 importScripts('/uv/uv.config.js');
 
 class UVServiceWorker extends EventEmitter {     
-    constructor(flowURL, config = __uv$config) {
+    constructor(serverURL, config = __uv$config) {
         super();
-        config.bare = flowURL + '/bare/';
+        config.bare = serverURL + '/bare/';
         this.addresses = typeof config.bare === 'string' ? [ new URL(config.bare, location) ] : config.bare.map(str => new URL(str, location));
         this.headers = {
             csp: [

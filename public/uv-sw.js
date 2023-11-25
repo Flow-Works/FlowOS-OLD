@@ -1,12 +1,8 @@
 importScripts('/uv/uv.sw.js');
 
-const params = new URLSearchParams(self.serviceWorker.scriptURL)
+const params = new URL(self.serviceWorker.scriptURL).searchParams
 
-var cfg = JSON.parse(params.get('config'));
-const sw = new UVServiceWorker(cfg);
+const serverURL = atob(params.get('url'));
+const sw = new UVServiceWorker(serverURL);
 
-self.addEventListener('fetch', event =>
-    event.respondWith(sw.fetch(event))
-);
-
-
+self.addEventListener('fetch', event => event.respondWith(sw.fetch(event)));
