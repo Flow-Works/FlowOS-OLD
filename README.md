@@ -8,7 +8,7 @@
 
   <img src="https://img.shields.io/github/stars/flow-works/flowos?style=for-the-badge" />
   <img src="https://img.shields.io/github/issues-pr/flow-works/flowos?style=for-the-badge" />
-  <img src="https://img.shields.io/github/forks/flow-works/flowo?style=for-the-badge&color=orange" />
+  <img src="https://img.shields.io/github/forks/flow-works/flowos?style=for-the-badge&color=orange" />
   <img src="https://img.shields.io/github/commit-activity/t/Flow-Works/FlowOS?style=for-the-badge&color=violet" />
   <img src="https://img.shields.io/github/actions/workflow/status/flow-works/flowos/build.yml?style=for-the-badge" />
 
