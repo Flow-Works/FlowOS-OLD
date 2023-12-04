@@ -29,12 +29,12 @@ export default class BrowserApp implements App {
         <button class="add">+</button>
       </div>
       <div class="tools" style="display:flex;gap:10px;align-items:center;">
-        <i class='back bx bx-left-arrow-alt'></i>
-        <i class='forward bx bx-right-arrow-alt'></i>
-        <i class='refresh bx bx-refresh'></i>
+        <i class='back material-symbols-rounded'>arrow_back</i>
+        <i class='forward material-symbols-rounded'>arrow_forward</i>
+        <i class='refresh material-symbols-rounded'>refresh</i>
         <input class="inp" style="border-radius: 15px;flex: 1;background: var(--base);border:none;padding: 0px 16px;height: 30px;">
-        <i class='toggle bx bx-toggle-right'></i>
-        <i class='fullscreen bx bx-fullscreen'></i>
+        <i class='toggle material-symbols-rounded'>toggle_on</i>
+        <i class='fullscreen material-symbols-rounded'>fullscreen</i>
       </div>
       <div id="content-container"></div>
       <style>
@@ -87,14 +87,12 @@ export default class BrowserApp implements App {
         this.proxy = !this.proxy
         if (!this.proxy) {
           if (this === tabManager.activeTab) {
-            win.content.querySelector('.toggle')?.classList.remove('bx-toggle-right')
-            win.content.querySelector('.toggle')?.classList.add('bx-toggle-left')
+            (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_off'
           }
           this.iframe.src = win.content.querySelector('input')?.value as string
         } else {
           if (this === tabManager.activeTab) {
-            win.content.querySelector('.toggle')?.classList.remove('bx-toggle-left')
-            win.content.querySelector('.toggle')?.classList.add('bx-toggle-right')
+            (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
           }
           this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value as string)}`
         }
@@ -145,13 +143,12 @@ export default class BrowserApp implements App {
         })
 
         if (!tab.proxy) {
+          (tab.header.querySelector('.title') as HTMLElement).textContent = 'Tab'
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = (tab.iframe.contentWindow as Window).location.href } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
-          win.content.querySelector('.toggle')?.classList.remove('bx-toggle-right')
-          win.content.querySelector('.toggle')?.classList.add('bx-toggle-left')
+          (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_off'
         } else {
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
-          win.content.querySelector('.toggle')?.classList.remove('bx-toggle-left')
-          win.content.querySelector('.toggle')?.classList.add('bx-toggle-right')
+          (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
         }
 
         tab.active = true
@@ -237,18 +234,20 @@ export default class BrowserApp implements App {
       tabManager.activeTab.toggle()
     }
 
-    let full = false;
-    (win.content.querySelector('.fullscreen') as HTMLElement).onclick = async () => {
-      if (full) {
-        win.content.querySelector('.fullscreen')?.classList.remove('bx-fullscreen')
-        win.content.querySelector('.fullscreen')?.classList.add('bx-exit-fullscreen')
-        await document.exitFullscreen()
+    win.content.onfullscreenchange = () => {
+      if (document.fullscreenElement !== null) {
+        (win.content.querySelector('.fullscreen') as HTMLElement).innerHTML = 'fullscreen_exit'
       } else {
-        win.content.querySelector('.fullscreen')?.classList.remove('bx-exit-fullscreen')
-        win.content.querySelector('.fullscreen')?.classList.add('bx-fullscreen')
-        await win.content.requestFullscreen()
+        (win.content.querySelector('.fullscreen') as HTMLElement).innerHTML = 'fullscreen'
       }
-      full = !full
+    }
+
+    (win.content.querySelector('.fullscreen') as HTMLElement).onclick = async () => {
+      if (document.fullscreenElement !== null) {
+        await document.exitFullscreen().catch(e => console.error)
+      } else {
+        await win.content.requestFullscreen().catch(e => console.error)
+      }
     }
 
     tabManager.addTab(new Tab('https://google.com'))

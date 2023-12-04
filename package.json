@@ -32,6 +32,7 @@
     "eruda": "^3.0.1",
     "filer": "^1.4.1",
     "prism-code-editor": "^2.2.1",
+    "material-symbols": "^0.14.1",
     "uuid": "^9.0.1"
   },
   "ts-standard": {

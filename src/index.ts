@@ -1,3 +1,4 @@
+import 'material-symbols'
 import './assets/style.less'
 
 import Preloader from './instances/Preloader'
