@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import WindowManager from '../instances/WindowManager'
 import { FlowWindowConfig } from '../types'
-import { sanitize } from '../utils';
+import { sanitize } from '../utils'
 
 /**
  * Makes an element draggable.
