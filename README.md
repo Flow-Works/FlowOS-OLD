@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS-2.0/master/src/assets/flow.png" width="100px">
  
-  # FlowOS Next
+  # FlowOS
 
   <img src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height="50">
   <a href="https://discord.gg/axUqK8CN2n"><img src="https://raw.githubusercontent.com/Flow-Works/FlowOS-2.0/master/src/assets/badge.png" height="50"></a><br/>
@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/github/actions/workflow/status/flow-works/flowos-2.0/build.yml?style=for-the-badge" />
 
   <br>
-  <i>The future of FlowOS</i>
+  <i>The most aesthetic webOS.</i>
   <br>
   <a href="https://docs.flow-works.me"><strong>Read the docs »</strong></a>
   <br>
@@ -22,7 +22,7 @@
 
 ## What is FlowOS?
 
-FlowOS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's extremly customizable with an API to make your own apps, themes, and modules.
+FlowOS is a web OS proxy made for the Titanium Network 2023 Proxathon. It's extremely customizable with an API to make your apps, themes, and modules.
 
 ## Getting Started
 
