@@ -75,4 +75,4 @@ This is an example of this being used for "**Assets**":
 
 ## Code of Conduct
 
-Our Code of Conduct is located at `CODE_OF_CONDUCT.md`
+Our Code of Conduct is located at `CODE_OF_CONDUCT.md`.
