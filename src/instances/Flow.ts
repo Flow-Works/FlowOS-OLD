@@ -13,14 +13,7 @@ class Flow {
   ]
 
   plugins: LoadedPlugin[] = []
-  pluginList: string[] = [
-    'appLauncher',
-    'apps',
-    'weather',
-    'clock',
-    'switcher',
-    'battery'
-  ]
+  pluginList: string[] = []
 
   /**
    * Initiates applications.
@@ -31,8 +24,9 @@ class Flow {
 
     for (const appPath of this.appList) {
       window.preloader.setStatus(`importing default apps\n${appPath}`)
-      const { default: ImportedApp } = await import(`../builtin/apps/${appPath}.ts`).catch((e: Error) => {
+      const { default: ImportedApp } = await import(`../builtin/apps/${appPath}.ts`).catch(async (e: Error) => {
         console.error(e)
+        await window.preloader.setError('apps')
         window.preloader.setStatus(`unable to import ${appPath}\n${e.name}: ${e.message}`)
       })
       const app = new ImportedApp()

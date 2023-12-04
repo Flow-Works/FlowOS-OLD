@@ -108,9 +108,9 @@ class FlowWindow {
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
-    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="close" class='bx bx-x'></i>`
+    this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="close" class='material-symbols-rounded'>close</i>`
     if (config.canResize) {
-      this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='bx bx-minus'></i><i id="max" class='bx bx-checkbox'></i><i id="close" class='bx bx-x'></i>`
+      this.header.innerHTML = `<img src="${config.icon}"></img> <div class="title">${config.title}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="max" class='material-symbols-rounded' style="font-size: 20px;">square</i><i id="close" class='material-symbols-rounded'>close</i>`
     }
 
     (this.header.querySelector('#close') as HTMLElement).onclick = () => {
@@ -126,8 +126,17 @@ class FlowWindow {
     this.realContent = document.createElement('window-content')
     const shadow = this.realContent.attachShadow({ mode: 'open' })
     shadow.innerHTML = `
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <style>
-        @import url(https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css);.bx {font-size: 25px;}
+        .material-symbols-rounded {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 200,
+          'opsz' 48
+        }
+      </style>
+      <style>
         * {
           -ms-overflow-style: none;
           scrollbar-width: none;
