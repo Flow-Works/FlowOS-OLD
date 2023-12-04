@@ -17962,6 +17962,8 @@
   
   function deepAssign(dest, src) {
       for (const key in src) {
+          if (!src.hasOwnProperty(key)) continue;
+          if (key === "__proto__" || key === "constructor") continue;
           if (hasOwnProperty.call(src, key)) {
               if (isObject(dest[key])) {
                   deepAssign(dest[key], copy(src[key]));
@@ -39189,7 +39191,7 @@
           str = new String(str).trim();
           if (!str || this.urlRegex.test(str)) return str;
   
-          if (str.startsWith('javascript:')) {
+          if (str.startsWith('javascript:') || str.startsWith("data:") || str.startsWith("vbscript:")) {
               return 'javascript:' + this.js.rewrite(str.slice('javascript:'.length));
           };
   
