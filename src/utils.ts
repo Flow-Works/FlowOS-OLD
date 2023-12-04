@@ -30,3 +30,24 @@ export const getTime = async (): Promise<string> => {
 
   return timeString
 }
+
+/**
+ * Sanitizes a string of all HTML elements.
+ *
+ * @param string String to be sanitized
+ * @returns Sanitized string
+ */
+export const sanitize = (string: string): string => {
+  const map: {
+    [key: string]: string
+  } = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&#x27;',
+    '/': '&#x2F;'
+  }
+  const reg = /[&<>"'/]/ig
+  return string.replace(reg, (match) => (map[match]))
+}
