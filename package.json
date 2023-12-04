@@ -1,7 +1,7 @@
 {
   "name": "flowos",
   "version": "1.0.0",
-  "description": "The future of FlowOS.",
+  "description": "The most aesthetic webOS.",
   "main": "src/index.ts",
   "scripts": {
     "docs": "typedoc src/**",
