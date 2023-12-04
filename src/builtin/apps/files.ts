@@ -27,18 +27,18 @@ export default class FilesApp implements App {
 
     async function setDir (dir: string): Promise<void> {
       await window.fs.readdir(dir, (e: NodeJS.ErrnoException, files: string[]) => {
-        const back = dir === '/' ? '<i class=\'bx bx-arrow-to-left\'></i>' : '<i class=\'back bx bx-left-arrow-alt\'></i>'
+        const back = dir === '/' ? '<span class="material-symbols-rounded">first_page</span>' : '<span class="back material-symbols-rounded">chevron_left</span>'
 
         win.content.innerHTML = `
           <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
             ${back}${dir}
             <div style="flex:1;"></div>
-            <i class='folder bx bxs-folder-plus' style="font-size: 17.5px;"></i><i class='file bx bxs-file-plus' style="font-size: 17.5px;"></i>
+            <i class='folder material-symbols-rounded' style="font-size: 17.5px;">create_new_folder</i><i class='file material-symbols-rounded' style="font-size: 17.5px;">note_add</i>
           </div>
           <div class="files" style="background: var(--base);flex: 1;border-radius: 10px;display: flex;flex-direction: column;"></div>
         `
 
-        if (back !== '<i class=\'bx bx-arrow-to-left\'></i>') {
+        if (back !== '<span class="material-symbols-rounded">first_page</span>') {
           (win.content.querySelector('.back') as HTMLElement).onclick = async () => {
             if (dir.split('/')[1] === dir.replace('/', '')) {
               await setDir(`/${dir.split('/')[0]}`)
@@ -71,51 +71,45 @@ export default class FilesApp implements App {
                 case 'js':
                 case 'mjs':
                 case 'cjs': {
-                  return '<i class=\'bx bxs-file-js\' ></i>'
+                  return '<span class="material-symbols-rounded">javascript</span>'
                 }
 
                 case 'html':
                 case 'htm': {
-                  return '<i class=\'bx bxs-file-html\' ></i>'
+                  return '<span class="material-symbols-rounded">html</span>'
                 }
 
                 case 'css': {
-                  return '<i class=\'bx bxs-file-css\' ></i>'
+                  return '<span class="material-symbols-rounded">css</span>'
                 }
 
                 case 'json': {
-                  return '<i class=\'bx bxs-file-json\' ></i>'
+                  return '<span class="material-symbols-rounded">code</span>'
                 }
 
                 case 'md': {
-                  return '<i class=\'bx bxs-file-md\' ></i>'
+                  return '<span class="material-symbols-rounded">markdown</span>'
                 }
 
                 case 'txt':
                 case 'text': {
-                  return '<i class=\'bx bxs-file-txt\' ></i>'
+                  return '<span class="material-symbols-rounded">description</span>'
                 }
 
                 case 'png':
-                case 'apng': {
-                  return '<i class=\'bx bxs-file-png\' ></i>'
-                }
-
+                case 'apng':
                 case 'jpg':
-                case 'jpeg': {
-                  return '<i class=\'bx bxs-file-jpg\' ></i>'
-                }
-
+                case 'jpeg':
                 case 'gif': {
-                  return '<i class=\'bx bxs-file-gif\' ></i>'
+                  return '<span class="material-symbols-rounded">image</span>'
                 }
 
                 default: {
-                  return '<i class=\'bx bxs-file-blank\' ></i>'
+                  return '<span class="material-symbols-rounded">draft</span>'
                 }
               }
             }
-            const icon = fileStat.isDirectory() ? '<i class=\'bx bx-folder\'></i>' : genIcon()
+            const icon = fileStat.isDirectory() ? '<span class="material-symbols-rounded">folder</span>' : genIcon()
 
             element.innerHTML += `${icon} ${file}`
             element.onclick = async () => {

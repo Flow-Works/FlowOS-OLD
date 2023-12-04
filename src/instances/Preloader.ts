@@ -33,7 +33,7 @@ class Preloader {
    * @param value The name of an instance.
    */
   setPending (value: string): void {
-    (this.element.querySelector('.done') as HTMLElement).innerHTML += `<div class="${value.split(' ').join('-')}"><i class='icon bx bx-minus' ></i>${value}</div>`
+    (this.element.querySelector('.done') as HTMLElement).innerHTML += `<div class="${value.split(' ').join('-')}"><span class='material-symbols-rounded'>check_indeterminate_small</span>${value}</div>`
   }
 
   /**
@@ -42,9 +42,19 @@ class Preloader {
    * @param value The name of an instance.
    */
   async setDone (value: string): Promise<void> {
-    const icon = this.element.querySelector('.done')?.querySelector(`.${value.split(' ').join('-')}`)?.querySelector('.icon')
-    icon?.classList.remove('bx-minus')
-    icon?.classList.add('bx-check')
+    const icon = this.element.querySelector('.done')?.querySelector(`.${value.split(' ').join('-')}`)?.querySelector('.material-symbols-rounded') as HTMLElement
+    icon.innerHTML = 'check_small'
+    await new Promise(resolve => setTimeout(resolve, 300))
+  }
+
+  /**
+   * Sets loading state of an instance to error.
+   *
+   * @param value The name of an instance.
+   */
+  async setError (value: string): Promise<void> {
+    const icon = this.element.querySelector('.done')?.querySelector(`.${value.split(' ').join('-')}`)?.querySelector('.material-symbols-rounded') as HTMLElement
+    icon.innerHTML = 'close_small'
     await new Promise(resolve => setTimeout(resolve, 300))
   }
 

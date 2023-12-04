@@ -63,13 +63,13 @@ export default class EditorApp implements App {
 
           <div class="dropdown" id="file">
             <a id="save">
-              <i class='bx bxs-save' style="font-size: 1.1rem;"></i>
+              <i class='material-symbols-rounded' style="font-size: 1.1rem;">save</i>
               Save
             </a>
           </div>
           <div class="dropdown" id="edit">
             <a id="find">
-              <i class='bx bxs-save' style="font-size: 1.1rem;"></i>
+              <i class='material-symbols-rounded' style="font-size: 1.1rem;">search</i>
               Find
             </a>
           </div>
