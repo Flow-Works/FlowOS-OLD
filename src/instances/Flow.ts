@@ -1,15 +1,17 @@
 import { LoadedApp, LoadedPlugin } from '../types'
+import nullIcon from '../assets/icons/application-default-icon.svg'
 
 class Flow {
   apps: LoadedApp[] = []
   appList: string[] = [
-    'settings',
-    'music',
-    'files',
-    'editor',
-    'info',
-    'manager',
-    'browser'
+    '../builtin/apps/settings.ts',
+    '../builtin/apps/music.ts',
+    '../builtin/apps/files.ts',
+    '../builtin/apps/editor.ts',
+    '../builtin/apps/info.ts',
+    '../builtin/apps/manager.ts',
+    '../builtin/apps/browser.ts',
+    '../builtin/apps/store.ts'
   ]
 
   plugins: LoadedPlugin[] = []
@@ -22,15 +24,22 @@ class Flow {
     window.preloader.setPending('apps')
     window.preloader.setStatus('importing default apps...')
 
+    await (await window.fs.promises.readdir('/Applications')).forEach((file) => {
+      window.fs.promises.readFile('/Applications/' + file).then(content => {
+        this.appList.push(`data:text/javascript;base64,${btoa(content.toString())}`)
+      }).catch(console.error)
+    })
+
     for (const appPath of this.appList) {
       window.preloader.setStatus(`importing default apps\n${appPath}`)
-      const { default: ImportedApp } = await import(`../builtin/apps/${appPath}.ts`).catch(async (e: Error) => {
+      const { default: ImportedApp } = await import(`${appPath}`).catch(async (e: Error) => {
         console.error(e)
         await window.preloader.setError('apps')
         window.preloader.setStatus(`unable to import ${appPath}\n${e.name}: ${e.message}`)
       })
       const app = new ImportedApp()
       app.builtin = true
+      app.meta.icon = app.meta.icon ?? nullIcon
 
       this.addApp(app)
     }

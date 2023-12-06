@@ -1,7 +1,7 @@
-import icon from '../../assets/icons/manager.png'
+import icon from '../../assets/icons/software-properties.svg'
 import { App, LoadedApp, LoadedPlugin } from '../../types'
 import FlowWindow from '../../structures/FlowWindow'
-import nullIcon from '../../assets/icons/null.png'
+import nullIcon from '../../assets/icons/application-default-icon.svg'
 
 export default class ManagerApp implements App {
   meta = {

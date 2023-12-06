@@ -1,4 +1,4 @@
-import icon from '../../assets/icons/null.png'
+import icon from '../../assets/icons/web-browser.svg'
 import { App } from '../../types'
 
 import FlowWindow from '../../structures/FlowWindow'
