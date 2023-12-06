@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS-2.0/master/src/assets/flow.png" width="100px">
+  <img src="https://raw.githubusercontent.com/Flow-Works/FlowOS/master/src/assets/flow.png" width="100px">
  
   # FlowOS
 
   <img src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height="50">
-  <a href="https://discord.gg/axUqK8CN2n"><img src="https://raw.githubusercontent.com/Flow-Works/FlowOS-2.0/master/src/assets/badge.png" height="50"></a><br/>
+  <a href="https://discord.gg/axUqK8CN2n"><img src="https://raw.githubusercontent.com/Flow-Works/FlowOS/master/src/assets/badge.png" height="50"></a><br/>
 
   <img src="https://img.shields.io/github/stars/flow-works/flowos?style=for-the-badge" />
   <img src="https://img.shields.io/github/issues-pr/flow-works/flowos?style=for-the-badge" />
@@ -30,7 +30,7 @@ To run FlowOS on your local machine, you need Node.js 16 or above.
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Flow-Works/FlowOS-2.0
+git clone https://github.com/Flow-Works/FlowOS
 ```
 2. Install packages
 ```bash
