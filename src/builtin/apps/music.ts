@@ -1,4 +1,4 @@
-import icon from '../../assets/icons/music.png'
+import icon from '../../assets/icons/gnome-music.svg'
 import { App } from '../../types'
 import FlowWindow from '../../structures/FlowWindow'
 

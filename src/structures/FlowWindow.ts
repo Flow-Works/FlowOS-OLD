@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid'
 import WindowManager from '../instances/WindowManager'
 import { FlowWindowConfig } from '../types'
 import { sanitize } from '../utils'
+import nullIcon from '../assets/icons/application-default-icon.svg'
 
 /**
  * Makes an element draggable.
@@ -109,9 +110,9 @@ class FlowWindow {
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
-    this.header.innerHTML = `<img src="${sanitize(config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="close" class='material-symbols-rounded'>close</i>`
+    this.header.innerHTML = `<img src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="close" class='material-symbols-rounded'>close</i>`
     if (config.canResize) {
-      this.header.innerHTML = `<img src="${sanitize(config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="max" class='material-symbols-rounded' style="font-size: 20px;">square</i><i id="close" class='material-symbols-rounded'>close</i>`
+      this.header.innerHTML = `<img src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="max" class='material-symbols-rounded' style="font-size: 20px;">square</i><i id="close" class='material-symbols-rounded'>close</i>`
     }
 
     (this.header.querySelector('#close') as HTMLElement).onclick = () => {

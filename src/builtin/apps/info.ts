@@ -1,4 +1,4 @@
-import icon from '../../assets/icons/info.png'
+import icon from '../../assets/icons/userinfo.svg'
 import badge from '../../assets/badge.png'
 import { App, PackageJSON } from '../../types'
 
