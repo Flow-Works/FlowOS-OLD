@@ -30,6 +30,11 @@ export interface PluginMeta extends BaseMeta {
   icon?: string
 }
 
+export interface RepoAppMeta extends BaseMeta {
+  icon?: string
+  url: string
+}
+
 export interface Apps {
   [key: string]: App
 }
@@ -78,4 +83,10 @@ export interface FlowConfig {
   HOSTNAME: string
   USERNAME: string
   '24HOUR_CLOCK': boolean
+}
+
+export interface RepoData {
+  name: string
+  id: string
+  apps: RepoAppMeta[]
 }

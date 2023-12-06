@@ -1,4 +1,4 @@
-import icon from '../../assets/icons/editor.png'
+import icon from '../../assets/icons/text-editor.svg'
 import { App } from '../../types'
 
 import { fullEditor } from 'prism-code-editor/setups'
