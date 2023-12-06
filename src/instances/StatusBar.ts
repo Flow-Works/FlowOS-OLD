@@ -47,14 +47,10 @@ class StatusBar {
           iconHTML = 'battery_charging_90'
         } else if (battery.level >= 0.8) {
           iconHTML = 'battery_charging_80'
-        } else if (battery.level >= 0.7) {
-          iconHTML = 'battery_charging_70'
         } else if (battery.level >= 0.6) {
           iconHTML = 'battery_charging_60'
         } else if (battery.level >= 0.5) {
           iconHTML = 'battery_charging_50'
-        } else if (battery.level >= 0.4) {
-          iconHTML = 'battery_charging_40'
         } else if (battery.level >= 0.3) {
           iconHTML = 'battery_charging_30'
         } else if (battery.level >= 0.2) {
