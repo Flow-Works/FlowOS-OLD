@@ -2,7 +2,6 @@ import icon from '../../assets/icons/web-browser.svg'
 import { App } from '../../types'
 
 import FlowWindow from '../../structures/FlowWindow'
-import { sanitize } from '../../utils'
 
 export default class BrowserApp implements App {
   meta = {
@@ -90,7 +89,8 @@ export default class BrowserApp implements App {
           if (this === tabManager.activeTab) {
             (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_off'
           }
-          this.iframe.src = sanitize(win.content.querySelector('input')?.value as string)
+          (this.header.querySelector('.title') as HTMLElement).innerText = 'Tab'
+          this.iframe.src = (win.content.querySelector('input')?.value as string)
         } else {
           if (this === tabManager.activeTab) {
             (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
@@ -117,7 +117,7 @@ export default class BrowserApp implements App {
         win.content.querySelector('#tabs-container')?.appendChild(tab.header)
 
         tab.iframe.onload = () => {
-          (tab.header.querySelector('.title') as HTMLElement).textContent = tab.iframe.contentDocument?.title as string
+          (tab.header.querySelector('.title') as HTMLElement).textContent = tab.iframe.contentDocument?.title ?? 'Tab'
           if (tab.iframe.contentDocument?.title as string === '') (tab.header.querySelector('.title') as HTMLElement).textContent = 'Tab'
           if (tab === this.activeTab) (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1])
         }
@@ -168,7 +168,7 @@ export default class BrowserApp implements App {
         if (tabManager.activeTab.proxy) {
           tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}`
         } else {
-          tabManager.activeTab.iframe.src = sanitize((win.content.querySelector('.inp') as HTMLInputElement).value)
+          tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value
         }
       }
     })

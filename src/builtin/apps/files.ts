@@ -64,7 +64,7 @@ export default class FilesApp implements App {
           const separator = dir === '/' ? '' : '/'
           window.fs.stat(dir + separator + file, (e: NodeJS.ErrnoException, fileStat: Stats) => {
             const element = document.createElement('div')
-            element.setAttribute('style', 'padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;')
+            element.setAttribute('style', 'display: flex;gap: 5px;align-items:center;padding: 5px;border-bottom: 1px solid var(--text);display:flex;align-items:center;gap: 5px;')
 
             const genIcon = (): string => {
               switch (file.split('.').at(-1)) {
@@ -111,8 +111,19 @@ export default class FilesApp implements App {
             }
             const icon = fileStat.isDirectory() ? '<span class="material-symbols-rounded">folder</span>' : genIcon()
 
-            element.innerHTML += `${icon} ${file}`
-            element.onclick = async () => {
+            element.innerHTML += `${icon} <span style="flex:1;">${file}</span><span class="material-symbols-rounded delete">delete_forever</span><span class="material-symbols-rounded rename">edit</span>`;
+            (element.querySelector('.rename') as HTMLElement).onclick = async () => {
+              const value = (prompt('Rename') as string)
+              if (value !== null || value !== undefined) {
+                await window.fs.promises.rename(dir + separator + file, dir + separator + value)
+                await setDir(dir)
+              }
+            }
+            (element.querySelector('.delete') as HTMLElement).onclick = async () => {
+              await window.fs.promises.unlink(dir + separator + file)
+              await setDir(dir)
+            }
+            element.ondblclick = async () => {
               if (fileStat.isDirectory()) {
                 await setDir(dir + separator + file)
               } else {
