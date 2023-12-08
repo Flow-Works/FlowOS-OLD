@@ -107,7 +107,7 @@ class FlowWindow {
     if (config.canResize === undefined || config.canResize === null) config.canResize = true
 
     if (config.canResize === false) {
-      this.element.style.resize = 'none';
+      this.element.style.resize = 'none'
     }
 
     this.element.style.width = `${config.width ?? 300}px`
