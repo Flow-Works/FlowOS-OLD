@@ -174,9 +174,11 @@ class FlowWindow {
     if (this.isMinimized) {
       this.element.style.pointerEvents = 'all'
       this.element.style.opacity = '1'
+      this.element.style.transform = 'translateY(0)'
     } else {
       this.element.style.pointerEvents = 'none'
       this.element.style.opacity = '0'
+      this.element.style.transform = 'translateY(10px)'
     }
 
     this.isMinimized = !this.isMinimized
@@ -228,9 +230,14 @@ class FlowWindow {
    * Closes the window.
    */
   close (): void {
-    this.element.remove()
+    this.element.style.pointerEvents = 'none'
+    this.element.style.opacity = '0'
+    this.element.style.transform = 'translateY(10px)'
     const event = new CustomEvent('app_closed', { detail: { win: this } })
     window.dispatchEvent(event)
+    setTimeout(() => {
+      this.element.remove()
+    }, 200)
   }
 
   /**
