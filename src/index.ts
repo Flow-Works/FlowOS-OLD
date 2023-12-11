@@ -6,14 +6,14 @@ import StatusBar from './instances/StatusBar'
 import WindowManager from './instances/WindowManager'
 import Flow from './instances/Flow'
 
-import * as fs from 'fs'
+import { FileSystem } from './filer-types'
 import { FlowConfig } from './types'
 
 declare global {
   interface Window {
     preloader: Preloader
     flow: Flow
-    fs: typeof fs
+    fs: FileSystem
     statusBar: StatusBar
     wm: WindowManager
     config: () => Promise<FlowConfig>
