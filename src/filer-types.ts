@@ -44,7 +44,11 @@ export interface FileSystemOptions {
 
 export type FileSystemCallback = (err: FilerError | null, fs: FileSystem) => {}
 
-export interface FileSystem {
+export interface FileSystem extends FileSystemMethods {
+  promises: FileSystemPromises
+}
+
+export interface FileSystemMethods {
   appendFile: typeof fs.appendFile
   access: typeof fs.access
   chown: typeof fs.chown
@@ -75,8 +79,6 @@ export interface FileSystem {
   utimes: typeof fs.utimes
   writeFile: typeof fs.writeFile
   write: typeof fs.write
-
-  promises: FileSystemPromises
 }
 
 export interface FileSystemPromises {
