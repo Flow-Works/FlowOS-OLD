@@ -120,7 +120,11 @@ export default class FilesApp implements App {
               }
             }
             (element.querySelector('.delete') as HTMLElement).onclick = async () => {
-              await window.fs.promises.unlink(dir + separator + file)
+              if (fileStat.isDirectory()) {
+                await window.fs.rmdir(dir + separator + file, () => {})
+              } else {
+                await window.fs.promises.unlink(dir + separator + file)
+              }
               await setDir(dir)
             }
             element.ondblclick = async () => {
