@@ -68,6 +68,7 @@ class Flow {
           console.error(e)
           await window.preloader.setError('apps')
           window.preloader.setStatus(`unable to import ${appPath}\n${(e as Error).name}: ${(e as Error).message}`)
+          break
         }
       }
     }
