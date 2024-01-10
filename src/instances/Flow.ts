@@ -31,7 +31,7 @@ class Flow {
       window.fs.promises.readdir('/Applications').then((list) => {
         list.forEach((file) => {
           window.fs.promises.readFile('/Applications/' + file).then(content => {
-            if (!content.toString().endsWith('.js')) return
+            if (!file.endsWith('.js') && !file.endsWith('.mjs')) return
             if (content.toString() === '') return
             this.appList.push(`data:text/javascript;base64,${btoa(content.toString())}`)
           }).catch((e) => console.error(e))
@@ -57,18 +57,19 @@ class Flow {
       for (const appPath of this.appList) {
         window.preloader.setStatus(`importing appstore apps\n${appPath}`)
 
-        try {
-          const { default: ImportedApp } = await import(appPath)
-          const app = new ImportedApp()
-          app.builtin = false
-          app.meta.icon = app.meta.icon ?? nullIcon
-
-          this.addApp(app)
-        } catch (e: any) {
+        let error = false
+        const { default: ImportedApp } = await import(appPath).catch(async (e: Error) => {
           console.error(e)
           await window.preloader.setError('apps')
-          window.preloader.setStatus(`unable to import ${appPath}\n${(e as Error).name}: ${(e as Error).message}`)
-        }
+          window.preloader.setStatus(`unable to import ${appPath}\n${e.name}: ${e.message}`)
+          error = true
+        })
+        if (error) break
+        const app = new ImportedApp()
+        app.builtin = false
+        app.meta.icon = app.meta.icon ?? nullIcon
+
+        this.addApp(app)
       }
     }
 
