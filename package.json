@@ -31,7 +31,7 @@
     "@ptkdev/logger": "^1.8.0",
     "eruda": "^3.0.1",
     "filer": "^1.4.1",
-    "prism-code-editor": "^2.2.4",
+    "prism-code-editor": "^2.3.0",
     "material-symbols": "^0.14.3",
     "uuid": "^9.0.1"
   },
