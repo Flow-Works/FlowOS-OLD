@@ -146,7 +146,7 @@ export default class EditorApp implements App {
       const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
       const language = fileLanguageMap[fileExtension] ?? 'text'
 
-      const value = (await window.fs.promises.readFile(data.path)).toString()
+      const value = Buffer.from(await window.fs.readFile(data.path)).toString()
       const editor = fullEditor(
         win.content.querySelector('.editor') as HTMLElement,
         {
@@ -191,7 +191,7 @@ export default class EditorApp implements App {
         editor.extensions.searchWidget?.open()
       }
       (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
-        await window.fs.promises.writeFile(data.path, editor.value)
+        await window.fs.writeFile(data.path, editor.value)
       }
     } else {
       await window.flow.openApp('flow.files')

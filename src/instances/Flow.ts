@@ -26,18 +26,15 @@ class Flow {
     window.preloader.setPending('apps')
     window.preloader.setStatus('importing apps...')
 
-    window.fs.exists('/Applications', (exists) => {
-      if (!exists) window.fs.promises.mkdir('/Applications').catch(e => console.error(e))
-      window.fs.promises.readdir('/Applications').then((list) => {
-        list.forEach((file) => {
-          window.fs.promises.readFile('/Applications/' + file).then(content => {
-            if (!file.endsWith('.js') && !file.endsWith('.mjs')) return
-            if (content.toString() === '') return
-            this.appList.push(`data:text/javascript;base64,${btoa(content.toString())}`)
-          }).catch((e) => console.error(e))
-        })
-      }).catch(e => console.error(e))
-    })
+    window.fs.readdir('/home/Applications/').then((list) => {
+      list.forEach((file) => {
+        window.fs.readFile('/home/Applications/' + file).then(content => {
+          if (!file.endsWith('.js') && !file.endsWith('.mjs')) return
+          if (content.toString() === '') return
+          this.appList.push(`data:text/javascript;base64,${btoa(content.toString())}`)
+        }).catch((e) => console.error(e))
+      })
+    }).catch(e => console.error(e))
 
     for (const appPath of this.defaultAppList) {
       window.preloader.setStatus(`importing default apps\n${appPath}`)

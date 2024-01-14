@@ -57,7 +57,8 @@ export default class SettingsApp implements App {
       '24HR_CLOCK': '24hr Clock'
     }
 
-    const config = await window.config()
+    // TODO: settings
+    const config = {}
 
     for (const key of Object.keys(config)) {
       const container = document.createElement('div')
@@ -87,7 +88,7 @@ export default class SettingsApp implements App {
     }
 
     win.content.querySelector('.save')?.addEventListener('click', () => {
-      window.fs.promises.writeFile('/.config/flow.json', JSON.stringify(config))
+      window.fs.writeFile('/.config/flow.json', JSON.stringify(config))
         .then(null)
         .catch(e => console.error(e))
     })

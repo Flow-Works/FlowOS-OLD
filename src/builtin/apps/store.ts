@@ -23,9 +23,8 @@ export default class MusicApp implements App {
 
     win.content.style.background = 'var(--base)'
 
-    const config = await window.config()
-
-    fetch(config.SERVER_URL + '/apps/list/')
+    // TODO: Allow customization of server URL
+    fetch('https://server.flow-works.me' + '/apps/list/')
       .then(async (res) => await res.json())
       .then(handle)
       .catch(e => console.error(e))
@@ -61,38 +60,33 @@ export default class MusicApp implements App {
             </div>
           `
 
-          window.fs.exists(`/Applications/${app.url.split('/').at(-1) as string}`, (exists) => {
+          window.fs.exists(`/home/Applications/${app.url.split('/').at(-1) as string}`).then((exists) => {
             if (exists) {
               (win.content.querySelector(`div[data-pkg="${sanitize(app.pkg)}"] div > .material-symbols-rounded`) as HTMLElement).innerHTML = 'delete';
 
-              (win.content.querySelector(`div[data-pkg="${sanitize(app.pkg)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = () => {
-                window.fs.unlink(`/Applications/${app.url.split('/').at(-1) as string}`, () => {
-                  window.location.reload()
-                })
+              (win.content.querySelector(`div[data-pkg="${sanitize(app.pkg)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = async () => {
+                await window.fs.unlink(`/Applications/${app.url.split('/').at(-1) as string}`)
+                window.location.reload()
               }
             } else {
               (win.content.querySelector(`div[data-pkg="${sanitize(app.pkg)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = () => {
                 install(app.url)
               }
             }
-          });
-
-          (win.content.querySelector(`div[data-pkg="${sanitize(app.pkg)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = () => {
-            install(app.url)
-          }
+          }).catch(e => console.error(e))
         })
       })
     }
 
     function install (url: string): void {
       fetch(url).then(async (res) => await res.text())
-        .then((data) => {
-          window.fs.exists('/Applications', (exists) => {
-            if (!exists) window.fs.promises.mkdir('/Applications').catch(console.error)
+        .then(async (data) => {
+          const exists = await window.fs.exists('/home/Applications')
 
-            window.fs.promises.writeFile(`/Applications/${url.split('/').at(-1) as string}`, data).then(() => window.location.reload()).catch(console.error)
-          })
-        }).catch(console.error)
+          if (!exists) window.fs.mkdir('/home/Applications').catch(console.error)
+
+          window.fs.writeFile(`/home/Applications/${url.split('/').at(-1) as string}`, data).then(() => window.location.reload()).catch(console.error)
+        }).catch(e => console.error(e))
     }
 
     return win
