@@ -8,14 +8,15 @@ export enum Errors {
 }
 
 export enum Permission {
-  ROOT,
-  ADMIN,
-  USER
+  USER,
+  ELEVATED,
+  SYSTEM
 }
 
 export interface Directory {
   type: 'directory'
   permission: Permission
+  deleteable: boolean
   children: {
     [key: string]: Directory | File
   }
@@ -24,34 +25,41 @@ export interface Directory {
 export interface File {
   type: 'file'
   permission: Permission
+  deleteable: boolean
   content: Buffer
 }
 
 const defaultFS: { root: Directory } = {
   root: {
     type: 'directory',
-    permission: Permission.ROOT,
+    deleteable: false,
+    permission: Permission.SYSTEM,
     children: {
       home: {
         type: 'directory',
-        permission: Permission.ROOT,
+        deleteable: false,
+        permission: Permission.SYSTEM,
         children: {
           Downloads: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           },
           Applications: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           },
           Desktop: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {
               'README.md': {
                 type: 'file',
+                deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('# Welcome to FlowOS!')
               }
@@ -59,39 +67,53 @@ const defaultFS: { root: Directory } = {
           },
           Pictures: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           },
           Videos: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           },
           Documents: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           },
           Music: {
             type: 'directory',
-            permission: Permission.ADMIN,
+            deleteable: false,
+            permission: Permission.USER,
             children: {}
           }
         }
       },
       var: {
         type: 'directory',
-        permission: Permission.ROOT,
+        deleteable: false,
+        permission: Permission.SYSTEM,
         children: {}
       },
       etc: {
         type: 'directory',
-        permission: Permission.ROOT,
-        children: {}
+        deleteable: false,
+        permission: Permission.SYSTEM,
+        children: {
+          hostname: {
+            type: 'file',
+            deleteable: false,
+            permission: Permission.ELEVATED,
+            content: Buffer.from('flow')
+          }
+        }
       },
       boot: {
         type: 'directory',
-        permission: Permission.ROOT,
+        deleteable: false,
+        permission: Permission.SYSTEM,
         children: {}
       }
     }
@@ -203,10 +225,28 @@ export class VirtualFS {
    * sufficient permissions to access a certain path.
    */
   private async handlePermissions (path: string, permission: Permission): Promise<void> {
-    const { current } = await this.navigatePath(path)
+    let current
 
-    if (current.permission === Permission.ADMIN && current.permission <= permission) throw new Error(Errors.EACCES)
-    if (current.permission === Permission.ROOT && current.permission <= permission) throw new Error(Errors.EPERM)
+    current = (await this.navigatePath(path)).current
+    console.log(current)
+    if (current === undefined) current = (await this.navigatePathParent(path)).current
+    console.log(current)
+
+    console.log(current.permission, permission)
+
+    if (current.permission === Permission.USER && current.permission < permission) {
+      const uac = await window.wm.createModal('Elevated Permissions Required', 'You need elevated permissions to perform this operation.')
+      if (!uac) {
+        throw new Error(Errors.EACCES)
+      }
+    }
+    if (current.permission === Permission.ELEVATED && current.permission < permission) {
+      const uac = await window.wm.createModal('Elevated Permissions Required', 'You need elevated permissions to perform this operation.')
+      if (!uac) {
+        throw new Error(Errors.EACCES)
+      }
+    }
+    if (current.permission === Permission.SYSTEM && current.permission < permission) throw new Error(Errors.EPERM)
   }
 
   /**
@@ -254,6 +294,7 @@ export class VirtualFS {
   async unlink (path: string, permission = Permission.USER): Promise<void> {
     const { current, filename } = await this.navigatePathParent(path)
 
+    if (!current.children[filename].deleteable) throw new Error(Errors.EPERM)
     await this.handlePermissions(path, permission)
 
     Reflect.deleteProperty(current.children, filename)
@@ -296,7 +337,8 @@ export class VirtualFS {
 
     current.children[filename] = {
       type: 'file',
-      permission: Permission.USER,
+      deleteable: true,
+      permission,
       content: Buffer.from(content)
     }
     await this.save()
@@ -318,7 +360,8 @@ export class VirtualFS {
 
     current.children[filename] = {
       type: 'directory',
-      permission: Permission.USER,
+      deleteable: true,
+      permission,
       children: {}
     }
     await this.save()
@@ -336,6 +379,7 @@ export class VirtualFS {
   async rmdir (path: string, permission = Permission.USER): Promise<void> {
     const { current, filename } = await this.navigatePathParent(path)
 
+    if (!current.deleteable) throw new Error(Errors.EPERM)
     await this.handlePermissions(path, permission)
 
     if (current.children[filename].type !== 'directory') throw new Error(Errors.ENOTDIR)
@@ -390,6 +434,9 @@ export class VirtualFS {
   async rename (oldPath: string, newPath: string, permission = Permission.USER): Promise<void> {
     const { current: oldCurrent, filename: oldFilename } = await this.navigatePathParent(oldPath)
     const { current: newCurrent, filename: newFilename } = await this.navigatePathParent(newPath)
+
+    if (!oldCurrent.deleteable) throw new Error(Errors.EPERM)
+    if (!newCurrent.deleteable) throw new Error(Errors.EPERM)
 
     await this.handlePermissions(oldPath, permission)
     await this.handlePermissions(newPath, permission)

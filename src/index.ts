@@ -14,7 +14,6 @@ const flowDetails = {
   version,
   codename: 'Mochi'
 }
-
 declare global {
   interface Window {
     flowDetails: typeof flowDetails
@@ -38,6 +37,7 @@ if (params.get('debug') !== null && params.get('debug') !== undefined) {
   enableDebug().catch(e => console.error(e))
 }
 
+window.flowDetails = flowDetails
 window.preloader = new Preloader()
 window.flow = new Flow()
 window.statusBar = new StatusBar()

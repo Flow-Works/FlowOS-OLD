@@ -1,8 +1,9 @@
 import icon from '../../assets/icons/userinfo.svg'
 import badge from '../../assets/badge.png'
-import { App, PackageJSON } from '../../types'
+import { App } from '../../types'
 
 import FlowWindow from '../../structures/FlowWindow'
+import HTML from '../../lib'
 
 export default class InfoApp implements App {
   meta = {
@@ -14,7 +15,6 @@ export default class InfoApp implements App {
   }
 
   async open (): Promise<FlowWindow> {
-    const packageJSON: PackageJSON = await import('../../../package.json')
     const win = window.wm.createWindow({
       title: this.meta.name,
       icon: this.meta.icon,
@@ -30,18 +30,29 @@ export default class InfoApp implements App {
     win.content.style.justifyContent = 'center'
     win.content.style.alignItems = 'center'
     win.content.style.background = 'var(--base)'
-    win.content.innerHTML = `
-        <div>
-          <h1 style="margin:0;">FlowOS</h1>
-          <p style="margin:0;">v${packageJSON.version}</p>
-          <br/>
-          <p>Created by ThinLiquid, 1nspird_, proudparot2, systemless_</p>
-          <img src="${badge}" height="50"><br/>
-          <a class="discord" href="https://discord.gg/flowos">Discord</a>
-         - 
-        <a class="github" href="https://github.com/Flow-Works/FlowOS-2.0">Github</a>
-        </div>
-    `
+
+    const div = new HTML('div').appendTo(win.content)
+    new HTML('h1').style({
+      margin: '0'
+    }).text(`FlowOS ${window.flowDetails.codename}`).appendTo(div)
+    new HTML('p').style({
+      margin: '0'
+    }).text(`v${window.flowDetails.version}`).appendTo(div)
+    new HTML('br').appendTo(div)
+    new HTML('img').attr({
+      src: badge,
+      height: '50'
+    }).appendTo(div)
+    new HTML('br').appendTo(div)
+    new HTML('a').text('Discord').attr({
+      href: 'https://discord.gg/86F8dK9vfn',
+      class: 'discord'
+    }).appendTo(div)
+    new HTML('span').text(' - ').appendTo(div)
+    new HTML('a').text('Github').attr({
+      href: 'https://github.com/Flow-Works/FlowOS',
+      class: 'github'
+    }).appendTo(div)
 
     return win
   }

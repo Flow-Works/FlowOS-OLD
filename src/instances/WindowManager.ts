@@ -1,4 +1,5 @@
 
+import HTML from '../lib'
 import FlowWindow from '../structures/FlowWindow'
 import { FlowWindowConfig } from '../types'
 
@@ -41,6 +42,40 @@ class WindowManager {
     this.windows.push(win)
     this.windowArea.appendChild(win.element)
     return win
+  }
+
+  /**
+   * Creates a modal window.
+   *
+   * @param {string} title - A string representing the title of the modal window.
+   * @param {string} text - The `text` parameter is a string that represents the content or message to
+   * be displayed in the modal window.
+   * @returns The function `createModal` is returning a `FlowWindow` object.
+   */
+  async createModal (title: string, text: string): Promise<boolean> {
+    const win = new FlowWindow(this, {
+      title,
+      icon: '',
+      width: 300,
+      height: 200,
+      canResize: false
+    })
+
+    return await new Promise((resolve) => {
+      new HTML('h3').text(text).appendTo(win.content)
+      new HTML('p').text(text).appendTo(win.content)
+      new HTML('button').text('Allow').appendTo(win.content).on('click', () => {
+        resolve(true)
+        win.close()
+      })
+      new HTML('button').text('Allow').appendTo(win.content).on('click', () => {
+        resolve(false)
+        win.close()
+      })
+
+      this.windows.push(win)
+      this.windowArea.appendChild(win.element)
+    })
   }
 
   /**
