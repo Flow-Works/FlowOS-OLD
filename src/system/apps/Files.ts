@@ -47,14 +47,14 @@ const Files: Process = {
       }
 
       (win.content.querySelector('.file') as HTMLElement).onclick = async () => {
-        const title: string | null | undefined = prompt('Enter file name')
+        const title = prompt('Enter file name')
         if (title != null) {
           await fs.writeFile(`${dir}/${title}`, '')
         }
       }
 
       (win.content.querySelector('.folder') as HTMLElement).onclick = async () => {
-        const title: string | null | undefined = prompt('Enter folder name')
+        const title = prompt('Enter folder name')
         if (title != null) {
           await fs.mkdir(`${dir}/${title}`, '')
         }
@@ -73,8 +73,8 @@ const Files: Process = {
 
         element.innerHTML += `${icon} <span style="flex:1;">${file}</span><span class="material-symbols-rounded delete">delete_forever</span><span class="material-symbols-rounded rename">edit</span>`;
         (element.querySelector('.rename') as HTMLElement).onclick = async () => {
-          const value = (prompt('Rename') as string)
-          if (value !== null || value !== undefined) {
+          const value = prompt('Rename')
+          if (value != null) {
             await fs.rename(dir + seperator + file, dir + seperator + value)
           }
         }
