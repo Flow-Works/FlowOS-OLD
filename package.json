@@ -2,7 +2,7 @@
   "name": "flowos",
   "version": "1.0.0-indev.0",
   "description": "The most aesthetic webOS.",
-  "main": "src/index.ts",
+  "main": "src/kernel.ts",
   "scripts": {
     "docs": "typedoc src/**",
     "test": "ts-standard",
