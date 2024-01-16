@@ -9,7 +9,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "vite dev"
+    "serve": "vite dev",
+    "commit": "cz"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +19,9 @@
     "@types/node": "^20.11.3",
     "@types/uuid": "^9.0.5",
     "@types/web": "^0.0.117",
+    "commitizen": "^4.3.0",
     "less": "^4.2.0",
+    "semantic-release": "^23.0.0",
     "ts-standard": "^12.0.2",
     "typedoc": "^0.25.3",
     "typedoc-material-theme": "^1.0.2",
