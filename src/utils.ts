@@ -4,8 +4,7 @@
  * @returns The time.
  */
 export const getTime = async (): Promise<string> => {
-  const config = await window.config()
-  const use24hrs = config['24HOUR_CLOCK']
+  const use24hrs = false
 
   const now = new Date()
   let hours: string | number = now.getHours()

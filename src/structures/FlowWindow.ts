@@ -1,8 +1,7 @@
-import { v4 as uuid } from 'uuid'
-import WindowManager from '../instances/WindowManager'
 import { FlowWindowConfig } from '../types'
 import { sanitize } from '../utils'
 import nullIcon from '../assets/icons/application-default-icon.svg'
+import ProcessLib from './ProcessLib'
 
 /**
  * Makes an element draggable.
@@ -78,9 +77,11 @@ class FlowWindow {
   isMinimized = false
   isMaximized = false
 
-  wm: WindowManager
+  wm: any
 
-  id = uuid()
+  readonly process: ProcessLib
+
+  onClose: () => void
 
   config: FlowWindowConfig
 
@@ -90,13 +91,16 @@ class FlowWindow {
    * @param wm The current window manager session.
    * @param config The window's pre-set config.
    */
-  constructor (wm: WindowManager, config: FlowWindowConfig) {
+  constructor (process: ProcessLib, wm: any, config: FlowWindowConfig, onClose = () => {}) {
+    this.process = process
     this.wm = wm
     this.config = config
 
+    this.onClose = onClose
+
     this.element = document.createElement('window')
 
-    this.element.style.zIndex = (window.wm.getHighestZIndex() + 1).toString()
+    this.element.style.zIndex = (wm.getHighestZIndex() as number + 1).toString()
     this.element.style.position = 'absolute'
     this.focus()
 
@@ -112,13 +116,13 @@ class FlowWindow {
     this.element.style.height = `${config.height ?? 200}px`
 
     this.header = document.createElement('window-header')
-    this.header.innerHTML = `<img src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="close" class='material-symbols-rounded'>close</i>`
+    this.header.innerHTML = `<img alt="${sanitize(config.title)} icon" src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="close" class='material-symbols-rounded'>close</i>`
     if (config.canResize) {
-      this.header.innerHTML = `<img src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="max" class='material-symbols-rounded' style="font-size: 20px;">square</i><i id="close" class='material-symbols-rounded'>close</i>`
+      this.header.innerHTML = `<img alt="${sanitize(config.title)} icon" src="${sanitize(config.icon === '' ? nullIcon : config.icon)}"></img> <div class="title">${sanitize(config.title)}</div><div style="flex:1;"></div><i id="min" class='material-symbols-rounded' style="margin-bottom: 5px;">minimize</i><i id="max" class='material-symbols-rounded' style="font-size: 20px;">square</i><i id="close" class='material-symbols-rounded'>close</i>`
     }
 
     (this.header.querySelector('#close') as HTMLElement).onclick = () => {
-      this.close()
+      this.process.kill().catch((e: any) => console.error(e))
     }
 
     (this.header.querySelector('#min') as HTMLElement).onclick = () => this.toggleMin()
@@ -158,8 +162,6 @@ class FlowWindow {
 
     shadow.appendChild(shadowBody)
     this.content = shadowBody
-
-    console.log(this.content)
 
     this.element.appendChild(this.header)
     this.element.appendChild(this.realContent)
@@ -224,7 +226,7 @@ class FlowWindow {
    */
   focus (): void {
     if (this.element.style.zIndex !== this.wm.getHighestZIndex().toString()) {
-      this.element.style.zIndex = (this.wm.getHighestZIndex() + 1).toString()
+      this.element.style.zIndex = (this.wm.getHighestZIndex() as number + 1).toString()
     }
   }
 
@@ -235,8 +237,7 @@ class FlowWindow {
     this.element.style.pointerEvents = 'none'
     this.element.style.opacity = '0'
     this.element.style.transform = 'translateY(10px)'
-    const event = new CustomEvent('app_closed', { detail: { win: this } })
-    window.dispatchEvent(event)
+    this.onClose()
     setTimeout(() => {
       this.element.remove()
     }, 200)

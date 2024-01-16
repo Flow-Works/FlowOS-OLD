@@ -1,6 +1,4 @@
 import icon from '../../assets/icons/text-editor.svg'
-import { App } from '../../types'
-
 import { fullEditor } from 'prism-code-editor/setups'
 // this will also import markup, clike, javascript, typescript and jsx
 import 'prism-code-editor/grammars/tsx'
@@ -8,7 +6,7 @@ import 'prism-code-editor/grammars/css-extras'
 import 'prism-code-editor/grammars/markdown'
 import 'prism-code-editor/grammars/python'
 
-import FlowWindow from '../../structures/FlowWindow'
+import { Process } from '../../types'
 
 interface EditorConfig {
   path: string
@@ -34,29 +32,41 @@ const fileLanguageMap: {
   py: 'python'
 }
 
-export default class EditorApp implements App {
-  meta = {
+const Editor: Process = {
+  config: {
     name: 'Editor',
-    description: 'A simple editor app.',
-    pkg: 'flow.editor',
-    version: '1.0.0',
-    icon
-  }
+    type: 'process',
+    icon,
+    targetVer: '1.0.0-indev.0'
+  },
+  run: async (process) => {
+    if (Object.keys(process.data).length > 0) {
+      const win = await process.loadLibrary('lib/WindowManager').then((wm: any) => {
+        return wm.createWindow({
+          title: 'Editor',
+          icon,
+          width: 350,
+          height: 500,
+          canResize: false
+        }, process)
+      })
 
-  async open (data?: EditorConfig): Promise<FlowWindow> {
-    const win = window.wm.createWindow({
-      title: this.meta.name,
-      icon: this.meta.icon,
-      width: 500,
-      height: 400
-    })
+      const fs = await process.loadLibrary('lib/VirtualFS')
 
-    if (data != null) {
-      win.setTitle(`Editor - ${data.path}`)
+      const data = process.data as EditorConfig
 
+      win.setTitle(`Editor - ${data.path.split('/').at(-1) as string}`)
       win.content.style.display = 'flex'
       win.content.style.flexDirection = 'column'
-      win.content.innerHTML = `
+
+      if (data == null) {
+        await process.launch('lib/FileManager')
+        setTimeout(() => {
+          win.close()
+        }, 10)
+      } else {
+        const render = async (): Promise<void> => {
+          win.content.innerHTML = `
         <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
           <div id="file-open">File</div>
           <div id="edit-open">Edit</div>
@@ -114,50 +124,50 @@ export default class EditorApp implements App {
         </style>
       `
 
-      const fileBtn = win.content.querySelector('#file-open')
-      const editBtn = win.content.querySelector('#edit-open')
+          const fileBtn = win.content.querySelector('#file-open')
+          const editBtn = win.content.querySelector('#edit-open')
 
-      const toggleDropdown = (id: string): void => {
-        const el = win.content.querySelector(`#${id}`)
-        el?.classList.toggle('show')
-      }
+          const toggleDropdown = (id: string): void => {
+            const el = win.content.querySelector(`#${id}`)
+            el?.classList.toggle('show')
+          }
 
-      fileBtn?.addEventListener('click', (e) => {
-        e.stopPropagation()
-        toggleDropdown('file')
-      })
+          fileBtn?.addEventListener('click', (e: Event) => {
+            e.stopPropagation()
+            toggleDropdown('file')
+          })
 
-      editBtn?.addEventListener('click', (e) => {
-        e.stopPropagation()
-        toggleDropdown('edit')
-      })
+          editBtn?.addEventListener('click', (e: Event) => {
+            e.stopPropagation()
+            toggleDropdown('edit')
+          })
 
-      win.content.addEventListener('click', () => {
-        const file = (win.content.querySelector('#file') as HTMLElement)
-        const edit = (win.content.querySelector('#edit') as HTMLElement)
-        if (file.classList.contains('show')) {
-          toggleDropdown('file')
-        }
-        if (edit.classList.contains('show')) {
-          toggleDropdown('edit')
-        }
-      })
+          win.content.addEventListener('click', () => {
+            const file = (win.content.querySelector('#file') as HTMLElement)
+            const edit = (win.content.querySelector('#edit') as HTMLElement)
+            if (file.classList.contains('show')) {
+              toggleDropdown('file')
+            }
+            if (edit.classList.contains('show')) {
+              toggleDropdown('edit')
+            }
+          })
 
-      const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
-      const language = fileLanguageMap[fileExtension] ?? 'text'
+          const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
+          const language = fileLanguageMap[fileExtension] ?? 'text'
 
-      const value = (await window.fs.promises.readFile(data.path)).toString()
-      const editor = fullEditor(
-        win.content.querySelector('.editor') as HTMLElement,
-        {
-          language,
-          theme: 'github-dark',
-          value
-        }
-      )
+          const value = Buffer.from(await fs.readFile(data.path)).toString()
+          const editor = fullEditor(
+            win.content.querySelector('.editor') as HTMLElement,
+            {
+              language,
+              theme: 'github-dark',
+              value
+            }
+          )
 
-      const style = document.createElement('style')
-      style.textContent = `
+          const style = document.createElement('style')
+          style.textContent = `
       .prism-code-editor {
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
@@ -186,20 +196,24 @@ export default class EditorApp implements App {
         font-family: 'Satoshi', sans-serif;
       }
       `
-      editor.scrollContainer.appendChild(style);
-      (win.content.querySelector('#find') as HTMLElement).onclick = () => {
-        editor.extensions.searchWidget?.open()
+          editor.scrollContainer.appendChild(style);
+          (win.content.querySelector('#find') as HTMLElement).onclick = () => {
+            editor.extensions.searchWidget?.open()
+          }
+          (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
+            await fs.writeFile(data.path, editor.value)
+          }
+        }
+        await render()
+        document.addEventListener('fs_update', () => {
+          render().catch(e => console.error(e))
+        })
       }
-      (win.content.querySelector('#save') as HTMLElement).onclick = async () => {
-        await window.fs.promises.writeFile(data.path, editor.value)
-      }
-    } else {
-      await window.flow.openApp('flow.files')
-      setTimeout(() => {
-        win.close()
-      }, 10)
+      return
     }
-
-    return win
+    await process.kill()
+    await process.launch('apps/Files')
   }
 }
+
+export default Editor
