@@ -43,7 +43,7 @@ const Info: Process = {
         }).text(`v${String(process.sysInfo.version)}`),
         new HTML('br'),
         new HTML('a').attr({
-          href: ''
+          href: 'https://discord.gg/nj93ywpyRy'
         }).append(
           new HTML('img').attr({
             src: badge,
