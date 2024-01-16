@@ -1,7 +1,6 @@
 import semver from 'semver'
 import Kernel from '../kernel'
-import { Permission } from '../system/lib/VirtualFS'
-import { Process, Executable, LibraryData, Package, Library } from '../types'
+import { Process, Executable, LibraryData, Package, Library, Permission } from '../types'
 import FlowWindow from './FlowWindow'
 import LibraryLib from './LibraryLib'
 import ProcLib from './ProcLib'

@@ -1,10 +1,9 @@
 import './assets/style.less'
 import { version } from '../package.json'
 import { v4 as uuid } from 'uuid'
-import { Permission } from './system/lib/VirtualFS'
 import ProcessLib from './structures/ProcessLib'
 import ProcLib from './structures/ProcLib'
-import { Executable, Process, Package, ProcessInfo, KernelConfig } from './types'
+import { Executable, Process, Package, ProcessInfo, KernelConfig, Permission } from './types'
 import semver from 'semver'
 
 declare global {

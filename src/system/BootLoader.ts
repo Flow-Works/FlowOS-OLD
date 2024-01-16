@@ -1,5 +1,5 @@
 import HTML from '../HTML'
-import { AppClosedEvent, AppOpenedEvent, Process } from '../types'
+import { AppClosedEvent, AppOpenedEvent, Directory, FileSystemObject, Process } from '../types'
 import { getTime } from '../utils'
 import { db, defaultFS, initializeDatabase, read, setFileSystem, write } from './lib/VirtualFS'
 import nullIcon from '../assets/icons/application-default-icon.svg'
@@ -32,10 +32,19 @@ const BootLoader: Process = {
     } else {
       console.warn('Persistent storage is not supported.')
     }
-    const fileSystem = await read()
+    const fileSystem = await read() as FileSystemObject
     if (fileSystem === undefined) {
       await write(defaultFS)
     } else {
+      const appsDirectory = ((fileSystem.root.children.home as Directory).children.Applications as Directory).children
+      const defaultAppsDirectory = ((defaultFS.root.children.home as Directory).children.Applications as Directory).children
+      for (const file in defaultAppsDirectory) {
+        if (appsDirectory[file] === undefined && defaultAppsDirectory[file] !== undefined) {
+          console.log(file)
+          appsDirectory[file] = defaultAppsDirectory[file]
+        }
+      }
+      await write(fileSystem)
       await setFileSystem(fileSystem)
     }
 

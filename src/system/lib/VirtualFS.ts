@@ -1,40 +1,9 @@
 import Kernel from '../../kernel'
 import ProcessLib from '../../structures/ProcessLib'
-import { Library } from '../../types'
+import { Directory, Errors, File, Library, Permission } from '../../types'
 
 console.debug = (...args: any[]) => {
   console.log('[VirtualFS]', ...args)
-}
-
-export enum Errors {
-  ENOENT = 'ENOENT',
-  EISDIR = 'EISDIR',
-  EEXIST = 'EEXIST',
-  EPERM = 'EPERM',
-  ENOTDIR = 'ENOTDIR',
-  EACCES = 'EACCES'
-}
-
-export enum Permission {
-  USER,
-  ELEVATED,
-  SYSTEM
-}
-
-export interface Directory {
-  type: 'directory'
-  permission: Permission
-  deleteable: boolean
-  children: {
-    [key: string]: Directory | File
-  }
-}
-
-export interface File {
-  type: 'file'
-  permission: Permission
-  deleteable: boolean
-  content: Buffer
 }
 
 export const defaultFS: { root: Directory } = {

@@ -1,9 +1,9 @@
 name: ts-standard
 on:
   push:
-    branches: [master]
+    branches: [master, dev]
   pull_request:
-    branches: [master]
+    branches: [master, dev]
 jobs:
   ts-standard:
     runs-on: ubuntu-latest
