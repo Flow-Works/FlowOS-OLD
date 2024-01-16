@@ -48,14 +48,14 @@ const Files: Process = {
 
       (win.content.querySelector('.file') as HTMLElement).onclick = async () => {
         const title: string | null | undefined = prompt('Enter file name')
-        if (title !== null && title !== undefined) {
+        if (title != null) {
           await fs.writeFile(`${dir}/${title}`, '')
         }
       }
 
       (win.content.querySelector('.folder') as HTMLElement).onclick = async () => {
         const title: string | null | undefined = prompt('Enter folder name')
-        if (title !== null && title !== undefined) {
+        if (title != null) {
           await fs.mkdir(`${dir}/${title}`, '')
         }
       }

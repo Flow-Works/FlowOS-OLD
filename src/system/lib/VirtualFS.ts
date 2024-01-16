@@ -253,7 +253,8 @@ export const setFileSystem = async (fileSystemObject: { root: Directory }): Prom
 
 export let db: IDBDatabase
 let fileSystem: { root: Directory }
-let kernel: Kernel, process: ProcessLib
+let kernel: Kernel
+let process: ProcessLib
 
 export const initializeDatabase = async (dbName: string): Promise<boolean> => {
   return await new Promise((resolve, reject) => {
@@ -315,9 +316,7 @@ const save = async (): Promise<void> => {
 }
 
 const handlePermissions = async (path: string): Promise<void> => {
-  let current
-
-  current = (await navigatePath(path)).current
+  let { current } = (await navigatePath(path))
 
   if (current === undefined) current = (await navigatePathParent(path)).current
 
@@ -374,7 +373,7 @@ const VirtualFS: Library = {
 
       Reflect.deleteProperty(current.children, filename)
 
-      console.debug('unlink ' + path)
+      console.debug(`unlink ${path}`)
       await save()
     },
     readFile: async (path: string): Promise<Buffer> => {
@@ -384,7 +383,7 @@ const VirtualFS: Library = {
 
       if (current.type !== 'file') throw new Error(Errors.EISDIR)
 
-      console.debug('read ' + path)
+      console.debug(`read ${path}`)
       return current.content
     },
     writeFile: async (path: string, content: string | Buffer): Promise<void> => {
@@ -392,11 +391,11 @@ const VirtualFS: Library = {
 
       let permission
 
-      if (typeof current.children[filename] !== 'undefined') {
+      if (typeof current.children[filename] === 'undefined') {
+        permission = Permission.USER
+      } else {
         await handlePermissions(path)
         permission = current.children[filename].permission
-      } else {
-        permission = Permission.USER
       }
 
       current.children[filename] = {
@@ -406,7 +405,7 @@ const VirtualFS: Library = {
         content: Buffer.from(content)
       }
 
-      console.debug('write ' + path)
+      console.debug(`write ${path}`)
       await save()
     },
     mkdir: async (path: string): Promise<void> => {
@@ -414,11 +413,11 @@ const VirtualFS: Library = {
 
       let permission
 
-      if (typeof current.children[filename] !== 'undefined') {
+      if (typeof current.children[filename] === 'undefined') {
+        permission = Permission.USER
+      } else {
         await handlePermissions(path)
         permission = current.children[filename].permission
-      } else {
-        permission = Permission.USER
       }
 
       current.children[filename] = {
@@ -428,7 +427,7 @@ const VirtualFS: Library = {
         children: {}
       }
 
-      console.debug('mkdir ' + path)
+      console.debug(`mkdir ${path}`)
       await save()
     },
     rmdir: async (path: string): Promise<void> => {
@@ -441,7 +440,7 @@ const VirtualFS: Library = {
 
       Reflect.deleteProperty(current.children, filename)
 
-      console.debug('rmdir ' + path)
+      console.debug(`rmdir ${path}`)
       await save()
     },
     readdir: async (path: string): Promise<string[]> => {
@@ -450,13 +449,13 @@ const VirtualFS: Library = {
       if (current.type === 'file') throw new Error(Errors.ENOTDIR)
       const result = await Promise.all(Object.keys(current.children ?? {}))
 
-      console.debug('readdir ' + path)
+      console.debug(`readdir ${path}`)
       return result
     },
     stat: async (path: string): Promise<{ isDirectory: () => boolean, isFile: () => boolean }> => {
       const { current } = await navigatePath(path)
 
-      console.debug('stat ' + path)
+      console.debug(`stat ${path}`)
       return {
         isDirectory: () => current.type === 'directory',
         isFile: () => current.type === 'file'
@@ -475,11 +474,11 @@ const VirtualFS: Library = {
       newCurrent.children[newFilename] = oldCurrent.children[oldFilename]
       Reflect.deleteProperty(oldCurrent.children, oldFilename)
 
-      console.debug('rename ' + oldPath + ' -> ' + newPath)
+      console.debug(`rename ${oldPath} -> ${newPath}`)
       await save()
     },
     exists: async (path: string): Promise<boolean> => {
-      console.debug('exists ' + path)
+      console.debug(`exists ${path}`)
       try {
         const { current } = await navigatePath(path)
         return current !== undefined

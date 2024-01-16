@@ -59,7 +59,12 @@ const Editor: Process = {
       win.content.style.display = 'flex'
       win.content.style.flexDirection = 'column'
 
-      if (data != null) {
+      if (data == null) {
+        await process.launch('lib/FileManager')
+        setTimeout(() => {
+          win.close()
+        }, 10)
+      } else {
         const render = async (): Promise<void> => {
           win.content.innerHTML = `
         <div style="padding: 5px;display: flex;align-items: center;gap: 5px;">
@@ -203,16 +208,11 @@ const Editor: Process = {
         document.addEventListener('fs_update', () => {
           render().catch(e => console.error(e))
         })
-      } else {
-        await process.launch('lib/FileManager')
-        setTimeout(() => {
-          win.close()
-        }, 10)
       }
-    } else {
-      await process.kill()
-      await process.launch('apps/Files')
+      return
     }
+    await process.kill()
+    await process.launch('apps/Files')
   }
 }
 

@@ -67,7 +67,7 @@ export default class ProcessLib {
       executable = importedExecutable.default
     } catch {
       if (this._kernel.fs === undefined) throw new Error('Filesystem hasn\'t been initiated.')
-      const dataURL = 'data:text/javascript;base64,' + Buffer.from(await this._kernel.fs.readFile('/opt/' + url + '.js')).toString('base64')
+      const dataURL = `data:text/javascript;base64,${Buffer.from(await this._kernel.fs.readFile(`/opt/${url}.js`)).toString('base64')}`
       const importedExecutable = await import(dataURL)
       executable = importedExecutable.default
     }

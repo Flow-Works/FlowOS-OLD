@@ -92,12 +92,12 @@ const BrowserApp: Process = {
           }
           (this.header.querySelector('.title') as HTMLElement).innerText = 'Tab'
           this.iframe.src = (win.content.querySelector('input')?.value as string)
-        } else {
-          if (this === tabManager.activeTab) {
-            (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
-          }
-          this.iframe.src = `/service/${xor.encode(win.content.querySelector('input').value) as string}`
+          return
         }
+        if (this === tabManager.activeTab) {
+          (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
+        }
+        this.iframe.src = `/service/${xor.encode(win.content.querySelector('input').value) as string}`
       }
     }
 
@@ -137,20 +137,21 @@ const BrowserApp: Process = {
 
       setActiveTab (tab: Tab): void {
         this.tabs.forEach((tab) => {
-          if (tab.active) {
-            tab.active = false
-            tab.iframe.style.display = 'none'
-            tab.header.classList.remove('active')
+          if (!tab.active) {
+            return
           }
+          tab.active = false
+          tab.iframe.style.display = 'none'
+          tab.header.classList.remove('active')
         })
 
-        if (!tab.proxy) {
+        if (tab.proxy) {
+          try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
+          (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
+        } else {
           (tab.header.querySelector('.title') as HTMLElement).textContent = 'Tab'
           try { (win.content.querySelector('.inp') as HTMLInputElement).value = (tab.iframe.contentWindow as Window).location.href } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
           (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_off'
-        } else {
-          try { (win.content.querySelector('.inp') as HTMLInputElement).value = xor.decode((tab.iframe.contentWindow as Window).location.href.split('/service/')[1]) } catch (e) { (win.content.querySelector('.inp') as HTMLInputElement).value = 'about:blank' }
-          (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
         }
 
         tab.active = true
@@ -166,11 +167,7 @@ const BrowserApp: Process = {
 
     win.content.querySelector('.inp')?.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        if (tabManager.activeTab.proxy) {
-          tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value) as string}`
-        } else {
-          tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value
-        }
+        tabManager.activeTab.iframe.src = tabManager.activeTab.proxy ? `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value) as string}` : (win.content.querySelector('.inp') as HTMLInputElement).value
       }
     });
 
@@ -195,18 +192,14 @@ const BrowserApp: Process = {
     }
 
     win.content.onfullscreenchange = () => {
-      if (document.fullscreenElement !== null) {
-        (win.content.querySelector('.fullscreen') as HTMLElement).innerHTML = 'fullscreen_exit'
-      } else {
-        (win.content.querySelector('.fullscreen') as HTMLElement).innerHTML = 'fullscreen'
-      }
+      (win.content.querySelector('.fullscreen') as HTMLElement).innerHTML = document.fullscreenElement !== null ? 'fullscreen_exit' : 'fullscreen'
     }
 
     (win.content.querySelector('.fullscreen') as HTMLElement).onclick = async () => {
-      if (document.fullscreenElement !== null) {
-        await document.exitFullscreen().catch(e => console.error)
-      } else {
+      if (document.fullscreenElement === null) {
         await win.content.requestFullscreen().catch((e: any) => console.error)
+      } else {
+        await document.exitFullscreen().catch(e => console.error)
       }
     }
 

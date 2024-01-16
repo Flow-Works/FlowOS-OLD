@@ -33,7 +33,11 @@ const BootLoader: Process = {
       console.warn('Persistent storage is not supported.')
     }
     const fileSystem = await read()
-    fileSystem === undefined ? await write(defaultFS) : await setFileSystem(fileSystem)
+    if (fileSystem === undefined) {
+      await write(defaultFS)
+    } else {
+      await setFileSystem(fileSystem)
+    }
 
     const config = Buffer.from(await fs.readFile('/etc/flow')).toString()
     process.kernel.setFS(fs)
@@ -46,7 +50,7 @@ const BootLoader: Process = {
       }
 
       try {
-        await navigator.serviceWorker.register('/uv-sw.js?url=' + encodeURIComponent(btoa(process.kernel.config.SERVER)) + '&e=' + uuid(), {
+        await navigator.serviceWorker.register(`/uv-sw.js?url=${encodeURIComponent(btoa(process.kernel.config.SERVER))}&e=${uuid()}`, {
           scope: '/service/'
         })
       } catch (e) {
@@ -81,7 +85,7 @@ const BootLoader: Process = {
             }).appendTo(apps)
             new HTML('img').attr({
               src: executable.config.icon ?? nullIcon,
-              alt: executable.config.name + ' icon'
+              alt: `${executable.config.name} icon`
             }).appendTo(appElement)
             new HTML('div').text(executable.config.name).appendTo(appElement)
           })
@@ -102,7 +106,7 @@ const BootLoader: Process = {
 
     statusBar.element.html(`
       <div class="outlined" data-toolbar-id="start"><span class="material-symbols-rounded">space_dashboard</span></div>
-      ${/* <div class="outlined" data-toolbar-id="widgets"><span class="material-symbols-rounded">widgets</span></div> */ ''}
+      
       <div data-toolbar-id="apps"></div>
       <flex></flex>
       <div class="outlined" data-toolbar-id="plugins"><span class="material-symbols-rounded">expand_less</span></div>
@@ -111,9 +115,7 @@ const BootLoader: Process = {
         <span class="material-symbols-rounded signal">signal_cellular_4_bar</span>
       </div>
       <div class="outlined" data-toolbar-id="calendar"></div>
-      ${/* <div class="outlined" data-toolbar-id="notifications">
-        <span class="material-symbols-rounded">notifications</span>
-      </div> */ ''}
+      
     `)
 
     setInterval((): any => {
@@ -127,14 +129,14 @@ const BootLoader: Process = {
     })
 
     if ('getBattery' in navigator) {
-      (navigator as any).getBattery().then(function (battery: any) {
+      (navigator as any).getBattery().then((battery: any) => {
         statusBar.updateBatteryIcon(battery)
 
-        battery.addEventListener('levelchange', function () {
+        battery.addEventListener('levelchange', () => {
           statusBar.updateBatteryIcon(battery)
         })
 
-        battery.addEventListener('chargingchange', function () {
+        battery.addEventListener('chargingchange', () => {
           statusBar.updateBatteryIcon(battery)
         })
       })
@@ -157,12 +159,12 @@ const BootLoader: Process = {
         })
     }
 
-    setInterval((): any => ping(performance.now()), 10000)
+    setInterval((): any => ping(performance.now()), 10_000)
 
     document.addEventListener('app_opened', (e: AppOpenedEvent): void => {
       new HTML('app').appendMany(
         new HTML('img').attr({
-          alt: e.detail.proc.config.name + ' icon',
+          alt: `${e.detail.proc.config.name} icon`,
           'data-id': e.detail.token,
           src: e.detail.proc.config.icon ?? nullIcon
         }).on('click', () => {

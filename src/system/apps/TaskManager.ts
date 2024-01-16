@@ -49,7 +49,7 @@ const TaskManager: Process = {
     }).appendTo(win.content)
 
     const render = (): void => {
-      const processList = process.kernel.processList
+      const { processList } = process.kernel
       table.html('')
 
       new HTML('thead').appendTo(table)

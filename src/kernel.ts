@@ -21,7 +21,7 @@ async function enableDebug (): Promise<void> {
   return await Promise.resolve()
 }
 
-if (params.get('debug') !== null && params.get('debug') !== undefined) {
+if (params.get('debug') != null) {
   enableDebug().catch(e => console.error(e))
 }
 
@@ -69,7 +69,7 @@ export default class Kernel {
       executable = importedExecutable.default
     } catch {
       if (this.fs === undefined) throw new Error('Filesystem hasn\'t been initiated.')
-      const dataURL = 'data:text/javascript;base64,' + Buffer.from(await this.fs.readFile('/opt/' + url + '.js')).toString('base64')
+      const dataURL = `data:text/javascript;base64,${Buffer.from(await this.fs.readFile(`/opt/${url}.js`)).toString('base64')}`
       const importedExecutable = await import(dataURL)
       executable = importedExecutable.default
     }
@@ -81,32 +81,26 @@ export default class Kernel {
     else if (this.packageList[executable.config.name].url !== url) throw new Error(`Package name conflict: ${executable.config.name}`)
 
     return await new Promise((resolve, reject) => {
-      switch (executable.config.type) {
-        case 'process': {
-          const executableProcess = executable as Process
-          console.group(`Starting ${url}`)
-          const pid = ProcLib.findEmptyPID(this)
-          const token = uuid()
-          const procLib = new ProcessLib(url, pid, token, permission, data, executableProcess, this)
-          this.processList.push({
-            pid,
-            token,
-            name: executableProcess.config.name
-          })
+      if (executable.config.type === 'process') {
+        const executableProcess = executable as Process
+        console.group(`Starting ${url}`)
+        const pid = ProcLib.findEmptyPID(this)
+        const token = uuid()
+        const procLib = new ProcessLib(url, pid, token, permission, data, executableProcess, this)
+        this.processList.push({
+          pid,
+          token,
+          name: executableProcess.config.name
+        })
+        document.dispatchEvent(new CustomEvent('update_process', {}))
+        executableProcess.run(procLib).then((value: any) => {
+          if (value !== undefined) procLib.kill().catch(e => console.error(e))
           document.dispatchEvent(new CustomEvent('update_process', {}))
-          executableProcess.run(procLib).then((value: any) => {
-            if (value !== undefined) procLib.kill().catch(e => console.error(e))
-            document.dispatchEvent(new CustomEvent('update_process', {}))
-            resolve({ procLib, value })
-          }).catch(e => console.error(e))
-          break
-        }
-
-        default: {
-          reject(new Error(`Unknown executable type: ${executable.config.type as string}`))
-          break
-        }
+          resolve({ procLib, value })
+        }).catch(e => console.error(e))
+        return
       }
+      reject(new Error(`Unknown executable type: ${executable.config.type as string}`))
     })
   }
 
@@ -119,7 +113,7 @@ export default class Kernel {
       executable = importedExecutable.default
     } catch {
       if (this.fs === undefined) throw new Error('Filesystem hasn\'t been initiated.')
-      const dataURL = 'data:text/javascript;base64,' + Buffer.from(await this.fs.readFile('/opt/' + url + '.js')).toString('base64')
+      const dataURL = `data:text/javascript;base64,${Buffer.from(await this.fs.readFile(`/opt/${url}.js`)).toString('base64')}`
       const importedExecutable = await import(dataURL)
       executable = importedExecutable.default
     }

@@ -4,7 +4,8 @@ import FlowLogo from '../../assets/flow.png'
 import { Library } from '../../types'
 import LibraryLib from '../../structures/LibraryLib'
 
-let library: LibraryLib, kernel: Kernel
+let library: LibraryLib
+let kernel: Kernel
 
 const SplashScreen: Library = {
   config: {

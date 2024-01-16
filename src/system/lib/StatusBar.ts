@@ -29,24 +29,22 @@ const StatusBar: Library = {
         } else if (battery.level >= 0) {
           iconHTML = 'battery_charging_20'
         }
-      } else {
-        if (battery.level === 1) {
-          iconHTML = 'battery_full'
-        } else if (battery.level >= 0.6) {
-          iconHTML = 'battery_6_bar'
-        } else if (battery.level >= 0.5) {
-          iconHTML = 'battery_5_bar'
-        } else if (battery.level >= 0.4) {
-          iconHTML = 'battery_4_bar'
-        } else if (battery.level >= 0.3) {
-          iconHTML = 'battery_3_bar'
-        } else if (battery.level >= 0.2) {
-          iconHTML = 'battery_2_bar'
-        } else if (battery.level >= 0.1) {
-          iconHTML = 'battery_1_bar'
-        } else if (battery.level >= 0) {
-          iconHTML = 'battery_0_bar'
-        }
+      } else if (battery.level === 1) {
+        iconHTML = 'battery_full'
+      } else if (battery.level >= 0.6) {
+        iconHTML = 'battery_6_bar'
+      } else if (battery.level >= 0.5) {
+        iconHTML = 'battery_5_bar'
+      } else if (battery.level >= 0.4) {
+        iconHTML = 'battery_4_bar'
+      } else if (battery.level >= 0.3) {
+        iconHTML = 'battery_3_bar'
+      } else if (battery.level >= 0.2) {
+        iconHTML = 'battery_2_bar'
+      } else if (battery.level >= 0.1) {
+        iconHTML = 'battery_1_bar'
+      } else if (battery.level >= 0) {
+        iconHTML = 'battery_0_bar'
       }
 
       const batteryDiv = document.querySelector('div[data-toolbar-id="controls"] > .battery')

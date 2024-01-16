@@ -6,11 +6,7 @@ export default class HTML {
    * @param elm The HTML element to be created or classified from.
    */
   constructor (elm: string | HTMLElement) {
-    if (elm instanceof HTMLElement) {
-      this.elm = elm
-    } else {
-      this.elm = document.createElement(elm === '' ? 'div' : elm)
-    }
+    this.elm = elm instanceof HTMLElement ? elm : document.createElement(elm === '' ? 'div' : elm)
   }
 
   /**
@@ -57,11 +53,7 @@ export default class HTML {
    * @returns a new HTML
    */
   qs (query: string): HTML | null {
-    if (this.elm.querySelector(query) != null) {
-      return HTML.from(this.elm.querySelector(query) as HTMLElement)
-    } else {
-      return null
-    }
+    return this.elm.querySelector(query) != null ? HTML.from(this.elm.querySelector(query) as HTMLElement) : null
   }
 
   /**
@@ -70,13 +62,11 @@ export default class HTML {
    * @returns a new HTML
    */
   qsa (query: string): Array<HTML | null> | null {
-    if (this.elm.querySelector(query) != null) {
-      return Array.from(this.elm.querySelectorAll(query)).map((e) =>
+    return this.elm.querySelector(query) != null
+      ? Array.from(this.elm.querySelectorAll(query)).map((e) =>
         HTML.from(e as HTMLElement)
       )
-    } else {
-      return null
-    }
+      : null
   }
 
   /**
@@ -95,8 +85,8 @@ export default class HTML {
    * @returns HTML
    */
   class (...val: string[]): HTML {
-    for (let i = 0; i < val.length; i++) {
-      this.elm.classList.toggle(val[i])
+    for (const element of val) {
+      this.elm.classList.toggle(element)
     }
     return this
   }
@@ -107,8 +97,8 @@ export default class HTML {
    * @returns HTML
    */
   classOn (...val: string[]): HTML {
-    for (let i = 0; i < val.length; i++) {
-      this.elm.classList.add(val[i])
+    for (const element of val) {
+      this.elm.classList.add(element)
     }
     return this
   }
@@ -119,8 +109,8 @@ export default class HTML {
    * @returns HTML
    */
   classOff (...val: string[]): HTML {
-    for (let i = 0; i < val.length; i++) {
-      this.elm.classList.remove(val[i])
+    for (const element of val) {
+      this.elm.classList.remove(element)
     }
     return this
   }
@@ -234,10 +224,10 @@ export default class HTML {
    */
   attr (obj: { [x: string]: any }): HTML {
     for (const key in obj) {
-      if (obj[key] !== null && obj[key] !== undefined) {
-        this.elm.setAttribute(key, obj[key])
-      } else {
+      if (obj[key] == null) {
         this.elm.removeAttribute(key)
+      } else {
+        this.elm.setAttribute(key, obj[key])
       }
     }
     return this
@@ -296,8 +286,7 @@ export default class HTML {
   static from (elm: HTMLElement | string): HTML | null {
     if (typeof elm === 'string') {
       const element = HTML.qs(elm)
-      if (element === null) return null
-      else return element
+      return element === null ? null : element
     } else {
       return new HTML(elm)
     }
@@ -309,11 +298,7 @@ export default class HTML {
    * @returns a new HTML
    */
   static qs (query: string): HTML | null {
-    if (document.querySelector(query) != null) {
-      return HTML.from(document.querySelector(query) as HTMLElement)
-    } else {
-      return null
-    }
+    return document.querySelector(query) != null ? HTML.from(document.querySelector(query) as HTMLElement) : null
   }
 
   /**
@@ -322,12 +307,10 @@ export default class HTML {
    * @returns a new HTML
    */
   static qsa (query: string): Array<HTML | null> | null {
-    if (document.querySelector(query) != null) {
-      return Array.from(document.querySelectorAll(query)).map((e) =>
+    return document.querySelector(query) != null
+      ? Array.from(document.querySelectorAll(query)).map((e) =>
         HTML.from(e as HTMLElement)
       )
-    } else {
-      return null
-    }
+      : null
   }
 }

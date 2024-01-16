@@ -37,7 +37,7 @@ const XOR: Library = {
 
             return indCheck ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char
           })
-          .join('') + ((search.length > 0) ? '?' + search.join('?') : '')
+          .join('') + ((search.length > 0) ? `?${search.join('?')}` : '')
       )
     }
   }

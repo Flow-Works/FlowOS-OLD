@@ -43,10 +43,10 @@ const ImageViewer: Process = {
       document.addEventListener('fs_update', () => {
         render().catch(e => console.error(e))
       })
-    } else {
-      await process.kill()
-      await process.launch('apps/Files')
+      return
     }
+    await process.kill()
+    await process.launch('apps/Files')
   }
 }
 

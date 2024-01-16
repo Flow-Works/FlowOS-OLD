@@ -25,12 +25,12 @@ const Store: Process = {
 
     win.content.style.background = 'var(--base)'
 
-    fetch(process.kernel.config.SERVER as string + '/apps/list/')
+    fetch(`${process.kernel.config.SERVER as string}/apps/list/`)
       .then(async (res) => await res.json())
       .then(handle)
       .catch(e => console.error(e))
     document.addEventListener('fs_update', () => {
-      fetch(process.kernel.config.SERVER as string + '/apps/list/')
+      fetch(`${process.kernel.config.SERVER as string}/apps/list/`)
         .then(async (res) => await res.json())
         .then(handle)
         .catch(e => console.error(e))
