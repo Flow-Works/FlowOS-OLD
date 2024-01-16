@@ -1,5 +1,8 @@
+/** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
   name: 'FlowOS',
-  plugin: ['typedoc-material-theme', 'typedoc-plugin-missing-exports'],
-  themeColor: '#1e1e2e'
+  plugin: ['typedoc-material-theme'],
+  themeColor: '#1e1e2e',
+  entryPoints: ['src/kernel.ts'],
+  entryPointStrategy: 'expand'
 }
