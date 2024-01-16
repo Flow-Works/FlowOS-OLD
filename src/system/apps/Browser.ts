@@ -1,24 +1,24 @@
 import icon from '../../assets/icons/web-browser.svg'
-import { App } from '../../types'
+import { Process } from '../../types'
 
-import FlowWindow from '../../structures/FlowWindow'
-
-export default class BrowserApp implements App {
-  meta = {
+const BrowserApp: Process = {
+  config: {
     name: 'Browser',
-    description: 'A simple browser app.',
-    pkg: 'flow.browser',
-    version: '1.0.0',
-    icon
-  }
-
-  async open (): Promise<FlowWindow> {
-    const win = window.wm.createWindow({
-      title: this.meta.name,
-      icon: this.meta.icon,
-      width: 400,
-      height: 300
+    type: 'process',
+    icon,
+    targetVer: '1.0.0-indev.0'
+  },
+  run: async (process) => {
+    const win = await process.loadLibrary('lib/WindowManager').then((wm: any) => {
+      return wm.createWindow({
+        title: 'Browser',
+        icon,
+        width: 500,
+        height: 700
+      }, process)
     })
+
+    const xor = await process.loadLibrary('lib/XOR')
 
     win.content.style.height = '100%'
     win.content.style.display = 'flex'
@@ -46,6 +46,7 @@ export default class BrowserApp implements App {
 
         #content-container {
           flex: 1;
+          background: white;
         }
         .add {
           border: none;
@@ -74,7 +75,7 @@ export default class BrowserApp implements App {
       iframe: HTMLIFrameElement = document.createElement('iframe')
 
       constructor (url: string) {
-        this.iframe.src = `/service/${xor.encode(url)}`
+        this.iframe.src = `/service/${xor.encode(url) as string}`
         this.iframe.style.display = 'none'
 
         this.header.innerHTML = `
@@ -95,7 +96,7 @@ export default class BrowserApp implements App {
           if (this === tabManager.activeTab) {
             (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
           }
-          this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value as string)}`
+          this.iframe.src = `/service/${xor.encode(win.content.querySelector('input').value) as string}`
         }
       }
     }
@@ -166,54 +167,12 @@ export default class BrowserApp implements App {
     win.content.querySelector('.inp')?.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
         if (tabManager.activeTab.proxy) {
-          tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}`
+          tabManager.activeTab.iframe.src = `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value) as string}`
         } else {
           tabManager.activeTab.iframe.src = (win.content.querySelector('.inp') as HTMLInputElement).value
         }
       }
-    })
-
-    interface XOR {
-      randomMax: number
-      randomMin: number
-      encode: (str: string) => string
-      decode: (str: string) => string
-    }
-
-    const xor: XOR = {
-      randomMax: 100,
-      randomMin: -100,
-
-      encode: (str: string): string => {
-        return encodeURIComponent(
-          str
-            .toString()
-            .split('')
-            .map((char, ind): string => {
-              let indCheck
-              if (ind % 2 === 0) { indCheck = false } else { indCheck = true }
-
-              return indCheck ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char
-            })
-            .join('')
-        )
-      },
-      decode: (str: string): string => {
-        const [input, ...search] = str.split('?')
-
-        return (
-          decodeURIComponent(input)
-            .split('')
-            .map((char, ind): string => {
-              let indCheck
-              if (ind % 2 === 0) { indCheck = false } else { indCheck = true }
-
-              return indCheck ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char
-            })
-            .join('') + ((search.length > 0) ? '?' + search.join('?') : '')
-        )
-      }
-    };
+    });
 
     (win.content.querySelector('button') as HTMLElement).onclick = () => {
       tabManager.addTab(new Tab('https://google.com'))
@@ -247,12 +206,12 @@ export default class BrowserApp implements App {
       if (document.fullscreenElement !== null) {
         await document.exitFullscreen().catch(e => console.error)
       } else {
-        await win.content.requestFullscreen().catch(e => console.error)
+        await win.content.requestFullscreen().catch((e: any) => console.error)
       }
     }
 
     tabManager.addTab(new Tab('https://google.com'))
-
-    return win
   }
 }
+
+export default BrowserApp

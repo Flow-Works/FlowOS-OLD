@@ -1,56 +1,64 @@
+import Kernel from './kernel'
 import FlowWindow from './structures/FlowWindow'
-
-export type AppOpenFunction = (data: any) => Promise<FlowWindow>
-export type PluginRunFunction = (element: HTMLDivElement, config: any) => void | Promise<void>
+import LibraryLib from './structures/LibraryLib'
+import ProcessLib from './structures/ProcessLib'
 
 export interface AppClosedEvent extends CustomEvent {
   detail: {
-    win: FlowWindow
+    token: string
   }
 }
 
 export interface AppOpenedEvent extends CustomEvent {
   detail: {
-    app: App
+    proc: Process
+    token: string
     win: FlowWindow
   }
 }
-export interface BaseMeta {
-  name: string
-  description: string
-  pkg: string
-  version: string
-}
 
-export interface AppMeta extends BaseMeta {
-  icon: string
-}
-
-export interface PluginMeta extends BaseMeta {
-  icon?: string
-}
-
-export interface RepoAppMeta extends BaseMeta {
-  icon?: string
+export interface Package {
   url: string
+  executable: Executable
 }
 
-export interface Apps {
-  [key: string]: App
+export interface Executable {
+  config: {
+    name: string
+    type: 'process' | 'library'
+    icon?: string
+    targetVer: string
+  }
 }
 
-export interface Plugins {
-  [key: string]: Plugin
+export type LibraryData = any
+export interface Library extends Executable {
+  config: {
+    name: string
+    type: 'library'
+    targetVer: string
+  }
+
+  init: (library: LibraryLib, kernel: Kernel, process: ProcessLib) => void
+  data: LibraryData
 }
 
-export interface App {
-  meta: AppMeta
-  open: AppOpenFunction
+export interface Process extends Executable {
+  config: {
+    name: string
+    type: 'process'
+    icon?: string
+    targetVer: string
+  }
+
+  run: (process: ProcessLib) => Promise<any>
 }
 
-export interface Plugin {
-  meta: PluginMeta
-  run: PluginRunFunction
+export interface RepoAppMeta {
+  name: string
+  icon?: string
+  targetVer: string
+  url: string
 }
 
 export interface FlowWindowConfig {
@@ -65,28 +73,19 @@ export interface FlowWindowConfig {
   minWidth?: number
   minHeight?: number
 }
-
-export interface LoadedApp extends App {
-  builtin: boolean
-}
-
-export interface LoadedPlugin extends Plugin {
-  builtin: boolean
-}
-
-export interface PackageJSON {
-  version: string
-}
-
-export interface FlowConfig {
-  SERVER_URL: string
-  HOSTNAME: string
-  USERNAME: string
-  '24HOUR_CLOCK': boolean
-}
-
 export interface RepoData {
   name: string
   id: string
   apps: RepoAppMeta[]
+}
+
+export interface ProcessInfo {
+  pid: number
+  name: string
+  token: string
+}
+
+export interface KernelConfig {
+  SERVER: string
+  [key: string]: any
 }

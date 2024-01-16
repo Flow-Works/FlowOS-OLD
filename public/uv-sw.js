@@ -1,7 +1,8 @@
+// @ts-nocheck
+
 importScripts('/uv/uv.sw.js');
 
-const params = new URL(self.serviceWorker.scriptURL).searchParams
-
+const params = new URL(self.location.href).searchParams
 const serverURL = atob(params.get('url'));
 const sw = new UVServiceWorker(serverURL);
 
