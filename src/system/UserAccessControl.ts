@@ -42,7 +42,7 @@ const UserAccessControl: Process = {
             } else {
               resolve(false)
             }
-          })
+          }).catch((e) => console.error(e))
       }).catch((e) => console.error(e))
     })
   }
