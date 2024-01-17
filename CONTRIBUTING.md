@@ -16,62 +16,39 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 ## Commit Guidelines
 
-|   Commit type               | Emoji                                                     |
-|:----------------------------|:----------------------------------------------------------|
-| Version tag                 | :bookmark: `:bookmark:`                                   |
-| New feature                 | :sparkles: `:sparkles:`                                   |
-| Bugfix                      | :bug: `:bug:`                                             |
-| Metadata                    | :card_index: `:card_index:`                               |
-| Documentation               | :books: `:books:`                                         |
-| Documenting source code     | :bulb: `:bulb:`                                           |
-| Performance                 | :racehorse: `:racehorse:`                                 |
-| Cosmetic                    | :lipstick: `:lipstick:`                                   |
-| Tests                       | :rotating_light: `:rotating_light:`                       |
-| Adding a test               | :white_check_mark: `:white_check_mark:`                   |
-| Make a test pass            | :heavy_check_mark: `:heavy_check_mark:`                   |
-| General update              | :zap: `:zap:`                                             |
-| Improve format/structure    | :art: `:art:`                                             |
-| Refactor code               | :hammer: `:hammer:`                                       |
-| Removing code/files         | :fire: `:fire:`                                           |
-| Continuous Integration      | :green_heart: `:green_heart:`                             |
-| Security                    | :lock: `:lock:`                                           |
-| Upgrading dependencies      | :arrow_up: `:arrow_up:`                                   |
-| Downgrading dependencies    | :arrow_down: `:arrow_down:`                               |
-| Lint                        | :shirt: `:shirt:`                                         |
-| Translation                 | :alien: `:alien:`                                         |
-| Text                        | :pencil: `:pencil:`                                       |
-| Critical hotfix             | :ambulance: `:ambulance:`                                 |
-| Deploying stuff             | :rocket: `:rocket:`                                       |
-| Work in progress            | :construction:  `:construction:`                          |
-| Adding CI build system      | :construction_worker: `:construction_worker:`             |
-| Analytics or tracking code  | :chart_with_upwards_trend: `:chart_with_upwards_trend:`   |
-| Removing a dependency       | :heavy_minus_sign: `:heavy_minus_sign:`                   |
-| Adding a dependency         | :heavy_plus_sign: `:heavy_plus_sign:`                     |
-| Docker                      | :whale: `:whale:`                                         |
-| Configuration files         | :wrench: `:wrench:`                                       |
-| NodeJS package.json         | :package: `:package:`                                     |
-| Merging branches            | :twisted_rightwards_arrows: `:twisted_rightwards_arrows:` |
-| Bad code / need improv.     | :hankey: `:hankey:`                                       |
-| Reverting changes           | :rewind: `:rewind:`                                       |
-| Breaking changes            | :boom: `:boom:`                                           |
-| Code review changes         | :ok_hand: `:ok_hand:`                                     |
-| Accessibility               | :wheelchair: `:wheelchair:`                               |
-| Move/rename repository      | :truck: `:truck:`                                         |
-| Issue/Pull Request template | :newspaper_roll: `:newspaper_roll:`                       |
-| Merge pull request          | :knot: `:knot:`                                           |
-| Assets                      | :bento: `:bento:`                                         |
+All commits made should follow the [Semantic Release](https://github.com/semantic-release/semantic-release#commit-message-format) commit message format.
 
-### Format
+## Pull Request Guidelines
 
-Your commit messages should use the following as a guide:
-```
-[emoji] description
-```
+A PR should be named using the following anatomy:
 
-This is an example of this being used for "**Assets**":
-```
-[🍱] Added terminal.png
-```
+`[emoji]` `(#issue)` `summary`
+
+As an example: `[➕] (#126) cool thing added`
+
+### emoji
+
+The emoji should be the first thing in the name, to let everyone know what kind of change the PR is putting forward. Here is a table of the standard emojis, and why they should be used.
+
+| Emoji                                   | Keyword    | Meaning                                                |
+|-----------------------------------------|------------|--------------------------------------------------------|
+| :heavy_plus_sign: `:heavy_plus_sign:`   | `add`      | Create a capability e.g. feature, test, dependency.    |
+| :heavy_minus_sign: `:heavy_minus_sign:` | `remove`   | Remove a capability e.g. feature, test, dependency.    |
+| :hammer: `:hammer:`                     | `refactor` | An update to existing code and/or refactoring.         |
+| :bug: `:bug:`                           | `fix`      | Fix an issue e.g. bug, typo, accident, misstatement.   |
+| :up: `:up:`                             | `bump`     | Increase the version of something e.g. dependency.     |
+| :bricks: `:bricks:`                     | `build`    | Change *only* to the build process, tooling, or infra. |
+| :memo: `:memo:`                         | `docs`     | A change to documentation *only*.                      |
+| :arrow_right_hook: `:arrow_right_hook:` | `revert`   | Reverting a previous commit.                           |
+| :knot: `:knot:`                         | `merge`    | Merging a branch into another.                         |
+
+### issue
+
+Following the emoji is the issue number  - this is the issue the PR addresses. It is formatted as `(#XXX)` where XXX is the GitHub issue number.
+
+### summary
+
+This is a short summary of what your commit is doing.
 
 ## Code of Conduct
 
