@@ -16,6 +16,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "^20.11.3",
     "@types/uuid": "^9.0.5",
     "@types/web": "^0.0.117",
