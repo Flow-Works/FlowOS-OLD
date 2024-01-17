@@ -16,7 +16,7 @@ const UserAccessControl: Process = {
     const target = process.data.executable
     return await new Promise((resolve) => {
       process.loadLibrary('lib/WindowManager').then(async wm => {
-        let message
+        let message = 'Unknown action'
         switch (process.data.type) {
           case 'launch': {
             message = `${initiator.config.name as string} wants to launch ${target.config.name as string}`

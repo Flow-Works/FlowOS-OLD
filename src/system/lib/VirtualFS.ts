@@ -1,6 +1,6 @@
 import Kernel from '../../kernel'
 import ProcessLib from '../../structures/ProcessLib'
-import { Directory, Errors, File, Library, Permission } from '../../types'
+import { Directory, Errors, File, Library, Permission, Stats } from '../../types'
 
 console.debug = (...args: any[]) => {
   console.log('[VirtualFS]', ...args)
@@ -421,7 +421,7 @@ const VirtualFS: Library = {
       console.debug(`readdir ${path}`)
       return result
     },
-    stat: async (path: string): Promise<{ isDirectory: () => boolean, isFile: () => boolean }> => {
+    stat: async (path: string): Promise<Stats> => {
       const { current } = await navigatePath(path)
 
       console.debug(`stat ${path}`)

@@ -1,7 +1,10 @@
+import HTML from './HTML'
 import Kernel from './kernel'
 import FlowWindow from './structures/FlowWindow'
 import LibraryLib from './structures/LibraryLib'
 import ProcessLib from './structures/ProcessLib'
+import Components from './system/lib/Components'
+import MIMETypes from './system/lib/MIMETypes'
 
 export interface AppClosedEvent extends CustomEvent {
   detail: {
@@ -124,3 +127,61 @@ export interface KernelConfig {
   SERVER: string
   [key: string]: any
 }
+
+export interface Stats {
+  isDirectory: () => boolean
+  isFile: () => boolean
+}
+
+export interface FileSystem {
+  unlink: (path: string) => Promise<void>
+  readFile: (path: string) => Promise<Buffer>
+  writeFile: (path: string, content: string | Buffer) => Promise<void>
+  mkdir: (path: string) => Promise<void>
+  rmdir: (path: string) => Promise<void>
+  readdir: (path: string) => Promise<string[]>
+  stat: (path: string) => Promise<Stats>
+  rename: (oldPath: string, newPath: string) => Promise<void>
+  exists: (path: string) => Promise<boolean>
+}
+
+export interface ModalData {
+  value: boolean
+  win: FlowWindow
+}
+export interface WindowManager {
+  windowArea: HTML
+  windows: FlowWindow[]
+  getHighestZIndex: () => number
+  createWindow: (config: FlowWindowConfig, process: ProcessLib) => FlowWindow
+  createModal: (title: string, text: string, process: ProcessLib) => Promise<ModalData>
+}
+
+export interface Launcher {
+  element: HTML
+  toggle: () => void
+}
+
+export interface XOR {
+  encode: (str: string) => string
+  decode: (str: string) => string
+}
+
+export interface StatusBar {
+  element: HTML
+  updateBatteryIcon: (battery: any) => void
+  updateIcon: (ms: number) => void
+}
+
+export type LoadedLibrary<T> =
+  T extends 'lib/VirtualFS' ? FileSystem :
+    T extends 'lib/WindowManager' ? WindowManager :
+      T extends 'lib/HTML' ? typeof HTML :
+        T extends 'lib/Launcher' ? Launcher :
+          T extends 'lib/XOR' ? XOR :
+            T extends 'lib/StatusBar' ? StatusBar :
+              T extends 'lib/MIMETypes' ? typeof MIMETypes.data :
+                T extends 'lib/Components' ? typeof Components.data :
+                  any
+
+export type LibraryPath = 'lib/VirtualFS' | 'lib/WindowManager' | string

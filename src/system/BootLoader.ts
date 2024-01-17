@@ -83,7 +83,7 @@ const BootLoader: Process = {
       const files = await fs.readdir('/home/Applications/')
       files
         .filter((x: string) => x.endsWith('.app') && ((input.elm as HTMLInputElement) !== null ? x.toLowerCase().includes((input.elm as HTMLInputElement).value.toLowerCase()) : true))
-        .forEach(async (file: string) => {
+        .forEach((file: string) => {
           fs.readFile(`/home/Applications/${file}`).then(async (data: Uint8Array) => {
             const path = Buffer.from(data).toString()
             const executable = await process.kernel.getExecutable(path) as Process
@@ -97,7 +97,7 @@ const BootLoader: Process = {
               alt: `${executable.config.name} icon`
             }).appendTo(appElement)
             new HTML('div').text(executable.config.name).appendTo(appElement)
-          })
+          }).catch((e: any) => console.error(e))
         })
     }
 
@@ -129,11 +129,11 @@ const BootLoader: Process = {
 
     setInterval((): any => {
       getTime().then((time) => {
-        statusBar.element.qs('div[data-toolbar-id="calendar"]').text(time)
+        statusBar.element.qs('div[data-toolbar-id="calendar"]')?.text(time)
       }).catch(e => console.error)
     }, 1000)
 
-    statusBar.element.qs('div[data-toolbar-id="start"]').on('click', () => {
+    statusBar.element.qs('div[data-toolbar-id="start"]')?.on('click', () => {
       launcher.toggle()
     })
 
@@ -180,11 +180,11 @@ const BootLoader: Process = {
           e.detail.win.focus()
           e.detail.win.toggleMin()
         })
-      ).appendTo(statusBar.element.qs('div[data-toolbar-id="apps"]'))
+      ).appendTo(statusBar.element.qs('div[data-toolbar-id="apps"]')?.elm as HTMLElement)
     })
 
     document.addEventListener('app_closed', (e: AppClosedEvent): void => {
-      statusBar.element.qs('div[data-toolbar-id="apps"]').qs(`img[data-id="${e.detail.token}"]`).elm.parentElement.remove()
+      statusBar.element.qs('div[data-toolbar-id="apps"]')?.qs(`img[data-id="${e.detail.token}"]`)?.elm.parentElement?.remove()
     })
 
     document.body.style.flexDirection = 'column-reverse'

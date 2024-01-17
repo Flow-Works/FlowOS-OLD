@@ -8,9 +8,6 @@ const XOR: Library = {
   },
   init: (l, k, p) => {},
   data: {
-    randomMax: 100,
-    randomMin: -100,
-
     encode: (str: string): string => {
       return encodeURIComponent(
         str
