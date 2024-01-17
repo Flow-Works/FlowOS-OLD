@@ -1,6 +1,6 @@
 import { Library } from '../../types'
 
-const MIME: Library = {
+const MIMETypes: Library = {
   config: {
     name: 'MIMETypes',
     type: 'library',
@@ -83,4 +83,4 @@ const MIME: Library = {
   }
 }
 
-export default MIME
+export default MIMETypes

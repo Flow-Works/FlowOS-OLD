@@ -81,7 +81,7 @@ const Store: Process = {
                   install(app.url)
                 }
               }
-            })
+            }).catch((e: any) => console.error(e))
           }).catch((e: any) => console.error(e))
         })
       })

@@ -56,7 +56,7 @@ const Files: Process = {
       (win.content.querySelector('.folder') as HTMLElement).onclick = async () => {
         const title = prompt('Enter folder name')
         if (title != null) {
-          await fs.mkdir(`${dir}/${title}`, '')
+          await fs.mkdir(`${dir}/${title}`)
         }
       }
 
@@ -69,7 +69,7 @@ const Files: Process = {
         const genIcon = (): string => {
           return `<span class="material-symbols-rounded">${(MIMETypes[file.split('.')[1]] === undefined ? 'draft' : MIMETypes[file.split('.')[1]].icon) as string}</span>`
         }
-        const icon = fileStat.isDirectory() as boolean ? '<span class="material-symbols-rounded">folder</span>' : genIcon()
+        const icon = fileStat.isDirectory() ? '<span class="material-symbols-rounded">folder</span>' : genIcon()
 
         element.innerHTML += `${icon} <span style="flex:1;">${file}</span><span class="material-symbols-rounded delete">delete_forever</span><span class="material-symbols-rounded rename">edit</span>`;
         (element.querySelector('.rename') as HTMLElement).onclick = async () => {
@@ -79,7 +79,7 @@ const Files: Process = {
           }
         }
         (element.querySelector('.delete') as HTMLElement).onclick = async () => {
-          if (fileStat.isDirectory() as boolean) {
+          if (fileStat.isDirectory()) {
             await fs.rmdir(dir + seperator + file)
           } else {
             await fs.unlink(dir + seperator + file)
@@ -101,7 +101,7 @@ const Files: Process = {
         }
 
         element.ondblclick = async () => {
-          if (fileStat.isDirectory() as boolean) {
+          if (fileStat.isDirectory()) {
             await setDir(dir + seperator + file)
           } else {
             await run(dir + seperator + file)

@@ -1,6 +1,6 @@
 import semver from 'semver'
 import Kernel from '../kernel'
-import { Process, Executable, LibraryData, Package, Library, Permission } from '../types'
+import { Process, Executable, Package, Library, Permission, LoadedLibrary, LibraryPath } from '../types'
 import FlowWindow from './FlowWindow'
 import LibraryLib from './LibraryLib'
 import ProcLib from './ProcLib'
@@ -57,7 +57,7 @@ export default class ProcessLib {
     })
   }
 
-  async loadLibrary (url: string): Promise<LibraryData> {
+  async loadLibrary <T extends LibraryPath>(url: T): Promise<LoadedLibrary<T>> {
     let executable: Executable
     try {
       const comps = import.meta.glob('../system/**/*.ts')
