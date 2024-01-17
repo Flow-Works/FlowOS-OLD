@@ -40,6 +40,7 @@ The emoji should be the first thing in the name, to let everyone know what kind 
 | :bricks: `:bricks:`                     | `build`    | Change *only* to the build process, tooling, or infra. |
 | :memo: `:memo:`                         | `docs`     | A change to documentation *only*.                      |
 | :arrow_right_hook: `:arrow_right_hook:` | `revert`   | Reverting a previous commit.                           |
+| :knot: `:knot:`                         | `merge`    | Merging a branch into another.                         |
 
 ### issue
 
