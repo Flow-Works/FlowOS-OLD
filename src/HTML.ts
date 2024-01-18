@@ -197,6 +197,24 @@ export default class HTML {
   }
 
   /**
+   * Prepend an element. Typically used as a `.prepend(new HTML(...))` call.
+   * @param elem The element to prepend.
+   * @returns HTML
+   */
+  prepend (elem: string | HTMLElement | HTML): HTML {
+    if (elem instanceof HTMLElement) {
+      this.elm.prepend(elem)
+    } else if (elem instanceof HTML) {
+      this.elm.prepend(elem.elm)
+    } else if (typeof elem === 'string') {
+      const newElem = document.createElement(elem)
+      this.elm.prepend(newElem)
+      return new HTML(newElem.tagName)
+    }
+    return this
+  }
+
+  /**
    * Append multiple elements. Typically used as a `.appendMany(new HTML(...), new HTML(...)` call.
    * @param elements The elements to append.
    * @returns HTML
