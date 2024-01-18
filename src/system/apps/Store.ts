@@ -93,7 +93,7 @@ const Store: Process = {
                     )
                     // @ts-expect-error
                     .appendTo(repoDiv)
-                })
+                }).catch(e => console.error(e))
             })
           })
           .catch(e => console.error(e))
@@ -186,7 +186,7 @@ const Store: Process = {
                       )
                     )
                     .appendTo(repoDiv)
-                })
+                }).catch(e => console.error(e))
             })
           })
           .catch(e => console.error(e))
