@@ -37,6 +37,14 @@ const Components: Library = {
         })
         return button
       }
+    },
+    Icon: {
+      new: (icon: string) => {
+        const { HTML } = library
+        return new HTML('i')
+          .class('material-symbols-rounded')
+          .text(icon)
+      }
     }
   }
 }
