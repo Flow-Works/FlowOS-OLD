@@ -227,6 +227,18 @@ export default class HTML {
   }
 
   /**
+   * Prepend multiple elements. Typically used as a `.prependMany(new HTML(...), new HTML(...)` call.
+   * @param elements The elements to prepend.
+   * @returns HTML
+   */
+  prependMany (...elements: any[]): HTML {
+    for (const elem of elements) {
+      this.prepend(elem)
+    }
+    return this
+  }
+
+  /**
    * Clear the innerHTML of the element.
    * @returns HTML
    */
