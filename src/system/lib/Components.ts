@@ -31,19 +31,22 @@ const Components: Library = {
         const button = new HTML('button')
         button.style({
           'border-radius': '5px',
-          padding: '2.5px',
-          background: 'transparent',
-          border: '1px solid var(--surface-0)'
+          padding: '2.5px 5px',
+          background: 'var(--base)',
+          border: '1px solid var(--surface-1)'
         })
         return button
       }
     },
     Icon: {
-      new: (icon: string) => {
+      new: (icon: string, size = 'inherit') => {
         const { HTML } = library
         return new HTML('i')
           .class('material-symbols-rounded')
           .text(icon)
+          .style({
+            'font-size': size
+          })
       }
     }
   }
