@@ -34,7 +34,7 @@ const Store: Process = {
       const div = new HTML(win.content).qs('div')
 
       repos.forEach(async (repo: string, index: number) => {
-        const repoDiv = div.qsa('div')[index]
+        const repoDiv = div?.qsa('div')?.[index]
         repoDiv?.html('')
         fetch(`${process.kernel.config.SERVER as string}/cors/?url=${repo}`)
           .then(async res => await res.json())
@@ -91,6 +91,7 @@ const Store: Process = {
                         button
                       )
                     )
+                    // @ts-expect-error
                     .appendTo(repoDiv)
                 })
             })
