@@ -1,7 +1,5 @@
 import { Process, RepoData } from '../../types'
 import icon from '../../assets/icons/softwarecenter.svg'
-
-import { sanitize } from '../../utils'
 import nullIcon from '../../assets/icons/application-default-icon.svg'
 
 const Store: Process = {
@@ -22,68 +20,176 @@ const Store: Process = {
     })
 
     const fs = await process.loadLibrary('lib/VirtualFS')
-
-    win.content.style.background = 'var(--base)'
+    const HTML = await process.loadLibrary('lib/HTML')
+    const { Button, Icon } = await process.loadLibrary('lib/Components')
 
     fetch(`${process.kernel.config.SERVER as string}/apps/list/`)
       .then(async (res) => await res.json())
       .then(handle)
       .catch(e => console.error(e))
-    document.addEventListener('fs_update', () => {
-      fetch(`${process.kernel.config.SERVER as string}/apps/list/`)
-        .then(async (res) => await res.json())
-        .then(handle)
-        .catch(e => console.error(e))
-    })
 
-    function handle (repos: RepoData[]): void {
-      win.content.innerHTML = `
-        <div class="repos" style="display: flex;flex-direction: column;gap: 10px;"></div>
-      `
+    async function updateList (): Promise<void> {
+      const res = fetch(`${process.kernel.config.SERVER as string}/apps/list/`)
+      const repos = await (await res).json()
+      const div = new HTML(win.content).qs('div')
 
+      repos.forEach(async (repo: string, index: number) => {
+        const repoDiv = div?.qsa('div')?.[index]
+        repoDiv?.html('')
+        fetch(`${process.kernel.config.SERVER as string}/cors/?url=${repo}`)
+          .then(async res => await res.json())
+          .then((repo: RepoData) => {
+            repo.apps.forEach((app) => {
+              fs.exists(`/home/Applications/${app.url.split('/').at(-1)?.replace('.js', '.app') as string}`)
+                .then((exists: boolean) => {
+                  const button = Button.new().style({
+                    display: 'flex',
+                    gap: '5px',
+                    'align-items': 'center'
+                  }).text('Uninstall')
+                    .prepend(Icon.new('delete'))
+                    .on('click', () => uninstall(app.url))
+
+                  if (exists) {
+                    fetch(`${process.kernel.config.SERVER as string}/cors?url=${app.url}`)
+                      .then(async (res) => await res.text())
+                      .then(async (data) => {
+                        const local = Buffer.from(await fs.readFile(`/opt/apps/${app.url.split('/').at(-1) as string}`)).toString()
+                        if (local !== data) {
+                          button.text('Update')
+                            .prepend(Icon.new('update'))
+                            .on('click', () => install(app.url))
+                        }
+                      }).catch(e => console.error(e))
+                  } else {
+                    button.text('Install')
+                      .prepend(Icon.new('download'))
+                      .on('click', () => install(app.url))
+                  }
+
+                  new HTML('div')
+                    .style({
+                      display: 'flex',
+                      'flex-direction': 'row',
+                      gap: '10px',
+                      padding: '10px',
+                      background: 'var(--base)',
+                      'border-radius': '10px'
+                    })
+                    .appendMany(
+                      new HTML('img').attr({
+                        src: app.icon ?? nullIcon
+                      }).style({
+                        'aspect-ratio': '1 / 1',
+                        width: '60px',
+                        height: '60px'
+                      }),
+                      new HTML('div').appendMany(
+                        new HTML('h3').style({
+                          margin: '0'
+                        }).text(app.name),
+                        button
+                      )
+                    )
+                    // @ts-expect-error
+                    .appendTo(repoDiv)
+                }).catch(e => console.error(e))
+            })
+          })
+          .catch(e => console.error(e))
+      })
+    }
+
+    function handle (repos: string[]): void {
+      win.content.innerHTML = ''
+      const div = new HTML('div').appendTo(win.content)
       repos.forEach((repo) => {
-        (win.content.querySelector('.repos') as HTMLElement).innerHTML += `
-          <div data-repo-id="${sanitize(repo.id)}" style="display: flex;flex-direction: column;gap: 10px;background: var(--surface-0);padding: 20px;margin: 10px;border-radius: 10px;">
-            <div style="flex: 1;">
-              <h2 style="margin: 0;margin-bottom: 10px;">${sanitize(repo.name)}</h2>
-              <code style="font-family: monospace;">${sanitize(repo.id)}</code>
-            </div>
-            <br/>
-            <div class="apps"></div>
-          </div>
-        `
+        fetch(`${process.kernel.config.SERVER as string}/cors/?url=${repo}`)
+          .then(async res => await res.json())
+          .then((repo: RepoData) => {
+            const icon = Icon.new('arrow_drop_up')
+            new HTML('h2').text(repo.name).style({
+              margin: '0',
+              padding: '10px',
+              display: 'flex',
+              gap: '5px',
+              'align-items': 'center'
+            })
+              .prepend(icon)
+              .appendTo(div)
+              .on('click', () => {
+                repoDiv.style({
+                  height: repoDiv.elm.style.height === '0px' ? 'max-content' : '0'
+                })
+                icon.text(`arrow_drop_${repoDiv.elm.style.height === '0px' ? 'up' : 'down'}`)
+              })
+            const repoDiv = new HTML('div').appendTo(div).style({
+              height: '0',
+              display: 'flex',
+              'flex-direction': 'column',
+              gap: '10px',
+              overflow: 'hidden',
+              padding: '0 10px'
+            })
+            repo.apps.forEach((app) => {
+              fs.exists(`/home/Applications/${app.url.split('/').at(-1)?.replace('.js', '.app') as string}`)
+                .then((exists: boolean) => {
+                  const button = Button.new().style({
+                    display: 'flex',
+                    gap: '5px',
+                    'align-items': 'center'
+                  }).text('Uninstall')
+                    .prepend(Icon.new('delete'))
+                    .on('click', () => uninstall(app.url))
 
-        repo.apps.forEach((app) => {
-          (win.content.querySelector(`div[data-repo-id="${sanitize(repo.id)}"] > .apps`) as HTMLElement).innerHTML += `
-            <div data-pkg="${sanitize(app.name)}" style="display: flex;gap: 20px;">
-              <img src="${sanitize(app.icon ?? nullIcon)}" height="59.5px" style="border-radius: var(--app-radius);">
-              <div>
-                <h3 style="margin: 0;margin-bottom: 10px;">${sanitize(app.name)}</h3>
-                <div style="display: flex;gap:5px;align-items: center;">
-                  <code style="font-family: monospace;">${sanitize(app.targetVer)}</code>
-                  <span class="material-symbols-rounded">download</span>
-                </div>
-              </div>
-            </div>
-          `
+                  if (exists) {
+                    fetch(`${process.kernel.config.SERVER as string}/cors?url=${app.url}`)
+                      .then(async (res) => await res.text())
+                      .then(async (data) => {
+                        const local = Buffer.from(await fs.readFile(`/opt/apps/${app.url.split('/').at(-1) as string}`)).toString()
+                        if (local !== data) {
+                          button.text('Update')
+                            .prepend(Icon.new('update'))
+                            .un('click', () => uninstall(app.url))
+                            .on('click', () => install(app.url))
+                        }
+                      }).catch(e => console.error(e))
+                  } else {
+                    button.text('Install')
+                      .prepend(Icon.new('download'))
+                      .un('click', () => uninstall(app.url))
+                      .on('click', () => install(app.url))
+                  }
 
-          fs.exists(`/opt/apps/${app.url.split('/').at(-1) as string}`).then((exists: boolean) => {
-            fs.exists(`/home/Applications/${app.url.split('/').at(-1)?.replace('.js', '.app') as string}`).then((exists2: boolean) => {
-              if (exists) {
-                (win.content.querySelector(`div[data-pkg="${sanitize(app.name)}"] div > .material-symbols-rounded`) as HTMLElement).innerHTML = 'delete';
-
-                (win.content.querySelector(`div[data-pkg="${sanitize(app.name)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = async () => {
-                  await fs.unlink(`/home/Applications/${app.url.split('/').at(-1)?.replace('.js', '.app') as string}`)
-                  await fs.unlink(`/opt/apps/${app.url.split('/').at(-1) as string}`)
-                }
-              } else {
-                (win.content.querySelector(`div[data-pkg="${sanitize(app.name)}"] div > .material-symbols-rounded`) as HTMLElement).onclick = () => {
-                  install(app.url)
-                }
-              }
-            }).catch((e: any) => console.error(e))
-          }).catch((e: any) => console.error(e))
-        })
+                  new HTML('div')
+                    .style({
+                      display: 'flex',
+                      'flex-direction': 'row',
+                      gap: '10px',
+                      padding: '10px',
+                      background: 'var(--base)',
+                      'border-radius': '10px'
+                    })
+                    .appendMany(
+                      new HTML('img').attr({
+                        src: app.icon ?? nullIcon
+                      }).style({
+                        'aspect-ratio': '1 / 1',
+                        width: '60px',
+                        height: '60px'
+                      }),
+                      new HTML('div').appendMany(
+                        new HTML('h3').style({
+                          margin: '0'
+                        }).text(app.name),
+                        button
+                      )
+                    )
+                    .appendTo(repoDiv)
+                }).catch(e => console.error(e))
+            })
+          })
+          .catch(e => console.error(e))
       })
     }
 
@@ -92,7 +198,17 @@ const Store: Process = {
         .then(async (data) => {
           await fs.writeFile(`/home/Applications/${url.split('/').at(-1)?.replace('.js', '.app') as string}`, `apps/${url.split('/').at(-1)?.split('.')[0] as string}`)
           await fs.writeFile(`/opt/apps/${url.split('/').at(-1) as string}`, data)
+          await updateList()
         }).catch(e => console.error(e))
+    }
+
+    function uninstall (url: string): void {
+      fs.unlink(`/home/Applications/${url.split('/').at(-1)?.replace('.js', '.app') as string}`)
+        .then(async () => {
+          await fs.unlink(`/opt/apps/${url.split('/').at(-1) as string}`)
+          await updateList()
+        })
+        .catch(e => console.error(e))
     }
   }
 }
