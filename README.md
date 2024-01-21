@@ -50,5 +50,16 @@ FlowOS is made with the following software:
 * [Vite](https://vitejs.dev)
 * [Ultraviolet](https://github.com/titaniumnetwork-dev/ultraviolet)
 
+## Contributors
+* [ThinLiquid](https://github.com/ThinLiquid)
+* [proudparrot2](https://github.com/proudparrot2)
+* [FlameCaster](https://github.com/FlameCaster)
+* [RisingGlitch](https://github.com/RisingGlitch)
+* [httphypixelnet](https://github.com/httphypixelnet)
+* [idk-pixel](https://github.com/idk-pixel)
+### Special Thanks
+* [datkat21](https://github.com/datkat21)
+* [alexfeed1990](https://github.com/alexfeed1990)
+
 ## License
 FlowOS is licensed under the MIT license. See the `LICENSE` file for more information.
