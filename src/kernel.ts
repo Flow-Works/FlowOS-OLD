@@ -31,8 +31,7 @@ const handle = async (type: 'target' | 'service' | 'mount', name: string, Instan
       name
     )
     console.groupEnd()
-    if (typeof Instance === 'object') return data
-    else return instance
+    return typeof Instance === 'object' ? data : instance
   } catch (e) {
     print.failed('Failed', `to start ${name}`, e)
     console.error(`${spaces}${e.stack.split('\n').join(`\n${spaces}`) as string}`)

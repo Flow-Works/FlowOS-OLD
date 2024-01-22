@@ -241,6 +241,7 @@ class VirtualFS {
     const getRequest = store?.get('fs')
 
     return await new Promise((resolve, reject) => {
+      if (getRequest == null) return
       getRequest.onsuccess = () => {
         resolve(getRequest.result)
       }
@@ -262,6 +263,7 @@ class VirtualFS {
     const putRequest = store?.put(this.fileSystem, 'fs')
 
     return await new Promise((resolve, reject) => {
+      if (putRequest == null) return
       putRequest.onsuccess = () => {
         document.dispatchEvent(new CustomEvent('fs_update', {}))
         resolve()

@@ -19,7 +19,7 @@ const Store: Process = {
       }, process)
     })
 
-    const fs = process.fs
+    const { fs } = process
     const HTML = await process.loadLibrary('lib/HTML')
     const { Button, Icon } = await process.loadLibrary('lib/Components')
 

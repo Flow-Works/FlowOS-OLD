@@ -24,7 +24,7 @@ const Settings: Process = {
         )
       })
 
-    const fs = process.fs
+    const { fs } = process
     const HTML = await process.loadLibrary('lib/HTML')
 
     const { Input, Button } = await process.loadLibrary('lib/Components')

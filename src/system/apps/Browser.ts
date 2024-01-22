@@ -75,7 +75,7 @@ const BrowserApp: Process = {
       iframe: HTMLIFrameElement = document.createElement('iframe')
 
       constructor (url: string) {
-        this.iframe.src = `/service/${xor.encode(url)}`
+        this.iframe.src = `/service/${xor.encode(url) as string}`
         this.iframe.style.display = 'none'
 
         this.header.innerHTML = `
@@ -97,7 +97,7 @@ const BrowserApp: Process = {
         if (this === tabManager.activeTab) {
           (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_on'
         }
-        this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value ?? '')}`
+        this.iframe.src = `/service/${xor.encode(win.content.querySelector('input')?.value ?? '') as string}`
       }
     }
 
@@ -167,7 +167,7 @@ const BrowserApp: Process = {
 
     win.content.querySelector('.inp')?.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        tabManager.activeTab.iframe.src = tabManager.activeTab.proxy ? `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value)}` : (win.content.querySelector('.inp') as HTMLInputElement).value
+        tabManager.activeTab.iframe.src = tabManager.activeTab.proxy ? `/service/${xor.encode((win.content.querySelector('.inp') as HTMLInputElement).value) as string}` : (win.content.querySelector('.inp') as HTMLInputElement).value
       }
     });
 

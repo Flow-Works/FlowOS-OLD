@@ -18,6 +18,7 @@ export default class ProcessLib {
       [key: string]: Package
     }
     config: any
+    setConfig: (config: any) => any
   }
 
   readonly permission: Permission
@@ -41,7 +42,10 @@ export default class ProcessLib {
       getExecutable: kernel.getExecutable.bind(kernel),
       processList: kernel.processList,
       packageList: kernel.packageList,
-      config: kernel.config
+      config: kernel.config,
+      setConfig: (config) => {
+        if (this.permission >= Permission.ELEVATED) kernel.config = config
+      }
     }
     this.process = process
     this.data = data
