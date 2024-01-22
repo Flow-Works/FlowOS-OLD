@@ -3,7 +3,6 @@ import Kernel from './kernel'
 import FlowWindow from './structures/FlowWindow'
 import LibraryLib from './structures/LibraryLib'
 import ProcessLib from './structures/ProcessLib'
-import Components from './system/lib/Components'
 import MIMETypes from './system/lib/MIMETypes'
 
 export interface AppClosedEvent extends CustomEvent {
@@ -173,15 +172,20 @@ export interface StatusBar {
   updateIcon: (ms: number) => void
 }
 
+export interface IComponents {
+  [key: string]: {
+    new: (...args: any[]) => InstanceType<typeof HTML>
+  }
+}
+
 export type LoadedLibrary<T> =
-  T extends 'lib/VirtualFS' ? FileSystem :
     T extends 'lib/WindowManager' ? WindowManager :
       T extends 'lib/HTML' ? typeof HTML :
         T extends 'lib/Launcher' ? Launcher :
           T extends 'lib/XOR' ? XOR :
             T extends 'lib/StatusBar' ? StatusBar :
               T extends 'lib/MIMETypes' ? typeof MIMETypes.data :
-                T extends 'lib/Components' ? typeof Components.data :
+                T extends 'lib/Components' ? IComponents :
                   any
 
 export type LibraryPath = 'lib/VirtualFS' | 'lib/WindowManager' | string

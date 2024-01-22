@@ -91,7 +91,7 @@ const BrowserApp: Process = {
             (win.content.querySelector('.toggle') as HTMLElement).innerHTML = 'toggle_off'
           }
           (this.header.querySelector('.title') as HTMLElement).innerText = 'Tab'
-          this.iframe.src = (win.content.querySelector('input')?.value as string)
+          this.iframe.src = (win.content.querySelector('input')?.value)
           return
         }
         if (this === tabManager.activeTab) {

@@ -29,5 +29,8 @@ export default defineConfig({
       disable: false,
       verbose: true
     })
-  ]
+  ],
+  build: {
+    target: 'ESNEXT'
+  }
 })

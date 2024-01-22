@@ -51,7 +51,7 @@ const Editor: Process = {
         }, process)
       })
 
-      const fs = await process.loadLibrary('lib/VirtualFS')
+      const fs = process.fs
 
       const data = process.data as EditorConfig
 
