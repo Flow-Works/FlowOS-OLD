@@ -26,7 +26,6 @@ const boot = new HTML('div').styleJs({
   background: '#11111b',
   padding: '100px',
   'font-family': 'monospace',
-  overflow: 'hidden',
   userSelect: 'none',
   overflow: 'hidden'
 }).appendTo(body)
