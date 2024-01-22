@@ -70,6 +70,7 @@ export default class Kernel {
     if (args.has('debug')) eruda.init()
     this.fs = await handle('target', 'Virtual File Systems', VirtualFS)
     if (this.fs === false) return
+    else progress.style({ width: '20%' })
     this.config = await handle('target', 'FlowOS Configuration', {
       init: async () => {
         if (this.fs === false) return
@@ -77,6 +78,7 @@ export default class Kernel {
       }
     })
     if (this.config === false) return
+    else progress.style({ width: '40%' })
     const tmp = await handle('mount', 'Temporary Directory (/tmp)', {
       init: async () => {
         if (this.fs === false) return false
@@ -87,6 +89,7 @@ export default class Kernel {
       }
     })
     if (tmp === false) return
+    else progress.style({ width: '60%' })
     const sw = await handle('service', 'Service Worker', {
       init: async () => {
         if (this.config === false) return false
@@ -100,6 +103,7 @@ export default class Kernel {
       }
     })
     if (sw === false) return
+    else progress.style({ width: '80%' })
     await handle('service', 'Desktop Environment', {
       init: () => {
         setTimeout(() => {
@@ -112,6 +116,7 @@ export default class Kernel {
                   console.log()
                   console.log('Welcome to FlowOS!')
                   console.log()
+                  progress.style({ width: '100%' })
                   setTimeout(() => {
                     this.startExecutable('Desktop', Permission.SYSTEM).catch(e => console.error(e))
                   }, 750)
