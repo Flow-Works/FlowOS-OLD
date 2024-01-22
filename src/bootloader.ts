@@ -26,7 +26,8 @@ const boot = new HTML('div').styleJs({
   padding: '100px',
   'font-family': 'monospace',
   overflow: 'hidden',
-  userSelect: 'none'
+  userSelect: 'none',
+  overflow: 'hidden'
 }).appendTo(body)
 
 boot.appendMany(
