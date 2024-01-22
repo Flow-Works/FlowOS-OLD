@@ -1,14 +1,14 @@
 import HTML from '../HTML'
 import { AppClosedEvent, AppOpenedEvent, Directory, FileSystemObject, Process } from '../types'
 import { getTime } from '../utils'
-import { db, defaultFS, initializeDatabase, read, setFileSystem, write } from './lib/VirtualFS'
+import { defaultFS } from './VirtualFS'
 import nullIcon from '../assets/icons/application-default-icon.svg'
 import { parse } from 'js-ini'
 import { v4 as uuid } from 'uuid'
 
 const BootLoader: Process = {
   config: {
-    name: 'Bootloader',
+    name: 'Desktop',
     type: 'process',
     targetVer: '1.0.0-indev.0'
   },
@@ -17,57 +17,9 @@ const BootLoader: Process = {
     const splashElement = splashScreen.getElement()
     splashElement.appendTo(document.body)
 
-    const fs = await process.loadLibrary('lib/VirtualFS')
+    const fs = process.fs
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
-
-    await initializeDatabase('virtualfs')
-    db.onerror = (event: Event) => {
-      const target = event.target as IDBRequest
-      const errorMessage = target.error !== null ? target.error.message : 'Unknown error'
-      throw new Error(`[VirtualFS] ${target.error?.name ?? 'Unknown Error'}: ${errorMessage}`)
-    }
-    if ('storage' in navigator) {
-      await navigator.storage?.persist()?.catch(e => console.error(e))
-    } else {
-      console.warn('Persistent storage is not supported.')
-    }
-    const fileSystem = await read() as FileSystemObject
-    if (fileSystem === undefined) {
-      await write(defaultFS)
-    } else {
-      const appsDirectory = ((fileSystem.root.children.home as Directory).children.Applications as Directory).children
-      const defaultAppsDirectory = ((defaultFS.root.children.home as Directory).children.Applications as Directory).children
-      for (const file in defaultAppsDirectory) {
-        if (appsDirectory[file] === undefined && defaultAppsDirectory[file] !== undefined) {
-          console.log(file)
-          appsDirectory[file] = defaultAppsDirectory[file]
-        }
-      }
-      await write(fileSystem)
-      await setFileSystem(fileSystem)
-    }
-
-    const config = Buffer.from(await fs.readFile('/etc/flow')).toString()
-    process.kernel.setFS(fs)
-    process.kernel.setConfig(parse(config))
-
-    if ('serviceWorker' in navigator) {
-      const registrations = await navigator.serviceWorker.getRegistrations()
-      for (const registration of registrations) {
-        await registration.unregister()
-      }
-
-      try {
-        await navigator.serviceWorker.register(`/uv-sw.js?url=${encodeURIComponent(btoa(process.kernel.config.SERVER))}&e=${uuid()}`, {
-          scope: '/service/'
-        })
-      } catch (e) {
-        console.error(e)
-      }
-    } else {
-      console.warn('Service workers are not supported.')
-    }
 
     const input = new HTML('input').attr({
       type: 'text',

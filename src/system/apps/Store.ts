@@ -19,7 +19,7 @@ const Store: Process = {
       }, process)
     })
 
-    const fs = await process.loadLibrary('lib/VirtualFS')
+    const fs = process.fs
     const HTML = await process.loadLibrary('lib/HTML')
     const { Button, Icon } = await process.loadLibrary('lib/Components')
 

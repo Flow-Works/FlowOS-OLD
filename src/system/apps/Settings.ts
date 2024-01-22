@@ -24,7 +24,7 @@ const Settings: Process = {
         )
       })
 
-    const fs = await process.loadLibrary('lib/VirtualFS')
+    const fs = process.fs
     const HTML = await process.loadLibrary('lib/HTML')
 
     const { Input, Button } = await process.loadLibrary('lib/Components')
