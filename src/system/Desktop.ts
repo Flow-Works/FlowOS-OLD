@@ -1,10 +1,7 @@
 import HTML from '../HTML'
-import { AppClosedEvent, AppOpenedEvent, Directory, FileSystemObject, Process } from '../types'
+import { AppClosedEvent, AppOpenedEvent, Process } from '../types'
 import { getTime } from '../utils'
-import { defaultFS } from './VirtualFS'
 import nullIcon from '../assets/icons/application-default-icon.svg'
-import { parse } from 'js-ini'
-import { v4 as uuid } from 'uuid'
 
 const BootLoader: Process = {
   config: {
@@ -17,7 +14,7 @@ const BootLoader: Process = {
     const splashElement = splashScreen.getElement()
     splashElement.appendTo(document.body)
 
-    const fs = process.fs
+    const { fs } = process
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
 
