@@ -14,7 +14,8 @@ body.html('<style>* { box-sizing: border-box }</style>')
 body.style({
   margin: '0',
   width: '100vw',
-  height: '100vh'
+  height: '100vh',
+  overflow: 'hidden'
 })
 
 const boot = new HTML('div').styleJs({
