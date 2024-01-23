@@ -1,4 +1,3 @@
-import path from 'path'
 import { Directory, Errors, File, Permission, Stats } from '../types'
 
 export const defaultFS: { root: Directory } = {
@@ -76,6 +75,12 @@ export const defaultFS: { root: Directory } = {
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('apps/Settings')
+              },
+              'ThemeMaker.app': {
+                type: 'file',
+                deleteable: true,
+                permission: Permission.USER,
+                content: Buffer.from('apps/ThemeMaker')
               }
             }
           },
@@ -96,47 +101,17 @@ export const defaultFS: { root: Directory } = {
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Info.app')
               },
-              'Manager.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Manager.app')
-              },
-              'Store.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Store.app')
-              },
-              'TaskManager.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/TaskManager.app')
-              },
               'Browser.lnk': {
                 type: 'file',
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Browser.app')
               },
-              'ImageViewer.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/ImageViewer.app')
-              },
               'Files.lnk': {
                 type: 'file',
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Files.app')
-              },
-              'Editor.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Editor.app')
               }
             }
           },
@@ -240,21 +215,21 @@ class VirtualFS {
   private fileSystem: { root: Directory }
   private db: IDBDatabase | null = null
 
-  private readonly addMissingFiles = async (): Promise<void> => {
-    const addMissingFiles = async (current: Directory, currentPath: string): Promise<void> => {
-      for (const child in current.children) {
-        const childPath = path.join(currentPath, child)
-        if (current.children[child].type === 'directory') {
-          if (!await this.exists(childPath)) {
-            await this.mkdir(childPath)
+  private async addMissingFiles (): Promise<void> {
+    const addDirectoryRecursive = async (directory: Directory, directoryPath: string): Promise<void> => {
+      for (const [key, value] of Object.entries(directory.children)) {
+        const path = (await import('path')).join(directoryPath, key)
+        if (value.type === 'directory') {
+          if (!await this.exists(path)) {
+            await this.mkdir(path)
           }
-          await addMissingFiles(current.children[child] as Directory, childPath)
-        } else if (current.children[child].type === 'file' && !await this.exists(childPath)) {
-          await this.writeFile(childPath, (current.children[child] as File).content)
+          await addDirectoryRecursive(value, path)
+        } else if (value.type === 'file' && !await this.exists(path)) {
+          await this.writeFile(path, Buffer.from(value.content).toString())
         }
       }
     }
-    await addMissingFiles(defaultFS.root, '')
+    await addDirectoryRecursive(defaultFS.root, '/')
   }
 
   async init (dbName = 'virtualfs'): Promise<VirtualFS> {
@@ -275,7 +250,6 @@ class VirtualFS {
         this.fileSystem = await this.read()
         if (this.fileSystem == null) await this.write(defaultFS)
         else await this.addMissingFiles()
-        console.log(this.fileSystem)
         resolve(this)
       }
     })

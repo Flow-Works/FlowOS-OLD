@@ -32,7 +32,7 @@ const UserAccessControl: Process = {
           }
         }
 
-        wm.createModal('User Account Control', message, process)
+        wm.createModal('allow', 'User Account Control', message, process)
           .then(async ({ value, win }: {
             value: boolean
             win: FlowWindow
