@@ -1,4 +1,6 @@
 import { Directory, Errors, File, Permission, Stats } from '../types'
+import path from 'path'
+const p = path
 
 export const defaultFS: { root: Directory } = {
   root: {
@@ -218,7 +220,7 @@ class VirtualFS {
   private async addMissingFiles (): Promise<void> {
     const addDirectoryRecursive = async (directory: Directory, directoryPath: string): Promise<void> => {
       for (const [key, value] of Object.entries(directory.children)) {
-        const path = (await import('path')).join(directoryPath, key)
+        const path = p.join(directoryPath, key)
         if (value.type === 'directory') {
           if (!await this.exists(path)) {
             await this.mkdir(path)
