@@ -115,7 +115,8 @@ window-area {
     border-radius: 5px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2), 0 0px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid;
+    border-color: color-mix(in srgb, var(--text) 20%, transparent);
     background: var(--crust);
     transition: 0.2s opacity, 0.2s transform;
 
@@ -154,7 +155,7 @@ launcher {
   justify-content: center;
   align-items: center;
   top: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: color-mix(in srgb, var(--crust) 20%, transparent);
   z-index: 99999999999999999999999;
   width: calc(100vw + 20px);
   height: calc(100vh + 20px);

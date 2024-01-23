@@ -74,6 +74,12 @@ const MIMETypes: Library = {
       opensWith: ['apps/ImageViewer'],
       icon: 'image'
     },
+    theme: {
+      type: 'application/x-flow-theme',
+      description: 'FlowOS Theme',
+      opensWith: ['apps/Editor'],
+      icon: 'palette'
+    },
     txt: {
       type: 'text/plain',
       description: 'Text Document',

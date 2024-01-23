@@ -75,6 +75,12 @@ export const defaultFS: { root: Directory } = {
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('apps/Settings')
+              },
+              'ThemeMaker.app': {
+                type: 'file',
+                deleteable: true,
+                permission: Permission.USER,
+                content: Buffer.from('apps/ThemeMaker')
               }
             }
           },
@@ -95,47 +101,17 @@ export const defaultFS: { root: Directory } = {
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Info.app')
               },
-              'Manager.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Manager.app')
-              },
-              'Store.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Store.app')
-              },
-              'TaskManager.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/TaskManager.app')
-              },
               'Browser.lnk': {
                 type: 'file',
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Browser.app')
               },
-              'ImageViewer.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/ImageViewer.app')
-              },
               'Files.lnk': {
                 type: 'file',
                 deleteable: true,
                 permission: Permission.USER,
                 content: Buffer.from('/home/Applications/Files.app')
-              },
-              'Editor.lnk': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('/home/Applications/Editor.app')
               }
             }
           },
@@ -176,13 +152,38 @@ export const defaultFS: { root: Directory } = {
         deleteable: false,
         permission: Permission.SYSTEM,
         children: {
+          themes: {
+            type: 'directory',
+            deleteable: false,
+            permission: Permission.SYSTEM,
+            children: {
+              'Mocha.theme': {
+                type: 'file',
+                deleteable: true,
+                permission: Permission.USER,
+                content: Buffer.from(JSON.stringify({
+                  name: 'Catpuccin Mocha',
+                  colors: {
+                    text: '#cdd6f4',
+                    'surface-2': '#585b70',
+                    'surface-1': '#45475a',
+                    'surface-0': '#313244',
+                    base: '#1e1e2e',
+                    mantle: '#181825',
+                    crust: '#11111b'
+                  }
+                }))
+              }
+            }
+          },
           flow: {
             type: 'file',
             deleteable: false,
             permission: Permission.ELEVATED,
             content: Buffer.from([
               'SERVER=https://server.flow-works.me',
-              '24HOUR=FALSE'
+              '24HOUR=FALSE',
+              'THEME=Mocha'
             ].join('\n'))
           },
           hostname: {
@@ -211,42 +212,62 @@ export const defaultFS: { root: Directory } = {
 }
 
 class VirtualFS {
-  private fileSystem: { root: Directory } = defaultFS
+  private fileSystem: { root: Directory }
   private db: IDBDatabase | null = null
+
+  private async addMissingFiles (): Promise<void> {
+    const addDirectoryRecursive = async (directory: Directory, directoryPath: string): Promise<void> => {
+      for (const [key, value] of Object.entries(directory.children)) {
+        const path = (await import('path')).join(directoryPath, key)
+        if (value.type === 'directory') {
+          if (!await this.exists(path)) {
+            await this.mkdir(path)
+          }
+          await addDirectoryRecursive(value, path)
+        } else if (value.type === 'file' && !await this.exists(path)) {
+          await this.writeFile(path, Buffer.from(value.content).toString())
+        }
+      }
+    }
+    await addDirectoryRecursive(defaultFS.root, '/')
+  }
+
   async init (dbName = 'virtualfs'): Promise<VirtualFS> {
     return await new Promise((resolve, reject) => {
-      indexedDB.deleteDatabase(dbName)
       const request = indexedDB.open(dbName)
+      request.onupgradeneeded = (event) => {
+        const target = event.target as IDBRequest
+        const db = target.result
+        db.createObjectStore('fs')
+      }
       request.onerror = () => {
         reject(new Error('Failed to open database'))
       }
-      request.onsuccess = () => {
-        this.db = request.result
+      request.onsuccess = async (event) => {
+        const target = event.target as IDBRequest
+        this.db = target.result
+        await navigator.storage.persist()
+        this.fileSystem = await this.read()
+        if (this.fileSystem == null) await this.write(defaultFS)
+        else await this.addMissingFiles()
         resolve(this)
-      }
-      request.onupgradeneeded = () => {
-        const db = request.result
-        db.createObjectStore('fs')
       }
     })
   }
 
-  private setFileSystem (fileSystemObject: { root: Directory }): void {
-    this.fileSystem = fileSystemObject
-  }
-
-  private readonly read = async (): Promise<any> => {
-    const transaction = this.db?.transaction(['fs'], 'readonly')
-    const store = transaction?.objectStore('fs')
-    const getRequest = store?.get('fs')
+  private readonly read = async (): Promise<{ root: Directory }> => {
+    if (this.db == null) throw new Error('Database is null')
+    const transaction = this.db.transaction(['fs'], 'readonly')
+    const store = transaction.objectStore('fs')
+    const getRequest = store.get('fs')
 
     return await new Promise((resolve, reject) => {
-      if (getRequest == null) return
-      getRequest.onsuccess = () => {
-        resolve(getRequest.result)
+      getRequest.onsuccess = (event) => {
+        const target = event.target as IDBRequest
+        resolve(target.result)
       }
 
-      getRequest.onerror = () => {
+      getRequest.onerror = (event) => {
         reject(getRequest.error)
       }
     })
@@ -258,12 +279,12 @@ class VirtualFS {
   }
 
   private readonly save = async (): Promise<void> => {
-    const transaction = this.db?.transaction(['fs'], 'readwrite')
-    const store = transaction?.objectStore('fs')
-    const putRequest = store?.put(this.fileSystem, 'fs')
+    if (this.db == null) throw new Error('Database is null')
+    const transaction = this.db.transaction(['fs'], 'readwrite')
+    const store = transaction.objectStore('fs')
+    const putRequest = store.put(this.fileSystem, 'fs')
 
     return await new Promise((resolve, reject) => {
-      if (putRequest == null) return
       putRequest.onsuccess = () => {
         document.dispatchEvent(new CustomEvent('fs_update', {}))
         resolve()
@@ -371,8 +392,8 @@ class VirtualFS {
   rmdir = async (path: string): Promise<void> => {
     const { current, filename } = await this.navigatePathParent(path)
 
-    if (!current.deleteable) throw new Error(Errors.EPERM)
-    await this.handlePermissions(path)
+    if (!current.deleteable && path !== '/tmp') throw new Error(Errors.EPERM)
+    if (path !== '/tmp') await this.handlePermissions(path)
 
     if (current.children[filename].type !== 'directory') throw new Error(Errors.ENOTDIR)
 
