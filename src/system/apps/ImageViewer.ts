@@ -19,7 +19,7 @@ const ImageViewer: Process = {
         }, process)
       })
 
-      const fs = await process.loadLibrary('lib/VirtualFS')
+      const fs = process.fs
       const MIMETypes: Record<string, { type: string }> = await process.loadLibrary('lib/MIMETypes')
       const HTML = await process.loadLibrary('lib/HTML')
 

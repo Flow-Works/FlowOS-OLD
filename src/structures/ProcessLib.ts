@@ -1,6 +1,6 @@
 import semver from 'semver'
 import Kernel from '../kernel'
-import { Process, Executable, Package, Library, Permission, LoadedLibrary, LibraryPath } from '../types'
+import { Process, Executable, Package, Library, Permission, LoadedLibrary, LibraryPath, FileSystem } from '../types'
 import FlowWindow from './FlowWindow'
 import LibraryLib from './LibraryLib'
 import ProcLib from './ProcLib'
@@ -9,6 +9,7 @@ export default class ProcessLib {
   readonly pid: number
   readonly token: string
   process: Process
+  fs: FileSystem
   private readonly _kernel: Kernel
   readonly kernel: {
     getExecutable: (url: string) => Promise<Executable>
@@ -17,8 +18,7 @@ export default class ProcessLib {
       [key: string]: Package
     }
     config: any
-    setConfig: (data: any) => void
-    setFS: (fs: any) => void
+    setConfig: (config: any) => any
   }
 
   readonly permission: Permission
@@ -32,6 +32,8 @@ export default class ProcessLib {
   }
 
   constructor (url: string, pid: number, token: string, permission = Permission.USER, data = {}, process: Process, kernel: Kernel) {
+    if (kernel.fs === false) return
+    this.fs = kernel.fs
     this.permission = permission
     this.pid = pid
     this.token = token
@@ -41,8 +43,9 @@ export default class ProcessLib {
       processList: kernel.processList,
       packageList: kernel.packageList,
       config: kernel.config,
-      setConfig: (data: any) => kernel.setConfig(data, this),
-      setFS: (fs: any) => kernel.setFS(fs, this)
+      setConfig: (config) => {
+        if (this.permission >= Permission.ELEVATED) kernel.config = config
+      }
     }
     this.process = process
     this.data = data
@@ -65,8 +68,7 @@ export default class ProcessLib {
       const importedExecutable = (await module()) as any
       executable = importedExecutable.default
     } catch {
-      if (this._kernel.fs === undefined) throw new Error('Filesystem hasn\'t been initiated.')
-      const dataURL = `data:text/javascript;base64,${Buffer.from(await this._kernel.fs.readFile(`/opt/${url}.js`)).toString('base64')}`
+      const dataURL = `data:text/javascript;base64,${Buffer.from(await this.fs.readFile(`/opt/${url}.js`)).toString('base64')}`
       const importedExecutable = await import(dataURL)
       executable = importedExecutable.default
     }

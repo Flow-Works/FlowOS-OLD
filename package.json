@@ -2,7 +2,7 @@
   "name": "flowos",
   "version": "1.1.0",
   "description": "The most aesthetic webOS.",
-  "main": "src/kernel.ts",
+  "main": "src/bootloader.ts",
   "scripts": {
     "docs": "typedoc src/**",
     "test": "ts-standard",
@@ -34,6 +34,8 @@
     "vite-plugin-node-polyfills": "^0.15.0"
   },
   "dependencies": {
+    "ansi-to-html": "^0.7.2",
+    "chalk": "^5.3.0",
     "eruda": "^3.0.1",
     "js-ini": "^1.6.0",
     "material-symbols": "^0.14.3",

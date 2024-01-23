@@ -24,7 +24,7 @@ const Settings: Process = {
         )
       })
 
-    const fs = await process.loadLibrary('lib/VirtualFS')
+    const { fs } = process
     const HTML = await process.loadLibrary('lib/HTML')
 
     const { Input, Button } = await process.loadLibrary('lib/Components')
@@ -50,17 +50,20 @@ const Settings: Process = {
               })
               .appendMany(
                 input,
-                Button.new().text('Save').on('click', async () => {
+                Button.new().text('Save').on('click', () => {
                   config[item] = input.getValue()
                   process.kernel.setConfig(config)
-                  await fs.writeFile('/etc/flow', stringify(config))
-                  document.dispatchEvent(
-                    new CustomEvent('config_update', {
-                      detail: {
-                        config
-                      }
+                  fs.writeFile('/etc/flow', stringify(config))
+                    .then(() => {
+                      document.dispatchEvent(
+                        new CustomEvent('config_update', {
+                          detail: {
+                            config
+                          }
+                        })
+                      )
                     })
-                  )
+                    .catch(e => console.error(e))
                 })
               )
           )

@@ -16,18 +16,16 @@ export const getTime = async (): Promise<string> => {
     if (hours === 0) {
       hours = 12
     } else if (hours > 12) {
-      hours = hours % 12
+      hours %= 12
     }
   }
 
   hours = (hours < 10) ? `0${hours}` : hours
   minutes = (minutes < 10) ? `0${minutes}` : minutes
 
-  const timeString = use24hrs
+  return use24hrs
     ? `${hours}:${minutes}`
     : `${hours}:${minutes} ${period}`
-
-  return timeString
 }
 
 /**

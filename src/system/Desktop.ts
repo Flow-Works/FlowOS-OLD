@@ -2,12 +2,10 @@ import HTML from '../HTML'
 import { AppClosedEvent, AppOpenedEvent, Process } from '../types'
 import { getTime } from '../utils'
 import nullIcon from '../assets/icons/application-default-icon.svg'
-import { parse } from 'js-ini'
-import { v4 as uuid } from 'uuid'
 
 const BootLoader: Process = {
   config: {
-    name: 'Bootloader',
+    name: 'Desktop',
     type: 'process',
     targetVer: '1.0.0-indev.0'
   },
@@ -19,26 +17,6 @@ const BootLoader: Process = {
     const { fs } = process
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
-
-    const config = Buffer.from(await fs.readFile('/etc/flow')).toString()
-    process.kernel.setConfig(parse(config))
-
-    if ('serviceWorker' in navigator) {
-      const registrations = await navigator.serviceWorker.getRegistrations()
-      for (const registration of registrations) {
-        await registration.unregister()
-      }
-
-      try {
-        await navigator.serviceWorker.register(`/uv-sw.js?url=${encodeURIComponent(btoa(process.kernel.config.SERVER))}&e=${uuid()}`, {
-          scope: '/service/'
-        })
-      } catch (e) {
-        console.error(e)
-      }
-    } else {
-      console.warn('Service workers are not supported.')
-    }
 
     const input = new HTML('input').attr({
       type: 'text',

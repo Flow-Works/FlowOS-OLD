@@ -18,7 +18,7 @@ const Files: Process = {
       }, process)
     })
 
-    const fs = await process.loadLibrary('lib/VirtualFS')
+    const fs = process.fs
     const MIMETypes = await process.loadLibrary('lib/MIMETypes')
 
     win.content.style.display = 'flex'
