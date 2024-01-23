@@ -57,6 +57,15 @@ export default class Kernel {
     this.version = pkg.version
   }
 
+  private async setTheme (themeName: string): Promise<void> {
+    if (this.fs === false) throw new Error('Filesystem hasn\'t been initiated.')
+    const file = await this.fs.readFile(`/etc/themes/${themeName}.theme`)
+    const { colors } = JSON.parse(Buffer.from(file).toString())
+    for (const color in colors) {
+      document.documentElement.style.setProperty(`--${color}`, colors[color])
+    }
+  }
+
   async boot (boot: HTML, progress: HTML, args: URLSearchParams): Promise<void> {
     progress.style({ width: '0%' })
     const bootArgs = args.toString().replace(/=($|&)/g, '=true ')
@@ -79,6 +88,11 @@ export default class Kernel {
     })
     if (this.config === false) return
     else progress.style({ width: '40%' })
+    await this.setTheme(this.config.THEME)
+    document.addEventListener('theme_update', () => {
+      if (this.config === false) return
+      this.setTheme(this.config.THEME).catch(e => console.error(e))
+    })
     const tmp = await handle('mount', 'Temporary Directory (/tmp)', {
       init: async () => {
         if (this.fs === false) return false

@@ -74,6 +74,7 @@ const Files: Process = {
         element.innerHTML += `${icon} <span style="flex:1;">${file}</span><span class="material-symbols-rounded delete">delete_forever</span><span class="material-symbols-rounded rename">edit</span>`;
         (element.querySelector('.rename') as HTMLElement).onclick = async () => {
           const value = prompt('Rename')
+          console.log(value)
           if (value != null) {
             await fs.rename(dir + seperator + file, dir + seperator + value)
           }
