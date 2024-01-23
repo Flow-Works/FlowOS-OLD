@@ -53,7 +53,7 @@ export default class Kernel {
   lastPid: number = 0
 
   constructor () {
-    this.codename = 'Mochi'
+    this.codename = 'Pocky'
     this.version = pkg.version
   }
 
