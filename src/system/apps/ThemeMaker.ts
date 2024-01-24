@@ -14,7 +14,7 @@ const ThemeConfig: Process = {
     const { Input, Button } = await process.loadLibrary('lib/Components')
 
     const win = wm.createWindow({
-      title: 'Task Manager',
+      title: 'Theme Maker',
       icon,
       width: 600,
       height: 200

@@ -61,14 +61,15 @@ const WindowManager: Library = {
           win
         }
       }
-      document.dispatchEvent(new CustomEvent('app_opened', appOpenedEvent))
 
       const { Button } = await process.loadLibrary('lib/Components')
 
       return {
         value: await new Promise((resolve) => {
-          new HTML('h3').text(title).appendTo(win.content)
-          new HTML('p').text(text).appendTo(win.content)
+          new HTML('h3').text(title).style({ margin: '0' }).appendTo(win.content)
+          new HTML('p').text(text).style({ margin: '0' }).appendTo(win.content)
+
+          if (type === 'allow') document.dispatchEvent(new CustomEvent('app_opened', appOpenedEvent))
 
           if (type === 'allow') {
             Button.new().text('Allow').appendTo(win.content).on('click', () => {
@@ -81,8 +82,8 @@ const WindowManager: Library = {
             })
           } else if (type === 'ok') {
             Button.new().text('OK').appendTo(win.content).on('click', () => {
-              resolve(true)
               win.close()
+              resolve(true)
             })
           }
 
