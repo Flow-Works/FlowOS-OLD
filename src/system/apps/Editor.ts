@@ -169,6 +169,7 @@ const Editor: Process = {
           const style = document.createElement('style')
           style.textContent = `
       .prism-code-editor {
+        color: var(--text);
         border-radius: 10px 10px 0 0;
         caret-color: var(--text);
         font-weight: 400;
@@ -206,6 +207,9 @@ const Editor: Process = {
         }
         await render()
         document.addEventListener('fs_update', () => {
+          render().catch(e => console.error(e))
+        })
+        document.addEventListener('theme_update', () => {
           render().catch(e => console.error(e))
         })
       }
