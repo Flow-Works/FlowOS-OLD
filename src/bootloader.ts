@@ -122,5 +122,6 @@ try {
   writeln('An error occured while booting FlowOS.')
   writeln('Please report this error to Flow Works.')
   writeln()
+  terminal.html(terminal.getHtml() + '<a onclick="indexedDB.deleteDatabase('virtualfs')">Clear Virual FileSystem?</a>\n')
   console.error(e.stack)
 }
