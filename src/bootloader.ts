@@ -123,4 +123,6 @@ try {
   writeln('Please report this error to Flow Works.')
   writeln()
   console.error(e.stack)
+  writeln()
+  terminal.html(terminal.getHTML() + '<a onclick="indexedDB.deleteDatabase(\'virtualfs\')">Reset FileSystem</a>')
 }
