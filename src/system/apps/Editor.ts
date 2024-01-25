@@ -12,26 +12,6 @@ interface EditorConfig {
   path: string
 }
 
-const fileLanguageMap: {
-  [key: string]: string
-} = {
-  c: 'clike',
-  cpp: 'clike',
-  java: 'clike',
-  cs: 'clike',
-  ts: 'typescript',
-  js: 'javascript',
-  mjs: 'javascript',
-  cjs: 'javascript',
-  jsx: 'jsx',
-  tsx: 'tsx',
-  html: 'html',
-  md: 'markdown',
-  css: 'css',
-  xml: 'xml',
-  py: 'python'
-}
-
 const Editor: Process = {
   config: {
     name: 'Editor',
@@ -40,6 +20,8 @@ const Editor: Process = {
     targetVer: '1.0.0-indev.0'
   },
   run: async (process) => {
+    const MIMETypes = await process.loadLibrary('lib/MIMETypes')
+
     if (Object.keys(process.data).length > 0) {
       const win = await process.loadLibrary('lib/WindowManager').then((wm: any) => {
         return wm.createWindow({
@@ -153,8 +135,44 @@ const Editor: Process = {
             }
           })
 
-          const fileExtension = data.path.split('.').pop()?.toLowerCase() as string
-          const language = fileLanguageMap[fileExtension] ?? 'text'
+          const fileExtension = (data.path.split('.').pop() as string).toLowerCase()
+          console.log('owo ' + fileExtension, MIMETypes)
+          const mime = fileExtension in MIMETypes ? MIMETypes[fileExtension].type : 'text/plain'
+          let language = 'text'
+
+          switch (mime) {
+            case 'text/markdown':
+              language = 'markdown'
+              break
+            case 'text/css':
+              language = 'css'
+              break
+            case 'text/html':
+              language = 'html'
+              break
+            case 'text/javascript':
+              language = 'javascript'
+              break
+            case 'text/jsx':
+              language = 'jsx'
+              break
+            case 'application/x-flow-theme':
+            case 'application/json':
+              language = 'clike'
+              break
+            case 'text/typescript':
+              language = 'typescript'
+              break
+            case 'text/tsx':
+              language = 'tsx'
+              break
+            case 'application/python':
+              language = 'python'
+              break
+            default:
+              language = 'text'
+              break
+          }
 
           const value = Buffer.from(await fs.readFile(data.path)).toString()
           const editor = fullEditor(
