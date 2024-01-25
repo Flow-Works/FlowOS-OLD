@@ -124,5 +124,5 @@ try {
   writeln()
   console.error(e.stack)
   writeln()
-  terminal.html(terminal.getHTML() + '<a href="#" onclick="indexedDB.deleteDatabase(\'virtualfs\')">Would you like to reset the VirtualFS?</a>')
+  terminal.html(terminal.getHTML() + '<a href="#" onclick="indexedDB.deleteDatabase(\'virtualfs\');window.location.reload()">Would you like to reset the VirtualFS?</a>')
 }
