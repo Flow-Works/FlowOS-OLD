@@ -153,7 +153,7 @@ export interface WindowManager {
   windows: FlowWindow[]
   getHighestZIndex: () => number
   createWindow: (config: FlowWindowConfig, process: ProcessLib) => FlowWindow
-  createModal: (title: string, text: string, process: ProcessLib) => Promise<ModalData>
+  createModal: (type: 'allow' | 'ok', title: string, text: string, process: ProcessLib) => Promise<ModalData>
 }
 
 export interface Launcher {

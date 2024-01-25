@@ -27,12 +27,24 @@ const Settings: Process = {
     const { fs } = process
     const HTML = await process.loadLibrary('lib/HTML')
 
-    const { Input, Button } = await process.loadLibrary('lib/Components')
+    const { Input, Button, Dropdown } = await process.loadLibrary('lib/Components')
 
     const render = async (config: any): Promise<void> => {
       win.content.innerHTML = ''
       for (const item in config) {
-        const input = Input.new().attr({
+        console.log(config[item])
+        const input = item === 'THEME'
+          ? Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
+          : Input.new()
+
+        if (item === 'THEME') {
+          const text = config[item]
+          const $select = input.elm as HTMLSelectElement
+          const $options = Array.from($select.options)
+          const optionToSelect = $options.find(item => item.text === text)
+          if (optionToSelect != null) optionToSelect.selected = true
+        }
+        input.attr({
           value: config[item]
         })
         new HTML('div')
@@ -62,6 +74,9 @@ const Settings: Process = {
                           }
                         })
                       )
+                      if (item === 'THEME') {
+                        document.dispatchEvent(new CustomEvent('theme_update', {}))
+                      }
                     })
                     .catch(e => console.error(e))
                 })

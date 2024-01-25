@@ -46,7 +46,7 @@ const WindowManager: Library = {
       WindowManager.data.windowArea.elm.appendChild(win.element)
       return win
     },
-    createModal: async (title: string, text: string, process: ProcessLib) => {
+    createModal: async (type: 'allow' | 'ok', title: string, text: string, process: ProcessLib) => {
       const win = new FlowWindow(process, WindowManager.data, {
         title,
         icon: '',
@@ -61,22 +61,31 @@ const WindowManager: Library = {
           win
         }
       }
-      document.dispatchEvent(new CustomEvent('app_opened', appOpenedEvent))
 
       const { Button } = await process.loadLibrary('lib/Components')
 
       return {
         value: await new Promise((resolve) => {
-          new HTML('h3').text(title).appendTo(win.content)
-          new HTML('p').text(text).appendTo(win.content)
-          Button.new().text('Allow').appendTo(win.content).on('click', () => {
-            resolve(true)
-            win.close()
-          })
-          Button.new().text('Deny').appendTo(win.content).on('click', () => {
-            resolve(false)
-            win.close()
-          })
+          new HTML('h3').text(title).style({ margin: '0' }).appendTo(win.content)
+          new HTML('p').text(text).style({ margin: '0' }).appendTo(win.content)
+
+          if (type === 'allow') document.dispatchEvent(new CustomEvent('app_opened', appOpenedEvent))
+
+          if (type === 'allow') {
+            Button.new().text('Allow').appendTo(win.content).on('click', () => {
+              resolve(true)
+              win.close()
+            })
+            Button.new().text('Deny').appendTo(win.content).on('click', () => {
+              resolve(false)
+              win.close()
+            })
+          } else if (type === 'ok') {
+            Button.new().text('OK').appendTo(win.content).on('click', () => {
+              win.close()
+              resolve(true)
+            })
+          }
 
           WindowManager.data.windows.push(win)
           WindowManager.data.windowArea.elm.appendChild(win.element)

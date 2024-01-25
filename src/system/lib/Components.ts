@@ -48,6 +48,23 @@ const Components: Library = {
             'font-size': size
           })
       }
+    },
+    Dropdown: {
+      new: (options: string[]) => {
+        const { HTML } = library
+        const dropdown = new HTML('select')
+        dropdown.style({
+          'border-radius': '5px',
+          padding: '2.5px',
+          background: 'var(--base)',
+          border: '1px solid var(--surface-1)'
+        }).appendMany(
+          ...options.map((option) => {
+            return new HTML('option').text(option)
+          })
+        )
+        return dropdown
+      }
     }
   }
 }

@@ -44,6 +44,30 @@ const MIMETypes: Library = {
       opensWith: ['apps/ImageViewer'],
       icon: 'image'
     },
+    cjs: {
+      type: 'application/javascript',
+      description: 'CommonJS Module',
+      opensWith: ['apps/Editor'],
+      icon: 'code'
+    },
+    htm: {
+      type: 'text/html',
+      description: 'HTML Document',
+      opensWith: ['apps/Editor'],
+      icon: 'code'
+    },
+    html: {
+      type: 'text/html',
+      description: 'HTML Document',
+      opensWith: ['apps/Editor'],
+      icon: 'code'
+    },
+    js: {
+      type: 'text/javascript',
+      description: 'JavaScript File',
+      opensWith: ['apps/Editor'],
+      icon: 'code'
+    },
     lnk: {
       type: 'application/x-ms-shortcut',
       description: 'Windows Shortcut',
@@ -55,6 +79,12 @@ const MIMETypes: Library = {
       description: 'Markdown Document',
       opensWith: ['apps/Editor'],
       icon: 'markdown'
+    },
+    mjs: {
+      type: 'text/javascript',
+      description: 'JavaScript Module',
+      opensWith: ['apps/Editor'],
+      icon: 'code'
     },
     mp4: {
       type: 'video/mp4',
@@ -73,6 +103,12 @@ const MIMETypes: Library = {
       description: 'SVG File',
       opensWith: ['apps/ImageViewer'],
       icon: 'image'
+    },
+    theme: {
+      type: 'application/x-flow-theme',
+      description: 'FlowOS Theme',
+      opensWith: ['apps/Editor'],
+      icon: 'palette'
     },
     txt: {
       type: 'text/plain',
