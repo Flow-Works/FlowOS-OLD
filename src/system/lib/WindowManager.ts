@@ -2,6 +2,7 @@ import HTML from '../../HTML'
 import FlowWindow from '../../structures/FlowWindow'
 import ProcessLib from '../../structures/ProcessLib'
 import { FlowWindowConfig, Library } from '../../types'
+import nullIcon from '../../assets/icons/application-default-icon.svg'
 
 const WindowManager: Library = {
   config: {
@@ -50,8 +51,8 @@ const WindowManager: Library = {
       const win = new FlowWindow(process, WindowManager.data, {
         title,
         icon: '',
-        width: 300,
-        height: 200,
+        width: 350,
+        height: 150,
         canResize: false
       })
       const appOpenedEvent = {
@@ -66,22 +67,50 @@ const WindowManager: Library = {
 
       return {
         value: await new Promise((resolve) => {
-          new HTML('h3').text(title).style({ margin: '0' }).appendTo(win.content)
-          new HTML('p').text(text).style({ margin: '0' }).appendTo(win.content)
+          win.content.style.padding = '10px'
+          win.content.style.display = 'flex'
+          win.content.style.flexDirection = 'column'
+          win.content.style.gap = '10px'
+
+          const container = new HTML('div').style({
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            height: 'max-content'
+          }).appendTo(win.content)
+
+          new HTML('img').attr({ src: process.process.config.icon ?? nullIcon }).style({
+            height: '100%',
+            'aspect-ratio': '1 / 1',
+            borderRadius: '50%',
+            alignSelf: 'center'
+          }).appendTo(container)
+
+          const space = new HTML('div').style({
+            display: 'flex',
+            gap: '10px',
+            'flex-direction': 'column',
+            'justify-content': 'center',
+            height: 'max-content'
+          }).appendTo(container)
+
+          new HTML('h3').text(title).style({ margin: '0' }).appendTo(space)
+          new HTML('p').text(text).style({ margin: '0' }).appendTo(space)
+          const div = new HTML('div').style({ display: 'flex', gap: '10px', alignItems: 'right' }).appendTo(space)
 
           if (type === 'allow') document.dispatchEvent(new CustomEvent('app_opened', appOpenedEvent))
 
           if (type === 'allow') {
-            Button.new().text('Allow').appendTo(win.content).on('click', () => {
+            Button.new('primary').text('Allow').appendTo(div).on('click', () => {
               resolve(true)
               win.close()
             })
-            Button.new().text('Deny').appendTo(win.content).on('click', () => {
+            Button.new().text('Deny').appendTo(div).on('click', () => {
               resolve(false)
               win.close()
             })
           } else if (type === 'ok') {
-            Button.new().text('OK').appendTo(win.content).on('click', () => {
+            Button.new('primary').text('OK').appendTo(div).on('click', () => {
               win.close()
               resolve(true)
             })

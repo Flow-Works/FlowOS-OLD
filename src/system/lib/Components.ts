@@ -20,21 +20,41 @@ const Components: Library = {
           padding: '2.5px',
           outline: 'none',
           background: 'transparent',
-          border: '1px solid var(--surface-0)'
+          border: '1px solid const(--surface-0)'
         })
         return input
       }
     },
     Button: {
-      new: () => {
+      new: (type: 'normal' | 'primary' = 'normal') => {
+        function shiftColor (col: string, amt: number): string {
+          const num = parseInt(col, 16)
+          const r = (num >> 16) + amt
+          const b = ((num >> 8) & 0x00FF) + amt
+          const g = (num & 0x0000FF) + amt
+          const newColor = g | (b << 8) | (r << 16)
+          return newColor.toString(16)
+        }
+
         const { HTML } = library
         const button = new HTML('button')
         button.style({
           'border-radius': '5px',
           padding: '2.5px 5px',
           background: 'var(--base)',
-          border: '1px solid var(--surface-1)'
+          border: '1px solid var(--surface-0)'
         })
+        if (type === 'normal') {
+          button.style({
+            background: 'var(--base)'
+          })
+        } else if (type === 'primary') {
+          button.style({
+            background: 'var(--primary)',
+            color: 'var(--base)',
+            border: '1px solid #' + shiftColor(document.documentElement.style.getPropertyValue('--primary').replace('#', ''), -40) + ''
+          })
+        }
         return button
       }
     },
@@ -57,7 +77,7 @@ const Components: Library = {
           'border-radius': '5px',
           padding: '2.5px',
           background: 'var(--base)',
-          border: '1px solid var(--surface-1)'
+          border: '1px solid const(--surface-1)'
         }).appendMany(
           ...options.map((option) => {
             return new HTML('option').text(option)

@@ -26,7 +26,7 @@ const Launcher: Library = {
       } else {
         Launcher.data.element.style({
           opacity: '1',
-          'backdrop-filter': 'blur(20px)',
+          'backdrop-filter': 'blur(10px)',
           'pointer-events': 'all'
         })
       }

@@ -1,6 +1,7 @@
 @import url(https://api.fontshare.com/v2/css?f[]=satoshi@1,2&display=swap);
 
 :root {
+  --primary: #89b4fa;
   --text: #cdd6f4;
   --surface-2: #585b70;
   --surface-1: #45475a;
@@ -59,12 +60,30 @@ toolbar {
   background: var(--mantle);
   margin: 0;
   padding: 10px;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid var(--surface-0);
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.2), 0 0px 10px rgba(0, 0, 0, 0.2);
+  user-select: none;
 
   & > div {
     &.outlined {
       padding: 10px;
       background: var(--base);
       border-radius: 10px;
+      border: 1px solid var(--surface-0);
+      box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.1), 0 0px 10px rgba(0, 0, 0, 0.1);
+      align-items: center;
+      justify-content: center;
+    }
+
+    &[data-toolbar-id="start"] {
+      cursor: pointer;
+      & * {
+        transition: color .1s ease-in-out;
+        &:hover {
+          color: var(--primary);
+        }
+      }
     }
 
     &[data-toolbar-id="controls"] {
@@ -76,6 +95,7 @@ toolbar {
 
     &[data-toolbar-id="plugins"] {
       width: 24px;
+      cursor: pointer;
       padding: 10px 0;
     }
 
@@ -164,6 +184,12 @@ launcher {
   margin: 0;
   left: 0;
 
+  &[style*="opacity: 1;"] {
+    apps * {
+      pointer-events: all;
+    }
+  }
+
   apps {
     max-height: 70vh;
     padding: 20px;
@@ -172,6 +198,8 @@ launcher {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
+    overflow: scroll;
+    pointer-events: none;
 
     app {
       flex: 1 0 21%;
@@ -184,7 +212,22 @@ launcher {
       min-width: 125px;
       max-width: 125px;
       text-align: center;
-      overflow: hidden;
+      overflow: visible;
+      transition: transform 0.1s ease-in-out;
+      cursor: pointer;
+
+
+      &:hover {
+        transform: scale(1.1);
+
+        div {
+          background: var(--surface-0);
+        }
+
+        img {
+          filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.75));
+        }
+      }
 
       img {
         width: 100%;
@@ -198,7 +241,9 @@ launcher {
         width: fit-content;
         height: 100%;
         white-space: nowrap;
-
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background 0.1s ease-in-out;
       }
     }
   }

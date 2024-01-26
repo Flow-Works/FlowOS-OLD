@@ -60,10 +60,11 @@ export default class Kernel {
   private async setTheme (themeName: string): Promise<void> {
     if (this.fs === false) throw new Error('Filesystem hasn\'t been initiated.')
     const file = await this.fs.readFile(`/etc/themes/${themeName}.theme`)
-    const { colors } = JSON.parse(Buffer.from(file).toString())
+    const { extras, colors } = JSON.parse(Buffer.from(file).toString())
     for (const color in colors) {
       document.documentElement.style.setProperty(`--${color}`, colors[color])
     }
+    document.documentElement.style.setProperty('--primary', extras[parse(Buffer.from(await this.fs.readFile('/etc/flow')).toString()).THEME_PRIMARY as string])
   }
 
   async boot (boot: HTML, progress: HTML, args: URLSearchParams): Promise<void> {

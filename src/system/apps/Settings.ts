@@ -7,7 +7,7 @@ const Settings: Process = {
     name: 'Settings',
     type: 'process',
     icon,
-    targetVer: '1.0.0-indev.0'
+    targetVer: '2.0.0'
   },
   run: async process => {
     const win = await process
@@ -32,21 +32,25 @@ const Settings: Process = {
     const render = async (config: any): Promise<void> => {
       win.content.innerHTML = ''
       for (const item in config) {
-        console.log(config[item])
-        const input = item === 'THEME'
-          ? Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
-          : Input.new()
+        let input = Input.new()
 
-        if (item === 'THEME') {
-          const text = config[item]
-          const $select = input.elm as HTMLSelectElement
-          const $options = Array.from($select.options)
-          const optionToSelect = $options.find(item => item.text === text)
-          if (optionToSelect != null) optionToSelect.selected = true
+        if (item === 'THEME_PRIMARY') {
+          const { extras } = JSON.parse(Buffer.from(await fs.readFile(`/etc/themes/${config.THEME as string}.theme`)).toString())
+          input = Dropdown.new(Object.keys(extras))
+        } else if (item === 'THEME') {
+          input = Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
         }
-        input.attr({
-          value: config[item]
-        })
+
+        if (item === 'THEME_PRIMARY' || item === 'THEME') {
+          (input.elm as HTMLSelectElement).value = config[item]
+        } else {
+          input.attr({
+            value: config[item]
+          })
+        }
+
+        console.log(input.getValue())
+
         new HTML('div')
           .appendMany(
             new HTML('label')
@@ -64,7 +68,6 @@ const Settings: Process = {
                 input,
                 Button.new().text('Save').on('click', () => {
                   config[item] = input.getValue()
-                  process.kernel.setConfig(config)
                   fs.writeFile('/etc/flow', stringify(config))
                     .then(() => {
                       document.dispatchEvent(
@@ -74,7 +77,7 @@ const Settings: Process = {
                           }
                         })
                       )
-                      if (item === 'THEME') {
+                      if (item === 'THEME' || item === 'THEME_PRIMARY') {
                         document.dispatchEvent(new CustomEvent('theme_update', {}))
                       }
                     })
