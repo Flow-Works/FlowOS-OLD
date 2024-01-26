@@ -1,4 +1,6 @@
-import { Library } from '../../types'
+import { AppClosedEvent, AppOpenedEvent, Library } from '../../types'
+import nullIcon from '../../assets/icons/application-default-icon.svg'
+import { getTime } from '../../utils'
 
 const StatusBar: Library = {
   config: {
@@ -8,6 +10,75 @@ const StatusBar: Library = {
   },
   init: (l, k, p) => {
     StatusBar.data.element = new l.HTML('toolbar')
+    StatusBar.data.element.html(`
+      <div class="outlined" data-toolbar-id="start"><span class="material-symbols-rounded">space_dashboard</span></div>
+      
+      <div data-toolbar-id="apps"></div>
+      <flex></flex>
+      <div class="outlined" data-toolbar-id="plugins"><span class="material-symbols-rounded">expand_less</span></div>
+      <div class="outlined" data-toolbar-id="controls">
+        <span class="material-symbols-rounded battery">battery_2_bar</span>
+        <span class="material-symbols-rounded signal">signal_cellular_4_bar</span>
+      </div>
+      <div class="outlined" data-toolbar-id="calendar"></div>
+      
+    `)
+
+    setInterval((): any => {
+      getTime().then((time) => {
+        StatusBar.data.element.qs('div[data-toolbar-id="calendar"]')?.text(time)
+      }).catch(e => console.error)
+    }, 1000)
+
+    if ('getBattery' in navigator) {
+      (navigator as any).getBattery().then((battery: any) => {
+        StatusBar.data.updateBatteryIcon(battery)
+
+        battery.addEventListener('levelchange', () => {
+          StatusBar.data.updateBatteryIcon(battery)
+        })
+
+        battery.addEventListener('chargingchange', () => {
+          StatusBar.data.updateBatteryIcon(battery)
+        })
+      })
+    } else {
+      const batteryDiv = document.querySelector('div[data-toolbar-id="controls"] > .battery')
+      if (batteryDiv != null) {
+        batteryDiv.innerHTML = 'battery_unknown'
+      }
+    }
+
+    async function ping (startTime: number): Promise<void> {
+      fetch(`${(k.config as any).SERVER as string}/bare/`)
+        .then(() => {
+          const endTime = performance.now()
+          const pingTime = endTime - startTime
+          StatusBar.data.updateIcon(pingTime)
+        })
+        .catch(() => {
+          (document.querySelector('div[data-toolbar-id="controls"] > .signal') as HTMLElement).innerHTML = 'signal_cellular_connected_no_internet_4_bar'
+        })
+    }
+
+    setInterval((): any => ping(performance.now()), 10_000)
+
+    document.addEventListener('app_opened', (e: AppOpenedEvent): void => {
+      new l.HTML('app').appendMany(
+        new l.HTML('img').attr({
+          alt: `${e.detail.proc.config.name} icon`,
+          'data-id': e.detail.token,
+          src: e.detail.proc.config.icon ?? nullIcon
+        }).on('click', () => {
+          e.detail.win.focus()
+          e.detail.win.toggleMin()
+        })
+      ).appendTo(StatusBar.data.element.qs('div[data-toolbar-id="apps"]')?.elm as HTMLElement)
+    })
+
+    document.addEventListener('app_closed', (e: AppClosedEvent): void => {
+      StatusBar.data.element.qs('div[data-toolbar-id="apps"]')?.qs(`img[data-id="${e.detail.token}"]`)?.elm.parentElement?.remove()
+    })
   },
   data: {
     updateBatteryIcon (battery: any) {
