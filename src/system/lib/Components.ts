@@ -30,8 +30,8 @@ const Components: Library = {
         function shiftColor (col: string, amt: number): string {
           const num = parseInt(col, 16)
           const r = (num >> 16) + amt
-          const b = ((num >> 8) & 0x00FF) + amt
-          const g = (num & 0x0000FF) + amt
+          const b = ((num >> 8) & 0x00_FF) + amt
+          const g = (num & 0x00_00_FF) + amt
           const newColor = g | (b << 8) | (r << 16)
           return newColor.toString(16)
         }
@@ -52,7 +52,7 @@ const Components: Library = {
           button.style({
             background: 'var(--primary)',
             color: 'var(--base)',
-            border: '1px solid #' + shiftColor(document.documentElement.style.getPropertyValue('--primary').replace('#', ''), -40) + ''
+            border: `1px solid #${shiftColor(document.documentElement.style.getPropertyValue('--primary').replace('#', ''), -40)}`
           })
         }
         return button
@@ -77,11 +77,9 @@ const Components: Library = {
           'border-radius': '5px',
           padding: '2.5px',
           background: 'var(--base)',
-          border: '1px solid const(--surface-1)'
+          border: '1px solid var(--surface-1)'
         }).appendMany(
-          ...options.map((option) => {
-            return new HTML('option').text(option)
-          })
+          ...options.map((option) => new HTML('option').text(option))
         )
         return dropdown
       }
