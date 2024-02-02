@@ -14,7 +14,7 @@ const StatusBar: Library = {
       <div class="outlined" data-toolbar-id="start"><span class="material-symbols-rounded">space_dashboard</span></div>
       
       <div data-toolbar-id="apps"></div>
-      <flex></flex>
+      <div style="flex:1;"></div>
       <div class="outlined" data-toolbar-id="plugins"><span class="material-symbols-rounded">expand_less</span></div>
       <div class="outlined" data-toolbar-id="controls">
         <span class="material-symbols-rounded battery">battery_2_bar</span>

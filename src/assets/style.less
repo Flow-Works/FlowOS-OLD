@@ -49,9 +49,6 @@ html {
 
   color: var(--text);
 }
-.bx {
-  font-size: 25px;
-}
 
 toolbar {
   width: 100%;
@@ -64,6 +61,8 @@ toolbar {
   border: 1px solid var(--surface-0);
   box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.2), 0 0px 10px rgba(0, 0, 0, 0.2);
   user-select: none;
+  position: relvative;
+  z-index: 1001;
 
   & > div {
     &.outlined {
@@ -168,128 +167,9 @@ window-area {
   }
 }
 
-launcher {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  background: color-mix(in srgb, var(--crust) 20%, transparent);
-  z-index: 99999999999999999999999;
-  width: calc(100vw + 20px);
-  height: calc(100vh + 20px);
-  gap: 20px;
-  transition: 0.2s opacity, 0.2s backdrop-filter;
-  margin: 0;
-  left: 0;
-
-  &[style*="opacity: 1;"] {
-    apps * {
-      pointer-events: all;
-    }
-  }
-
-  apps {
-    max-height: 70vh;
-    padding: 20px;
-    margin: 40px;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    overflow: scroll;
-    pointer-events: none;
-
-    app {
-      flex: 1 0 21%;
-      flex-grow: 0;
-      align-items: center;
-      justify-content: center;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-width: 125px;
-      max-width: 125px;
-      text-align: center;
-      overflow: visible;
-      transition: transform 0.1s ease-in-out;
-      cursor: pointer;
-
-
-      &:hover {
-        transform: scale(1.1);
-
-        div {
-          background: var(--surface-0);
-        }
-
-        img {
-          filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.75));
-        }
-      }
-
-      img {
-        width: 100%;
-        border-radius: var(--app-radius);
-        aspect-ratio: 1 / 1;
-      }
-
-      div {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: fit-content;
-        height: 100%;
-        white-space: nowrap;
-        padding: 5px 10px;
-        border-radius: 5px;
-        transition: background 0.1s ease-in-out;
-      }
-    }
-  }
-
-  input {
-    background: var(--mantle);
-    border: 2px solid var(--crust);
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
-    max-width: 100vw;
-    text-align: center;
-    transition: border 0.2s;
-
-    &:focus {
-      outline: none;
-      border: 2px solid var(--text);
-    }
-  }
-}
-
-preloader {
-  position: absolute;
-  z-index: 9999999;
-  top: 0;
-  left: 0;
-  background: var(--crust);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1s;
-
-  .status, .done {
-    text-align: center;
-  }
-
-  .done div {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
-}
-
-flex {
-  flex: 1;
+.gradient-blur {
+  mask: linear-gradient(to bottom, transparent, black 5%), linear-gradient(to top, transparent, black 35%);
+  mask-size: 100% 50%;
+  mask-repeat: no-repeat;
+  mask-position: top, bottom;
 }
