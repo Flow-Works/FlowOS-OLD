@@ -20,7 +20,7 @@ const Components: Library = {
           padding: '2.5px',
           outline: 'none',
           background: 'transparent',
-          border: '1px solid const(--surface-0)'
+          border: '1px solid var(--surface-0)'
         })
         return input
       }
