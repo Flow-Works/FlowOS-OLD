@@ -25,12 +25,6 @@ export const defaultFS: { root: Directory } = {
             deleteable: false,
             permission: Permission.USER,
             children: {
-              'Fruits.app': {
-                type: 'file',
-                deleteable: true,
-                permission: Permission.USER,
-                content: Buffer.from('apps/Fruits')
-              },
               'Info.app': {
                 type: 'file',
                 deleteable: true,
