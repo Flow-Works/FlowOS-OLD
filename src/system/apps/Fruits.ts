@@ -1,7 +1,7 @@
 import HTML from '../../HTML'
 import { Process } from '../../types'
 
-import icon from '../../assets/icons/fruits.png'
+import icon from '../../assets/icons/fruits/fruits.png'
 import cherriesIcon from '../../assets/icons/fruits/cherries.png'
 import lemonIcon from '../../assets/icons/fruits/lemon.png'
 import tangerineIcon from '../../assets/icons/fruits/tangerine.png'
