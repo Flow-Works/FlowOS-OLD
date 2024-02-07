@@ -16,15 +16,34 @@ const BootLoader: Process = {
     const { fs } = process
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
+    const { Input } = await process.loadLibrary('lib/Components')
 
-    const input = new HTML('input').attr({
+    const input = Input.new().attr({
       type: 'text',
       placeholder: 'Search'
+    }).style({
+      width: '100%',
+      'border-radius': '10px',
+      padding: '5px',
+      'margin-bottom': '10px',
+      position: 'sticky',
+      top: '0'
     }).on('keyup', () => {
       apps.elm.innerHTML = ''
       renderApps().catch(e => console.error(e))
     }).appendTo(launcher.element)
-    const apps = new HTML('apps').appendTo(launcher.element)
+
+    const apps = new HTML('div').style({
+      overflow: 'scroll',
+      height: 'max-content',
+      position: 'relative'
+    })
+
+    new HTML('div').style({
+      height: '100%',
+      overflow: 'scroll',
+      'padding-bottom': '30px'
+    }).append(apps).appendTo(launcher.element).class('gradient-blur')
 
     const renderApps = async (): Promise<void> => {
       apps.html('')
@@ -36,13 +55,21 @@ const BootLoader: Process = {
             const path = Buffer.from(data).toString()
             const executable = await process.kernel.getExecutable(path) as Process
 
-            const appElement = new HTML('app').on('click', () => {
+            const appElement = new HTML('div').style({
+              display: 'flex',
+              'align-items': 'center',
+              padding: '5px',
+              cursor: 'pointer',
+              gap: '10px',
+              'border-bottom': '1px solid var(--surface-0)'
+            }).on('click', () => {
               process.launch(path).catch((e: any) => console.error(e))
               launcher.toggle()
             }).appendTo(apps)
             new HTML('img').attr({
               src: executable.config.icon ?? nullIcon,
-              alt: `${executable.config.name} icon`
+              alt: `${executable.config.name} icon`,
+              height: '40px'
             }).appendTo(appElement)
             new HTML('div').text(executable.config.name).appendTo(appElement)
           }).catch((e: any) => console.error(e))
@@ -72,6 +99,19 @@ const BootLoader: Process = {
     await wm.windowArea.appendTo(document.body)
 
     splashElement.cleanup()
+
+    launcher.element.prepend(new HTML('div')
+      .html(`
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="-if+5+1+2-3"
+        data-ad-client="ca-pub-9675905177363247"
+        data-ad-slot="2569234651"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      `))
   }
 }
 
