@@ -39,7 +39,7 @@
     "eruda": "^3.0.1",
     "js-ini": "^1.6.0",
     "material-symbols": "^0.14.3",
-    "prism-code-editor": "^2.3.0",
+    "prism-code-editor": "^2.4.1",
     "semver": "^7.5.4",
     "uuid": "^9.0.1"
   },
