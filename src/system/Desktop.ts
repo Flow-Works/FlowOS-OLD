@@ -99,6 +99,19 @@ const BootLoader: Process = {
     await wm.windowArea.appendTo(document.body)
 
     splashElement.cleanup()
+
+    launcher.element.prepend(new HTML('div')
+      .html(`
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="-if+5+1+2-3"
+        data-ad-client="ca-pub-9675905177363247"
+        data-ad-slot="2569234651"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      `))
   }
 }
 
