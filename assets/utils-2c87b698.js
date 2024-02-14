@@ -1,0 +1,1 @@
+const r=async()=>{const t=new Date;let e=t.getHours(),s=t.getMinutes(),o="AM";return o=e>=12?"PM":"AM",e===0?e=12:e>12&&(e%=12),e=e<10?`0${e}`:e,s=s<10?`0${s}`:s,`${e}:${s} ${o}`},u=n=>{const t={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","/":"&#x2F;"},e=/[&<>"'/]/ig;return n.replace(e,s=>t[s])};export{r as g,u as s};
