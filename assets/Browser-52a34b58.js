@@ -1,4 +1,4 @@
-const l="/assets/web-browser-8b47647b.svg",d={config:{name:"Browser",type:"process",icon:l,targetVer:"1.0.0-indev.0"},run:async i=>{const t=await i.loadLibrary("lib/WindowManager").then(o=>o.createWindow({title:"Browser",icon:l,width:500,height:700},i)),c=await i.loadLibrary("lib/XOR");t.content.style.height="100%",t.content.style.display="flex",t.content.style.flexDirection="column",t.content.innerHTML=`
+const l="/FlowOS/assets/web-browser-8b47647b.svg",d={config:{name:"Browser",type:"process",icon:l,targetVer:"1.0.0-indev.0"},run:async i=>{const t=await i.loadLibrary("lib/WindowManager").then(o=>o.createWindow({title:"Browser",icon:l,width:500,height:700},i)),c=await i.loadLibrary("lib/XOR");t.content.style.height="100%",t.content.style.display="flex",t.content.style.flexDirection="column",t.content.innerHTML=`
       <div style="display: flex;padding: 10px;gap: 10px;">
         <div id="tabs-container" style="display: flex;gap: 10px;"></div>
         <button class="add">+</button>

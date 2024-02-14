@@ -1,4 +1,4 @@
-import{n as d}from"./application-default-icon-38d880e7.js";import{g as o}from"./utils-2c87b698.js";const t={config:{name:"StatusBar",type:"library",targetVer:"1.0.0-indev.0"},init:(e,a,n)=>{if(t.data.element=new e.HTML("toolbar"),t.data.element.html(`
+import{n as d}from"./application-default-icon-a19c8ba0.js";import{g as o}from"./utils-2c87b698.js";const t={config:{name:"StatusBar",type:"library",targetVer:"1.0.0-indev.0"},init:(e,a,n)=>{if(t.data.element=new e.HTML("toolbar"),t.data.element.html(`
       <div class="outlined" data-toolbar-id="start"><span class="material-symbols-rounded">space_dashboard</span></div>
       
       <div data-toolbar-id="apps"></div>

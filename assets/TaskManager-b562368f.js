@@ -1,4 +1,4 @@
-const l="/assets/utilities-system-monitor-125f7e39.svg",c={config:{name:"Task Manager",type:"process",icon:l,targetVer:"1.0.0-indev.0"},run:async n=>{const e=await n.loadLibrary("lib/WindowManager").then(d=>d.createWindow({title:"Task Manager",icon:l,width:600,height:200},n)),t=await n.loadLibrary("lib/HTML");e.content.style.display="flex",e.content.style.flexDirection="column",e.content.style.gap="10px",e.content.style.padding="10px",e.content.style.background="var(--base)",new t("style").html(`tbody tr:hover {
+const l="/FlowOS/assets/utilities-system-monitor-125f7e39.svg",c={config:{name:"Task Manager",type:"process",icon:l,targetVer:"1.0.0-indev.0"},run:async n=>{const e=await n.loadLibrary("lib/WindowManager").then(d=>d.createWindow({title:"Task Manager",icon:l,width:600,height:200},n)),t=await n.loadLibrary("lib/HTML");e.content.style.display="flex",e.content.style.flexDirection="column",e.content.style.gap="10px",e.content.style.padding="10px",e.content.style.background="var(--base)",new t("style").html(`tbody tr:hover {
         background: var(--surface-1);
         border-radius: 10px;
       }
