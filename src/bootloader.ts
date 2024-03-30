@@ -119,8 +119,8 @@ try {
   writeln('/-----------------------------------------------\\')
   writeln('| FlowOS is now discontinued. Starting in 10s...|')
   writeln('\\-----------------------------------------------/')
-  setTimeout(async () => {
-    await kernel.boot(boot, progress, args)
+  setTimeout(() => {
+    kernel.boot(boot, progress, args).catch(e => console.error(e))
   }, 10000)
 } catch (e) {
   writeln()
