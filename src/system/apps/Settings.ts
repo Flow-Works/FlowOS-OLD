@@ -1,7 +1,6 @@
 import { Process } from '../../types'
 import icon from '../../assets/icons/preferences-system.svg'
 import { stringify } from 'js-ini'
-
 const Settings: Process = {
   config: {
     name: 'Settings',
@@ -37,6 +36,12 @@ const Settings: Process = {
         if (item === 'THEME_PRIMARY') {
           const { extras } = JSON.parse(Buffer.from(await fs.readFile(`/etc/themes/${config.THEME as string}.theme`)).toString())
           input = Dropdown.new(Object.keys(extras))
+        } else if (item === 'THEME') {
+          input = Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
+        }
+        if (item === 'BACKGROUND') {
+          const { background } = JSON.parse(Buffer.from(await fs.readFile(`/etc/flow/${config.BACKGROUND as string}.BACKGROUND`)).toString())
+          document.cookie = "background=" + background + "; expires=Thu, 18 Dec 9999 12:00:00 UTC; path=/";
         } else if (item === 'THEME') {
           input = Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
         }

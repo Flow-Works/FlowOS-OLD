@@ -43,7 +43,7 @@ boot.appendMany(
         src: logo,
         height: '40px'
       }),
-      new HTML('h1').text('FlowOS').styleJs({
+      new HTML('h1').text('FlowOS Neo').styleJs({
         color: 'white'
       })
     ),
@@ -116,16 +116,16 @@ window.console.group = (...args: any) => {
 try {
   const args = new URLSearchParams(window.location.search)
   const kernel = new Kernel()
-  writeln('/-----------------------------------------------\\')
-  writeln('| FlowOS is now discontinued. Starting in 10s...|')
-  writeln('\\-----------------------------------------------/')
+  writeln('/-----------------------------------------------------------------------------------\\')
+  writeln('| FlowOS Neo is a planned project by Neptune6866 to continue what FlowOS meant to do|')
+  writeln('\\-----------------------------------------------------------------------------------/')
   setTimeout(() => {
     kernel.boot(boot, progress, args).catch(e => console.error(e))
-  }, 10000)
+  }, 5000)
 } catch (e) {
   writeln()
   writeln('An error occured while booting FlowOS.')
-  writeln('Please report this error to Flow Works.')
+  writeln('Please report this error to Neptune6866.')
   writeln()
   console.error(e.stack)
   writeln()

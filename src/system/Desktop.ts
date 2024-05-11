@@ -17,7 +17,7 @@ const BootLoader: Process = {
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
     const { Input } = await process.loadLibrary('lib/Components')
-
+    const windowArea = document.querySelector('window-area')
     const input = Input.new().attr({
       type: 'text',
       placeholder: 'Search'
@@ -93,6 +93,7 @@ const BootLoader: Process = {
     })
 
     document.body.style.flexDirection = 'column-reverse'
+    document.body.style.backgroundImage = 'url(/src/assets/background.jpg)'
 
     await statusBar.element.appendTo(document.body)
     await launcher.element.appendTo(document.body)
