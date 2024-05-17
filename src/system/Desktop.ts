@@ -1,7 +1,9 @@
 import HTML from '../HTML'
 import { Process } from '../types'
 import nullIcon from '../assets/icons/application-default-icon.svg'
-
+import VirtualFS from '../system/VirtualFS'
+import { config } from 'process'
+import { parse } from 'js-ini'
 const BootLoader: Process = {
   config: {
     name: 'Desktop',
@@ -93,7 +95,11 @@ const BootLoader: Process = {
     })
 
     document.body.style.flexDirection = 'column-reverse'
-    document.body.style.backgroundImage = 'url(/src/assets/background.jpg)'
+    
+    await fs.readFile('/etc/flow').then(async (data: Uint8Array) => {
+      const dataString = Buffer.from(data).toString()
+      const config = parse(dataString)
+    document.body.style.backgroundImage = "url(" + config.BACKGROUND.toString() + ")"})
 
     await statusBar.element.appendTo(document.body)
     await launcher.element.appendTo(document.body)
