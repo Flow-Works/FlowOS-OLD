@@ -100,7 +100,7 @@ const BootLoader: Process = {
       const dataString = Buffer.from(data).toString()
       const config = parse(dataString)
     document.body.style.backgroundImage = "url(" + config.BACKGROUND.toString() + ")"})
-
+    document.body.style.backgroundSize = "cover"
     await statusBar.element.appendTo(document.body)
     await launcher.element.appendTo(document.body)
     await wm.windowArea.appendTo(document.body)

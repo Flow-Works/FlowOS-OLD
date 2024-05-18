@@ -39,12 +39,6 @@ const Settings: Process = {
         } else if (item === 'THEME') {
           input = Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
         }
-        if (item === 'BACKGROUND') {
-          const { background } = JSON.parse(Buffer.from(await fs.readFile(`/etc/flow/${config.BACKGROUND as string}.BACKGROUND`)).toString())
-          document.cookie = "background=" + background + "; expires=Thu, 18 Dec 9999 12:00:00 UTC; path=/";
-        } else if (item === 'THEME') {
-          input = Dropdown.new((await fs.readdir('/etc/themes')).map((theme: string) => theme.replace('.theme', '')))
-        }
 
         if (item === 'THEME_PRIMARY' || item === 'THEME') {
           (input.elm as HTMLSelectElement).value = config[item]

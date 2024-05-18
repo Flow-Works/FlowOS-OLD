@@ -377,7 +377,8 @@ export const defaultFS: { root: Directory } = {
               'SERVER=http://localhost:3000/',
               '24_HOUR=false',
               'THEME=Mocha',
-              'THEME_PRIMARY=blue'
+              'THEME_PRIMARY=blue',
+              'BACKGROUND='
             ].join('\n'))
           },
           hostname: {
@@ -447,6 +448,10 @@ class VirtualFS {
       }
       if (config.THEME_PRIMARY == null) {
         config.THEME_PRIMARY = 'blue'
+        await this.writeFile('/etc/flow', stringify(config))
+      }
+      if (config.BACKGROUND == null) {
+        config.BACKGROUND = ''
         await this.writeFile('/etc/flow', stringify(config))
       }
     })
