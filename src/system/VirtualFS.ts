@@ -378,7 +378,7 @@ export const defaultFS: { root: Directory } = {
               '24_HOUR=false',
               'THEME=Mocha',
               'THEME_PRIMARY=blue',
-              'BACKGROUND='
+              'BACKGROUND=/src/assets/background.png'
             ].join('\n'))
           },
           hostname: {
@@ -451,7 +451,7 @@ class VirtualFS {
         await this.writeFile('/etc/flow', stringify(config))
       }
       if (config.BACKGROUND == null) {
-        config.BACKGROUND = ''
+        config.BACKGROUND = '/src/assets/background.png'
         await this.writeFile('/etc/flow', stringify(config))
       }
     })
