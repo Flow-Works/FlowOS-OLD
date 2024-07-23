@@ -1,7 +1,6 @@
 import { Process } from '../../types'
 import icon from '../../assets/icons/preferences-system.svg'
 import { stringify } from 'js-ini'
-
 const Settings: Process = {
   config: {
     name: 'Settings',

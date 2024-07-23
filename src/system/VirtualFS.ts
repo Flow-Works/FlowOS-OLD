@@ -374,10 +374,11 @@ export const defaultFS: { root: Directory } = {
             deleteable: false,
             permission: Permission.ELEVATED,
             content: Buffer.from([
-              'SERVER=https://server.flow-works.me',
+              'SERVER=http://localhost:3000/',
               '24_HOUR=false',
               'THEME=Mocha',
-              'THEME_PRIMARY=blue'
+              'THEME_PRIMARY=blue',
+              'BACKGROUND=/src/assets/background.png'
             ].join('\n'))
           },
           hostname: {
@@ -434,7 +435,7 @@ class VirtualFS {
       const config = parse(dataString)
 
       if (config.SERVER == null) {
-        config.SERVER = 'https://server.flow-works.me'
+        config.SERVER = 'http://localhost:3000/'
         await this.writeFile('/etc/flow', stringify(config))
       }
       if (config['24_HOUR'] == null) {
@@ -447,6 +448,10 @@ class VirtualFS {
       }
       if (config.THEME_PRIMARY == null) {
         config.THEME_PRIMARY = 'blue'
+        await this.writeFile('/etc/flow', stringify(config))
+      }
+      if (config.BACKGROUND == null) {
+        config.BACKGROUND = '/src/assets/background.png'
         await this.writeFile('/etc/flow', stringify(config))
       }
     })

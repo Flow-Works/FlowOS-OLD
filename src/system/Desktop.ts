@@ -1,7 +1,9 @@
 import HTML from '../HTML'
 import { Process } from '../types'
 import nullIcon from '../assets/icons/application-default-icon.svg'
-
+import VirtualFS from '../system/VirtualFS'
+import { config } from 'process'
+import { parse } from 'js-ini'
 const BootLoader: Process = {
   config: {
     name: 'Desktop',
@@ -17,7 +19,7 @@ const BootLoader: Process = {
     const wm = await process.loadLibrary('lib/WindowManager')
     const launcher = await process.loadLibrary('lib/Launcher')
     const { Input } = await process.loadLibrary('lib/Components')
-
+    const windowArea = document.querySelector('window-area')
     const input = Input.new().attr({
       type: 'text',
       placeholder: 'Search'
@@ -93,7 +95,12 @@ const BootLoader: Process = {
     })
 
     document.body.style.flexDirection = 'column-reverse'
-
+    
+    await fs.readFile('/etc/flow').then(async (data: Uint8Array) => {
+      const dataString = Buffer.from(data).toString()
+      const config = parse(dataString)
+    document.body.style.backgroundImage = "url(" + config.BACKGROUND.toString() + ")"})
+    document.body.style.backgroundSize = "cover"
     await statusBar.element.appendTo(document.body)
     await launcher.element.appendTo(document.body)
     await wm.windowArea.appendTo(document.body)
